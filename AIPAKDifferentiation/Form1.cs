@@ -16,8 +16,8 @@ namespace AIPAKDifferentiation {
     public partial class AIPAKDifferentiation : Form {
 
         private static String pakDirectory = @"C:\Users\Oliver\Desktop\Programming\Alien Isolation\AIPAKDifferentiation\examplePAKs\";
-        private static String pakPath1 = pakDirectory + @"COMMANDS_HAB_CORPORATEPENT_vanilla.PAK";
-        private static String pakPath2 = pakDirectory + @"COMMANDS_HAB_CORPORATEPENT_invisible_alien.PAK";
+        private static String pakPath1 = pakDirectory + @"COMMANDS_TECH_HUB_vanilla.PAK";
+        private static String pakPath2 = pakDirectory + @"COMMANDS_TECH_HUB_modified.PAK";
 
         public AIPAKDifferentiation() {
             InitializeComponent();
@@ -44,26 +44,37 @@ namespace AIPAKDifferentiation {
         private void drawDifferencesToListView(List<CompositeDifference> differences) {
             if(null != differences) {
                 foreach (CompositeDifference compositeDifference in differences) {
-                    string[] compositeEntry = new string[3];
-                    compositeEntry[0] = DIFFERENCE_TYPE.COMPOSITE.ToString();
-                    compositeEntry[1] = compositeDifference.composite.name;
-                    compositeEntry[2] = compositeDifference.differenceType.ToString();
+                    ListViewItemEntry compositeEntry = new ListViewItemEntry(
+                        CATHODE_TYPE.COMPOSITE, 
+                        compositeDifference.composite.shortGUID,
+                        "-",
+                        compositeDifference.composite.name, 
+                        compositeDifference.differenceType.ToString()
+                    );
 
-                    listviewDifferences.Items.Add(new ListViewItem(compositeEntry));
+                    listviewDifferences.Items.Add(new ListViewItem(compositeEntry.ToStringArray()));
 
                     foreach (EntityDifference entityDifference in compositeDifference.entityDifferences) {
-                        string[] entityEntry = new string[3];
-                        entityEntry[0] = DIFFERENCE_TYPE.ENTITY.ToString();
-                        entityEntry[1] = "Variant: " + entityDifference.entity.variant.ToString();
-                        entityEntry[2] = entityDifference.differenceType.ToString();
-                        listviewDifferences.Items.Add(new ListViewItem(entityEntry));
+                        ListViewItemEntry entityEntry = new ListViewItemEntry(
+                            CATHODE_TYPE.ENTITY,
+                            entityDifference.entity.shortGUID,
+                                compositeDifference.composite.name,
+                            entityDifference.entity.variant.ToString(),
+                            entityDifference.differenceType.ToString()
+                        );
+
+                        listviewDifferences.Items.Add(new ListViewItem(entityEntry.ToStringArray()));
 
                         foreach (ParameterDifference parameterDifference in entityDifference.parameterDiffereces) {
-                            string[] parameterEntry = new string[3];
-                            parameterEntry[0] = DIFFERENCE_TYPE.PARAMETER.ToString();
-                            parameterEntry[1] = "DataType: " + parameterDifference.parameter.dataType.ToString();
-                            parameterEntry[2] = parameterDifference.differenceType.ToString();
-                            listviewDifferences.Items.Add(new ListViewItem(parameterEntry));
+                            ListViewItemEntry parameterEntry = new ListViewItemEntry(
+                                CATHODE_TYPE.PARAMETER,
+                                parameterDifference.parameter.shortGUID,
+                                compositeDifference.composite.name,
+                                parameterDifference.parameter.content.dataType.ToString(),
+                                parameterDifference.differenceType.ToString()
+                            );
+
+                            listviewDifferences.Items.Add(new ListViewItem(parameterEntry.ToStringArray()));
                         }
                     }
                 }

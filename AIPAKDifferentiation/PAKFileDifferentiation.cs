@@ -48,7 +48,7 @@ namespace AIPAKDifferentiation {
                     CompositeDifference compositeDifference = new CompositeDifference(composite, COMPOSITE_DIFFERENCE_TYPE.DELETED);
                     this.compositeDifferences.Add(compositeDifference);
                 } else {
-                    // this part handels modifications (responsible for checking entities) - we do not want to check for modified entities if a composite got deleted
+                    // this part handles modifications (responsible for checking entities) - we do not want to check for modified entities if a composite got deleted
                     this.loadDifferencesEntities(composite, pak2.GetComposite(composite.shortGUID));
                 }
             }
@@ -71,11 +71,11 @@ namespace AIPAKDifferentiation {
                     EntityDifference entityDifference = new EntityDifference(entity, ENTITIY_DIFFERENCE_TYPE.DELETED);
                     compositeDifference.entityDifferences.Add(entityDifference);
                 } else {
-                    // now we handel modifications with parameters of this entity
+                    // now we handle modifications with parameters of this entity
                     this.loadDifferencesParameters(entity, pak2Composite.GetEntityByID(entity.shortGUID), compositeDifference);
                 }
             }
-            // afterwards we check if any entity has been created - we dont want any parameters here, just the newly created entity
+            // afterwards we check if any entity has been created - we dont want any parameters here, just the newly created entities
             foreach (CathodeEntity pak2Entity in pak2Composite.GetEntities()) {
                 if (null == composite.GetEntityByID(pak2Entity.shortGUID)) { // null means the entity with guid from composite2 wasn't found in composite1
                     EntityDifference entityDifference = new EntityDifference(pak2Entity, ENTITIY_DIFFERENCE_TYPE.CREATED);
@@ -94,12 +94,32 @@ namespace AIPAKDifferentiation {
 
             foreach (CathodeLoadedParameter parameter in entity.parameters) {
                 // first we check for parameter deletion
-                // @TODO
+                CathodeParameter content = parameter.content;
+                CathodeLoadedParameter pak2Parameter = pak2Entity.parameters.Find(x => x.shortGUID == parameter.shortGUID);
+                if(null == pak2Parameter) {
+                    ParameterDifference parameterDifference = new ParameterDifference(parameter, PARAMETER_DIFFERENCE_TYPE.DELETED);
+                    entityDifference.parameterDiffereces.Add(parameterDifference);
+                } else {
+                    // now we handle modification of parameter values  of this parameter
+                    this.loadParameterValues(parameter, pak2Parameter, entityDifference); // TODO has to be implemented
+                }
+            }
+            //afterwards we check if any parameter has been created - we dont want any parameter values here, just newly created parameters
+            foreach(CathodeLoadedParameter pak2Parameter in pak2Entity.parameters) {
+                CathodeLoadedParameter foundPak1Parameter = entity.parameters.Find(x => x.shortGUID == pak2Parameter.shortGUID);
+                if(null == foundPak1Parameter) {
+                    ParameterDifference parameterDifference = new ParameterDifference(pak2Parameter, PARAMETER_DIFFERENCE_TYPE.CREATED);
+                    entityDifference.parameterDiffereces.Add(parameterDifference);
+                }
             }
 
             if (0 < entityDifference.parameterDiffereces.Count) {
                 compositeDifference.entityDifferences.Add(entityDifference);
             }
+        }
+
+        private void loadParameterValues(CathodeLoadedParameter parameter, CathodeLoadedParameter pak2Parameter, EntityDifference entityDifference) {
+
         }
     }
 }

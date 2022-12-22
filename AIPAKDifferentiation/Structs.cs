@@ -34,16 +34,45 @@ namespace AIPAKDifferentiation {
 
     class ParameterDifference {
 
-        public CathodeParameter parameter;
+        public CathodeLoadedParameter parameter;
         public PARAMETER_DIFFERENCE_TYPE differenceType;
 
-        public ParameterDifference(CathodeParameter parameter, PARAMETER_DIFFERENCE_TYPE differenceType) {
+        public ParameterDifference(CathodeLoadedParameter parameter, PARAMETER_DIFFERENCE_TYPE differenceType) {
             this.parameter = parameter;
             this.differenceType = differenceType;
         }
     }
 
-    enum DIFFERENCE_TYPE {
+    class ListViewItemEntry {
+
+        private CATHODE_TYPE cathodeType;
+        private ShortGuid shortGuid;
+        private string compositeName;
+        private string name;
+        private string differenceType;
+
+        public ListViewItemEntry(CATHODE_TYPE cathodeType, ShortGuid shortGuid, string compositeName, string name, string differenceType) {
+            this.cathodeType = cathodeType;
+            this.shortGuid = shortGuid;
+            this.compositeName = compositeName;
+            this.name = name;
+            this.differenceType = differenceType;
+        }
+
+        public string[] ToStringArray() {
+            string[] arr = new string[5];
+
+            arr[0] = this.cathodeType.ToString();
+            arr[1] = this.shortGuid.ToString();
+            arr[2] = this.compositeName;
+            arr[3] = this.name;
+            arr[4] = this.differenceType;
+
+            return arr;
+        }
+    }
+
+    enum CATHODE_TYPE {
         COMPOSITE,
         ENTITY,
         PARAMETER
