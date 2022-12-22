@@ -61,7 +61,7 @@
             this.listviewDifferences.Name = "listviewDifferences";
             this.listviewDifferences.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.listviewDifferences.ShowItemToolTips = true;
-            this.listviewDifferences.Size = new System.Drawing.Size(960, 346);
+            this.listviewDifferences.Size = new System.Drawing.Size(960, 446);
             this.listviewDifferences.TabIndex = 0;
             this.listviewDifferences.TabStop = false;
             this.listviewDifferences.UseCompatibleStateImageBehavior = false;
@@ -106,13 +106,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(984, 461);
+            this.ClientSize = new System.Drawing.Size(984, 561);
             this.Controls.Add(this.labelDifferences);
             this.Controls.Add(this.listviewDifferences);
             this.Controls.Add(this.buttonPakShowDifferences);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(1000, 500);
-            this.MinimumSize = new System.Drawing.Size(1000, 500);
+            this.MaximumSize = new System.Drawing.Size(1000, 600);
+            this.MinimumSize = new System.Drawing.Size(1000, 600);
             this.Name = "AIPAKDifferentiation";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AIPAKDifferentiation";

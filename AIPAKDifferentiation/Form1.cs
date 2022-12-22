@@ -58,7 +58,7 @@ namespace AIPAKDifferentiation {
                         ListViewItemEntry entityEntry = new ListViewItemEntry(
                             CATHODE_TYPE.ENTITY,
                             entityDifference.entity.shortGUID,
-                                compositeDifference.composite.name,
+                            compositeDifference.composite.name,
                             entityDifference.entity.variant.ToString(),
                             entityDifference.differenceType.ToString()
                         );
