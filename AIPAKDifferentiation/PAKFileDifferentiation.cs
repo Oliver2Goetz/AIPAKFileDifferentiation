@@ -71,8 +71,9 @@ namespace AIPAKDifferentiation {
                     EntityDifference entityDifference = new EntityDifference(entity, ENTITIY_DIFFERENCE_TYPE.DELETED);
                     compositeDifference.entityDifferences.Add(entityDifference);
                 } else {
-                    // now we handle modifications with parameters of this entity
-                    this.loadDifferencesParameters(entity, pak2Composite.GetEntityByID(entity.shortGUID), compositeDifference);
+                    // now we handle modifications with parameters and links of this entity
+                    this.loadDifferencesParameters(entity, pak2Entity, compositeDifference);
+                    this.loadDifferencesLinks(entity, pak2Entity, compositeDifference);
                 }
             }
             // afterwards we check if any entity has been created - we dont want any parameters here, just the newly created entities
@@ -100,7 +101,7 @@ namespace AIPAKDifferentiation {
                     ParameterDifference parameterDifference = new ParameterDifference(parameter, PARAMETER_DIFFERENCE_TYPE.DELETED);
                     entityDifference.parameterDiffereces.Add(parameterDifference);
                 } else {
-                    // now we handle modification of parameter values  of this parameter
+                    // now we handle modification of parameter values of this parameter
                     this.loadParameterValues(parameter, pak2Parameter, entityDifference); // TODO has to be implemented
                 }
             }
@@ -116,6 +117,10 @@ namespace AIPAKDifferentiation {
             if (0 < entityDifference.parameterDiffereces.Count) {
                 compositeDifference.entityDifferences.Add(entityDifference);
             }
+        }
+
+        private void loadDifferencesLinks(CathodeEntity entity, CathodeEntity pak2Entity, CompositeDifference compositeDifference) {
+            
         }
 
         private void loadParameterValues(CathodeLoadedParameter parameter, CathodeLoadedParameter pak2Parameter, EntityDifference entityDifference) {

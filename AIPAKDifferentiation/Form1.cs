@@ -15,19 +15,25 @@ namespace AIPAKDifferentiation {
 
     public partial class AIPAKDifferentiation : Form {
 
-        private static String pakDirectory = @"C:\Users\Oliver\Desktop\Programming\Alien Isolation\AIPAKDifferentiation\examplePAKs\";
-        private static String pakPath1 = pakDirectory + @"COMMANDS_TECH_HUB_vanilla.PAK";
-        private static String pakPath2 = pakDirectory + @"COMMANDS_TECH_HUB_modified.PAK";
+        private String pakPath1 = "";
+        private String pakPath2 = "";
 
         public AIPAKDifferentiation() {
             InitializeComponent();
         }
 
         private void AIPAKDifferentiation_Load(object sender, EventArgs e) {
-
+            // for testing
+            this.pakPath1 = @"C:\Users\Oliver\Desktop\Programming\Alien Isolation\AIPAKDifferentiation\examplePAKs\COMMANDS_TECH_HUB_vanilla.PAK";
+            this.pakPath2 = @"C:\Users\Oliver\Desktop\Programming\Alien Isolation\AIPAKDifferentiation\examplePAKs\COMMANDS_TECH_HUB_modified.PAK";
         }
 
         private void buttonPakShowDifferences_Click(object sender, EventArgs e) {
+            if (0 >= this.pakPath1.Length || 0 >= this.pakPath2.Length || !File.Exists(this.pakPath1) || !File.Exists(this.pakPath2)) {
+                MessageBox.Show("Select 2 PAK files to compare.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                return;
+            }
             listviewDifferences.Items.Clear();
 
             List<CompositeDifference> differences = this.loadPakFileDifferences();
@@ -35,7 +41,7 @@ namespace AIPAKDifferentiation {
         }
 
         private List<CompositeDifference> loadPakFileDifferences() {
-            PAKFileDifferentiation pakFileDifferentiation = new PAKFileDifferentiation(pakPath1, pakPath2);
+            PAKFileDifferentiation pakFileDifferentiation = new PAKFileDifferentiation(this.pakPath1, this.pakPath2);
             List<CompositeDifference> compositeDifferences = pakFileDifferentiation.loadDifferences();
 
             return compositeDifferences;
@@ -79,6 +85,40 @@ namespace AIPAKDifferentiation {
                     }
                 }
             }
+        }
+
+        private void buttonBrowsePak1_Click(object sender, EventArgs e) {
+            this.pakPath1 = this.getFileDialogResult("Select PAK 1");
+            labelPak1.Text = "PAK 1: " + this.pakPath1;
+            this.setToolTip(labelPak1, this.pakPath1);
+            
+        }
+
+        private void buttonBrowsePak2_Click(object sender, EventArgs e) {
+            this.pakPath2 = this.getFileDialogResult("Select PAK 2");
+            labelPak2.Text = "PAK 2: " + this.pakPath2;
+            this.setToolTip(labelPak2, this.pakPath2);
+        }
+
+        private string getFileDialogResult(string title) {
+            string result = "";
+
+            fileDialog.Title = title;
+
+            if (fileDialog.ShowDialog() == DialogResult.OK) {
+                result = fileDialog.FileName;
+            }
+
+            return result;
+        }
+
+        private void setToolTip(Control control, string text) {
+            ToolTip toolTip = new ToolTip();
+            toolTip.ToolTipIcon = ToolTipIcon.None;
+            toolTip.IsBalloon = false;
+            toolTip.ShowAlways = true;
+
+            toolTip.SetToolTip(control, text);
         }
     }
 }
