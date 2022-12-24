@@ -15,8 +15,10 @@ namespace AIPAKDifferentiation {
 
     public partial class AIPAKDifferentiation : Form {
 
-        private String pakPath1 = "";
-        private String pakPath2 = "";
+        private string pakPath1 = "";
+        private string pakPath2 = "";
+
+        private List<CompositeDifference> compositeDifferences = new List<CompositeDifference>();
 
         public AIPAKDifferentiation() {
             InitializeComponent();
@@ -36,25 +38,23 @@ namespace AIPAKDifferentiation {
             }
             listviewDifferences.Items.Clear();
 
-            List<CompositeDifference> differences = this.loadPakFileDifferences();
-            drawDifferencesToListView(differences);
+            this.loadPakFileDifferences();
+            drawDifferencesToListView(this.compositeDifferences);
         }
 
-        private List<CompositeDifference> loadPakFileDifferences() {
+        private void loadPakFileDifferences() {
             PAKFileDifferentiation pakFileDifferentiation = new PAKFileDifferentiation(this.pakPath1, this.pakPath2);
-            List<CompositeDifference> compositeDifferences = pakFileDifferentiation.loadDifferences();
-
-            return compositeDifferences;
+            this.compositeDifferences = pakFileDifferentiation.loadDifferences();
         }
 
         private void drawDifferencesToListView(List<CompositeDifference> differences) {
-            if(null != differences) {
+            if (null != differences) {
                 foreach (CompositeDifference compositeDifference in differences) {
                     ListViewItemEntry compositeEntry = new ListViewItemEntry(
-                        CATHODE_TYPE.COMPOSITE, 
+                        CATHODE_TYPE.COMPOSITE,
                         compositeDifference.composite.shortGUID,
                         "-",
-                        compositeDifference.composite.name, 
+                        compositeDifference.composite.name,
                         compositeDifference.differenceType.ToString()
                     );
 

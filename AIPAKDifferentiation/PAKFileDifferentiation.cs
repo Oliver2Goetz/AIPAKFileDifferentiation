@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Windows.Forms;
 
 using CATHODE.Commands;
 
@@ -11,8 +12,8 @@ namespace AIPAKDifferentiation {
 
     class PAKFileDifferentiation {
 
-        private String pakPath1 = "";
-        private String pakPath2 = "";
+        private string pakPath1 = "";
+        private string pakPath2 = "";
 
         CommandsPAK pak1 = null;
         CommandsPAK pak2 = null;
@@ -23,7 +24,7 @@ namespace AIPAKDifferentiation {
          * This class compares two PAK files with each other and shows the differences in composites, entities and parameters
          * pakPath1 is handeled like the original PAK file, while pakPath2 is considered modified
          */
-        public PAKFileDifferentiation(String pakPath1, String pakPath2) {
+        public PAKFileDifferentiation(string pakPath1, string pakPath2) {
             this.pakPath1 = pakPath1;
             this.pakPath2 = pakPath2;
 
@@ -34,7 +35,8 @@ namespace AIPAKDifferentiation {
 
         public List<CompositeDifference> loadDifferences() {
             if (pak1.Loaded && pak2.Loaded) {
-                loadDifferencesComposites();
+                this.loadDifferencesComposites();
+
                 return this.compositeDifferences;
             }
 

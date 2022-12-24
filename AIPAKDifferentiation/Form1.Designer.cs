@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AIPAKDifferentiation));
             this.buttonPakShowDifferences = new System.Windows.Forms.Button();
             this.listviewDifferences = new System.Windows.Forms.ListView();
             this.columnCathodeType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -168,11 +169,11 @@
             this.Controls.Add(this.labelDifferences);
             this.Controls.Add(this.listviewDifferences);
             this.Controls.Add(this.buttonPakShowDifferences);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(1000, 600);
             this.MinimumSize = new System.Drawing.Size(1000, 600);
             this.Name = "AIPAKDifferentiation";
-            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AIPAKDifferentiation";
             this.Load += new System.EventHandler(this.AIPAKDifferentiation_Load);
