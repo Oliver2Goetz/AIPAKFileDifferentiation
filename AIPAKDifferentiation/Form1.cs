@@ -61,38 +61,40 @@ namespace AIPAKDifferentiation {
                     listviewDifferences.Items.Add(new ListViewItem(compositeEntry.ToStringArray()));
 
                     foreach (EntityDifference entityDifference in compositeDifference.entityDifferences) {
-                        ListViewItemEntry entityEntry = new ListViewItemEntry(
-                            CATHODE_TYPE.ENTITY,
-                            entityDifference.entity.shortGUID,
-                            compositeDifference.composite.name,
-                            entityDifference.entity.variant.ToString(),
-                            entityDifference.differenceType.ToString()
-                        );
-
-                        listviewDifferences.Items.Add(new ListViewItem(entityEntry.ToStringArray()));
-
-                        foreach (ParameterDifference parameterDifference in entityDifference.parameterDiffereces) {
-                            ListViewItemEntry parameterEntry = new ListViewItemEntry(
-                                CATHODE_TYPE.PARAMETER,
-                                parameterDifference.parameter.shortGUID,
+                        if (this.isValidEntityToShow(entityDifference)) {
+                            ListViewItemEntry entityEntry = new ListViewItemEntry(
+                                CATHODE_TYPE.ENTITY,
+                                entityDifference.entity.shortGUID,
                                 compositeDifference.composite.name,
-                                parameterDifference.parameter.content.dataType.ToString(),
-                                parameterDifference.differenceType.ToString()
+                                entityDifference.entity.variant.ToString(),
+                                entityDifference.differenceType.ToString()
                             );
 
-                            listviewDifferences.Items.Add(new ListViewItem(parameterEntry.ToStringArray()));
-                        }
+                            listviewDifferences.Items.Add(new ListViewItem(entityEntry.ToStringArray()));
 
-                        foreach (LinkDifference linkDifference in entityDifference.linkDifferences) {
-                            ListViewItemEntry linkEntry = new ListViewItemEntry(
-                                CATHODE_TYPE.LINK,
-                                linkDifference.link.connectionID,
-                                "childID: " + linkDifference.link.childID,
-                                "parentParamID: " + linkDifference.link.parentParamID + " | childParamID: " + linkDifference.link.childParamID,
-                                linkDifference.differenceType.ToString()
-                            );
+                            foreach (ParameterDifference parameterDifference in entityDifference.parameterDiffereces) {
+                                ListViewItemEntry parameterEntry = new ListViewItemEntry(
+                                    CATHODE_TYPE.PARAMETER,
+                                    parameterDifference.parameter.shortGUID,
+                                    compositeDifference.composite.name,
+                                    parameterDifference.parameter.content.dataType.ToString(),
+                                    parameterDifference.differenceType.ToString()
+                                );
 
-                            listviewDifferences.Items.Add(new ListViewItem(linkEntry.ToStringArray()));
+                                listviewDifferences.Items.Add(new ListViewItem(parameterEntry.ToStringArray()));
+                            }
+
+                            foreach (LinkDifference linkDifference in entityDifference.linkDifferences) {
+                                ListViewItemEntry linkEntry = new ListViewItemEntry(
+                                    CATHODE_TYPE.LINK,
+                                    linkDifference.link.connectionID,
+                                    "childID: " + linkDifference.link.childID,
+                                    "parentParamID: " + linkDifference.link.parentParamID + " | childParamID: " + linkDifference.link.childParamID,
+                                    linkDifference.differenceType.ToString()
+                                );
+
+                                listviewDifferences.Items.Add(new ListViewItem(linkEntry.ToStringArray()));
+                            }
                         }
                     }
                 }
@@ -131,6 +133,31 @@ namespace AIPAKDifferentiation {
             toolTip.ShowAlways = true;
 
             toolTip.SetToolTip(control, text);
+        }
+
+        /*
+         * Checks if an entity is valid -> used for filtering unwanted entities out (eg. override)
+         */
+        private bool isValidEntityToShow(EntityDifference entityDifference) {
+            bool isValid = true;
+
+            if (entityDifference.entity.variant == EntityVariant.OVERRIDE && checkboxEntityHideOverrides.Checked) {
+                isValid = false;
+            } else if (entityDifference.entity.variant == EntityVariant.NOT_SETUP && checkboxEntityHideNotSetup.Checked) {
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        private void checkboxEntityHideOverrides_CheckedChanged(object sender, EventArgs e) {
+            listviewDifferences.Items.Clear();
+            this.drawDifferencesToListView(this.compositeDifferences);
+        }
+
+        private void checkboxEntityHideNotSetup_CheckedChanged(object sender, EventArgs e) {
+            listviewDifferences.Items.Clear();
+            this.drawDifferencesToListView(this.compositeDifferences);
         }
     }
 }
