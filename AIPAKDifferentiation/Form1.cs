@@ -82,6 +82,18 @@ namespace AIPAKDifferentiation {
 
                             listviewDifferences.Items.Add(new ListViewItem(parameterEntry.ToStringArray()));
                         }
+
+                        foreach (LinkDifference linkDifference in entityDifference.linkDifferences) {
+                            ListViewItemEntry linkEntry = new ListViewItemEntry(
+                                CATHODE_TYPE.LINK,
+                                linkDifference.link.connectionID,
+                                "childID: " + linkDifference.link.childID,
+                                "parentParamID: " + linkDifference.link.parentParamID + " | childParamID: " + linkDifference.link.childParamID,
+                                linkDifference.differenceType.ToString()
+                            );
+
+                            listviewDifferences.Items.Add(new ListViewItem(linkEntry.ToStringArray()));
+                        }
                     }
                 }
             }

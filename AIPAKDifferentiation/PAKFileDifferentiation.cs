@@ -66,7 +66,7 @@ namespace AIPAKDifferentiation {
         private void loadDifferencesEntities(CathodeComposite composite, CathodeComposite pak2Composite) {
             CompositeDifference compositeDifference = new CompositeDifference(composite, COMPOSITE_DIFFERENCE_TYPE.MODIFIED);
             
-            foreach(CathodeEntity entity in composite.GetEntities()) {
+            foreach (CathodeEntity entity in composite.GetEntities()) {
                 // first we check for entity deletion
                 CathodeEntity pak2Entity = pak2Composite.GetEntityByID(entity.shortGUID);
                 if (pak2Entity == null) {
@@ -74,8 +74,12 @@ namespace AIPAKDifferentiation {
                     compositeDifference.entityDifferences.Add(entityDifference);
                 } else {
                     // now we handle modifications with parameters and links of this entity
-                    this.loadDifferencesParameters(entity, pak2Entity, compositeDifference);
-                    this.loadDifferencesLinks(entity, pak2Entity, compositeDifference);
+                    EntityDifference entityDifference = this.loadDifferencesParameters(entity, pak2Entity, compositeDifference);
+                    entityDifference = this.loadDifferencesLinks(entity, pak2Entity, compositeDifference, entityDifference);
+
+                    if (null != entityDifference) {
+                        compositeDifference.entityDifferences.Add(entityDifference);
+                    }
                 }
             }
             // afterwards we check if any entity has been created - we dont want any parameters here, just the newly created entities
@@ -92,7 +96,7 @@ namespace AIPAKDifferentiation {
             }
         }
 
-        private void loadDifferencesParameters(CathodeEntity entity, CathodeEntity pak2Entity, CompositeDifference compositeDifference) {
+        private EntityDifference loadDifferencesParameters(CathodeEntity entity, CathodeEntity pak2Entity, CompositeDifference compositeDifference) {
             EntityDifference entityDifference = new EntityDifference(entity, ENTITIY_DIFFERENCE_TYPE.MODIFIED);
 
             foreach (CathodeLoadedParameter parameter in entity.parameters) {
@@ -107,10 +111,10 @@ namespace AIPAKDifferentiation {
                     this.loadParameterValues(parameter, pak2Parameter, entityDifference); // TODO has to be implemented
                 }
             }
-            //afterwards we check if any parameter has been created - we dont want any parameter values here, just newly created parameters
-            foreach(CathodeLoadedParameter pak2Parameter in pak2Entity.parameters) {
+            // afterwards we check if any parameter has been created - we dont want any parameter values here, just newly created parameters
+            foreach (CathodeLoadedParameter pak2Parameter in pak2Entity.parameters) {
                 CathodeLoadedParameter foundPak1Parameter = entity.parameters.Find(x => x.shortGUID == pak2Parameter.shortGUID);
-                if(null == foundPak1Parameter) {
+                if (null == foundPak1Parameter) {
                     ParameterDifference parameterDifference = new ParameterDifference(pak2Parameter, PARAMETER_DIFFERENCE_TYPE.CREATED);
                     entityDifference.parameterDiffereces.Add(parameterDifference);
                 }
@@ -118,11 +122,44 @@ namespace AIPAKDifferentiation {
 
             if (0 < entityDifference.parameterDiffereces.Count) {
                 compositeDifference.entityDifferences.Add(entityDifference);
+                return entityDifference;
+            } else {
+                return null;
             }
         }
 
-        private void loadDifferencesLinks(CathodeEntity entity, CathodeEntity pak2Entity, CompositeDifference compositeDifference) {
-            
+        private EntityDifference loadDifferencesLinks(CathodeEntity entity, CathodeEntity pak2Entity, CompositeDifference compositeDifference, EntityDifference entityDifference) {
+            List<LinkDifference> linkDifferences = new List<LinkDifference>();
+
+            // first we check for deletion (modification of a link is not possible - in this case it would be a new link
+            foreach (CathodeEntityLink link  in entity.childLinks) {
+                CathodeEntityLink pak2Link = pak2Entity.childLinks.Find(x => x.connectionID == link.connectionID);
+
+                if (null == pak2Link.connectionID) {
+                    LinkDifference linkDifference = new LinkDifference(link, LINK_DIFFERENCE_TYPE.DELETED);
+                    linkDifferences.Add(linkDifference);
+                }
+            }
+            // afterwards we check if any link has been created
+            foreach (CathodeEntityLink pak2Link in pak2Entity.childLinks) {
+                CathodeEntityLink foundPak1Link = entity.childLinks.Find(x => x.connectionID == pak2Link.connectionID);
+                if (null == foundPak1Link.connectionID) {
+                    LinkDifference linkDifference = new LinkDifference(pak2Link, LINK_DIFFERENCE_TYPE.CREATED);
+                    linkDifferences.Add(linkDifference);
+                }
+            }
+
+            if (null == entityDifference && 0 < linkDifferences.Count) {
+                entityDifference = new EntityDifference(entity, ENTITIY_DIFFERENCE_TYPE.MODIFIED);
+                compositeDifference.entityDifferences.Add(entityDifference);
+            }
+            if (0 < linkDifferences.Count) {
+                entityDifference.linkDifferences.AddRange(linkDifferences);
+
+                return entityDifference;
+            }
+
+            return null;
         }
 
         private void loadParameterValues(CathodeLoadedParameter parameter, CathodeLoadedParameter pak2Parameter, EntityDifference entityDifference) {

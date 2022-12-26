@@ -25,6 +25,7 @@ namespace AIPAKDifferentiation {
         public CathodeEntity entity;
         public ENTITIY_DIFFERENCE_TYPE differenceType;
         public List<ParameterDifference> parameterDiffereces = new List<ParameterDifference>();
+        public List<LinkDifference> linkDifferences = new List<LinkDifference>();
 
         public EntityDifference(CathodeEntity entity, ENTITIY_DIFFERENCE_TYPE differenceType) {
             this.entity = entity;
@@ -39,6 +40,17 @@ namespace AIPAKDifferentiation {
 
         public ParameterDifference(CathodeLoadedParameter parameter, PARAMETER_DIFFERENCE_TYPE differenceType) {
             this.parameter = parameter;
+            this.differenceType = differenceType;
+        }
+    }
+
+    class LinkDifference {
+
+        public CathodeEntityLink link;
+        public LINK_DIFFERENCE_TYPE differenceType;
+
+        public LinkDifference(CathodeEntityLink link, LINK_DIFFERENCE_TYPE differenceType) {
+            this.link = link;
             this.differenceType = differenceType;
         }
     }
@@ -75,7 +87,8 @@ namespace AIPAKDifferentiation {
     enum CATHODE_TYPE {
         COMPOSITE,
         ENTITY,
-        PARAMETER
+        PARAMETER,
+        LINK
     }
 
     enum COMPOSITE_DIFFERENCE_TYPE {
@@ -94,5 +107,10 @@ namespace AIPAKDifferentiation {
         CREATED,   // means that in PAK2 this parameter was created
         MODIFIED,  // means that in PAK2 this parameter was modified (on it's parameter settings)
         DELETED    // means that in PAK2 this parameter was deleted
+    }
+
+    enum LINK_DIFFERENCE_TYPE {
+        CREATED,   // means that in PAK2 this link was created
+        DELETED    // means that in PAK2 this link was deleted
     }
 }
