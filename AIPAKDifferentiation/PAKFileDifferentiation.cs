@@ -172,7 +172,10 @@ namespace AIPAKDifferentiation {
                         parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + cBool2.value.ToString();
                         break;
                     case DataType.VECTOR:
-                        // TODO
+                        cVector3 cVector3 = (cVector3)parameter.content;
+                        cVector3 cVector32 = (cVector3)pak2Parameter.content;
+                        parameterDifference.valueBefore = data.dataType.ToString() + ": " + cVector3.value.ToString();
+                        parameterDifference.valueBefore = pak2Parameter.content.dataType.ToString() + ": " + cVector32.value.ToString();
                         break;
                     case DataType.TRANSFORM:
                         cTransform cTransform = (cTransform)parameter.content;
