@@ -22,6 +22,7 @@ namespace AIPAKDifferentiation {
         EntityUtils entityUtilsPak2 = null;
 
         private List<CompositeDifference> compositeDifferences = new List<CompositeDifference>();
+        private List<ListViewItem> preparedDifferencesList = new List<ListViewItem>();
 
         public AIPAKDifferentiation() {
             InitializeComponent();
@@ -42,7 +43,8 @@ namespace AIPAKDifferentiation {
             listviewDifferences.Items.Clear();
 
             this.loadPakFileDifferences();
-            drawDifferencesToListView(this.compositeDifferences);
+            this.preparedDifferencesList = getDifferencesAsListViewItemList(this.compositeDifferences);
+            listviewDifferences.Items.AddRange(this.preparedDifferencesList.ToArray());
         }
 
         private void loadPakFileDifferences() {
@@ -52,7 +54,9 @@ namespace AIPAKDifferentiation {
             this.compositeDifferences = pakFileDifferentiation.loadDifferences();
         }
 
-        private void drawDifferencesToListView(List<CompositeDifference> differences) {
+        private List<ListViewItem> getDifferencesAsListViewItemList(List<CompositeDifference> differences) {
+            List<ListViewItem> preparedDifferencesList = new List<ListViewItem>();
+
             if (null != differences) {
                 foreach (CompositeDifference compositeDifference in differences) {
                     ListViewItemEntry compositeEntry = new ListViewItemEntry(
@@ -64,7 +68,7 @@ namespace AIPAKDifferentiation {
                         compositeDifference.differenceType.ToString()
                     );
 
-                    listviewDifferences.Items.Add(new ListViewItem(compositeEntry.ToStringArray()));
+                    preparedDifferencesList.Add(new ListViewItem(compositeEntry.ToStringArray()));
 
                     foreach (EntityDifference entityDifference in compositeDifference.entityDifferences) {
                         if (this.isValidEntityToShow(entityDifference)) {
@@ -77,7 +81,7 @@ namespace AIPAKDifferentiation {
                                 entityDifference.differenceType.ToString()
                             );
 
-                            listviewDifferences.Items.Add(new ListViewItem(entityEntry.ToStringArray()));
+                            preparedDifferencesList.Add(new ListViewItem(entityEntry.ToStringArray()));
 
                             foreach (ParameterDifference parameterDifference in entityDifference.parameterDiffereces) {
                                 ListViewItemEntry parameterEntry = new ListViewItemEntry(
@@ -89,7 +93,7 @@ namespace AIPAKDifferentiation {
                                     parameterDifference.differenceType.ToString()
                                 );
 
-                                listviewDifferences.Items.Add(new ListViewItem(parameterEntry.ToStringArray()));
+                                preparedDifferencesList.Add(new ListViewItem(parameterEntry.ToStringArray()));
                             }
 
                             foreach (LinkDifference linkDifference in entityDifference.linkDifferences) {
@@ -109,12 +113,14 @@ namespace AIPAKDifferentiation {
                                     linkDifference.differenceType.ToString()
                                 );
 
-                                listviewDifferences.Items.Add(new ListViewItem(linkEntry.ToStringArray()));
+                                preparedDifferencesList.Add(new ListViewItem(linkEntry.ToStringArray()));
                             }
                         }
                     }
                 }
             }
+
+            return preparedDifferencesList;
         }
 
         private void buttonBrowsePak1_Click(object sender, EventArgs e) {
@@ -166,7 +172,8 @@ namespace AIPAKDifferentiation {
 
         private void checkboxEntityHideOverrides_CheckedChanged(object sender, EventArgs e) {
             listviewDifferences.Items.Clear();
-            this.drawDifferencesToListView(this.compositeDifferences);
+            this.preparedDifferencesList = getDifferencesAsListViewItemList(this.compositeDifferences);
+            listviewDifferences.Items.AddRange(this.preparedDifferencesList.ToArray());
         }
     }
 }

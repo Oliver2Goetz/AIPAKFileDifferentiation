@@ -30,6 +30,7 @@
             this.columnGuid = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnValueBefore = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnValueAfter = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnDifferenceType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.labelDifferences = new System.Windows.Forms.Label();
             this.buttonBrowsePak1 = new System.Windows.Forms.Button();
@@ -38,7 +39,7 @@
             this.labelPak2 = new System.Windows.Forms.Label();
             this.fileDialog = new System.Windows.Forms.OpenFileDialog();
             this.checkboxEntityHideOverrides = new System.Windows.Forms.CheckBox();
-            this.columnValueAfter = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.labelFilters = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // buttonPakShowDifferences
@@ -96,6 +97,11 @@
             // 
             this.columnValueBefore.Text = "Initial Value";
             this.columnValueBefore.Width = 240;
+            // 
+            // columnValueAfter
+            // 
+            this.columnValueAfter.Text = "New value";
+            this.columnValueAfter.Width = 240;
             // 
             // columnDifferenceType
             // 
@@ -163,7 +169,7 @@
             // checkboxEntityHideOverrides
             // 
             this.checkboxEntityHideOverrides.AutoSize = true;
-            this.checkboxEntityHideOverrides.Location = new System.Drawing.Point(151, 93);
+            this.checkboxEntityHideOverrides.Location = new System.Drawing.Point(211, 93);
             this.checkboxEntityHideOverrides.Name = "checkboxEntityHideOverrides";
             this.checkboxEntityHideOverrides.Size = new System.Drawing.Size(143, 17);
             this.checkboxEntityHideOverrides.TabIndex = 7;
@@ -171,16 +177,22 @@
             this.checkboxEntityHideOverrides.UseVisualStyleBackColor = true;
             this.checkboxEntityHideOverrides.CheckedChanged += new System.EventHandler(this.checkboxEntityHideOverrides_CheckedChanged);
             // 
-            // columnValueAfter
+            // labelFilters
             // 
-            this.columnValueAfter.Text = "New value";
-            this.columnValueAfter.Width = 240;
+            this.labelFilters.AutoSize = true;
+            this.labelFilters.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.75F);
+            this.labelFilters.Location = new System.Drawing.Point(148, 92);
+            this.labelFilters.Name = "labelFilters";
+            this.labelFilters.Size = new System.Drawing.Size(43, 15);
+            this.labelFilters.TabIndex = 8;
+            this.labelFilters.Text = "Filters:";
             // 
             // AIPAKDifferentiation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1284, 661);
+            this.Controls.Add(this.labelFilters);
             this.Controls.Add(this.checkboxEntityHideOverrides);
             this.Controls.Add(this.labelPak2);
             this.Controls.Add(this.labelPak1);
@@ -219,6 +231,7 @@
         private System.Windows.Forms.OpenFileDialog fileDialog;
         private System.Windows.Forms.CheckBox checkboxEntityHideOverrides;
         private System.Windows.Forms.ColumnHeader columnValueAfter;
+        private System.Windows.Forms.Label labelFilters;
     }
 }
 
