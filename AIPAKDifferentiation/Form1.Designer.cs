@@ -29,7 +29,7 @@
             this.columnCathodeType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnGuid = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnValue = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnValueBefore = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnDifferenceType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.labelDifferences = new System.Windows.Forms.Label();
             this.buttonBrowsePak1 = new System.Windows.Forms.Button();
@@ -38,6 +38,7 @@
             this.labelPak2 = new System.Windows.Forms.Label();
             this.fileDialog = new System.Windows.Forms.OpenFileDialog();
             this.checkboxEntityHideOverrides = new System.Windows.Forms.CheckBox();
+            this.columnValueAfter = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // buttonPakShowDifferences
@@ -59,7 +60,8 @@
             this.columnCathodeType,
             this.columnGuid,
             this.columnName,
-            this.columnValue,
+            this.columnValueBefore,
+            this.columnValueAfter,
             this.columnDifferenceType});
             this.listviewDifferences.FullRowSelect = true;
             this.listviewDifferences.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
@@ -69,7 +71,7 @@
             this.listviewDifferences.Name = "listviewDifferences";
             this.listviewDifferences.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.listviewDifferences.ShowItemToolTips = true;
-            this.listviewDifferences.Size = new System.Drawing.Size(960, 400);
+            this.listviewDifferences.Size = new System.Drawing.Size(1260, 500);
             this.listviewDifferences.TabIndex = 0;
             this.listviewDifferences.TabStop = false;
             this.listviewDifferences.UseCompatibleStateImageBehavior = false;
@@ -78,22 +80,22 @@
             // columnCathodeType
             // 
             this.columnCathodeType.Text = "Cathode Type";
-            this.columnCathodeType.Width = 100;
+            this.columnCathodeType.Width = 85;
             // 
             // columnGuid
             // 
             this.columnGuid.Text = "Guid";
-            this.columnGuid.Width = 90;
+            this.columnGuid.Width = 75;
             // 
             // columnName
             // 
             this.columnName.Text = "Name";
-            this.columnName.Width = 330;
+            this.columnName.Width = 500;
             // 
-            // columnValue
+            // columnValueBefore
             // 
-            this.columnValue.Text = "Value";
-            this.columnValue.Width = 330;
+            this.columnValueBefore.Text = "Initial Value";
+            this.columnValueBefore.Width = 240;
             // 
             // columnDifferenceType
             // 
@@ -169,11 +171,16 @@
             this.checkboxEntityHideOverrides.UseVisualStyleBackColor = true;
             this.checkboxEntityHideOverrides.CheckedChanged += new System.EventHandler(this.checkboxEntityHideOverrides_CheckedChanged);
             // 
+            // columnValueAfter
+            // 
+            this.columnValueAfter.Text = "New value";
+            this.columnValueAfter.Width = 240;
+            // 
             // AIPAKDifferentiation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(984, 561);
+            this.ClientSize = new System.Drawing.Size(1284, 661);
             this.Controls.Add(this.checkboxEntityHideOverrides);
             this.Controls.Add(this.labelPak2);
             this.Controls.Add(this.labelPak1);
@@ -184,8 +191,8 @@
             this.Controls.Add(this.buttonPakShowDifferences);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(1000, 600);
-            this.MinimumSize = new System.Drawing.Size(1000, 600);
+            this.MaximumSize = new System.Drawing.Size(1300, 700);
+            this.MinimumSize = new System.Drawing.Size(1300, 700);
             this.Name = "AIPAKDifferentiation";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AIPAKDifferentiation";
@@ -201,7 +208,7 @@
         private System.Windows.Forms.ListView listviewDifferences;
         private System.Windows.Forms.Label labelDifferences;
         private System.Windows.Forms.ColumnHeader columnCathodeType;
-        private System.Windows.Forms.ColumnHeader columnValue;
+        private System.Windows.Forms.ColumnHeader columnValueBefore;
         private System.Windows.Forms.ColumnHeader columnDifferenceType;
         private System.Windows.Forms.ColumnHeader columnGuid;
         private System.Windows.Forms.ColumnHeader columnName;
@@ -211,6 +218,7 @@
         private System.Windows.Forms.Label labelPak2;
         private System.Windows.Forms.OpenFileDialog fileDialog;
         private System.Windows.Forms.CheckBox checkboxEntityHideOverrides;
+        private System.Windows.Forms.ColumnHeader columnValueAfter;
     }
 }
 

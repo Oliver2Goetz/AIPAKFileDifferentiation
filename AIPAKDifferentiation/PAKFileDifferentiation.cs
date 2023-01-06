@@ -112,8 +112,11 @@ namespace AIPAKDifferentiation {
                     ParameterDifference parameterDifference = new ParameterDifference(parameter, PARAMETER_DIFFERENCE_TYPE.DELETED);
                     entityDifference.parameterDiffereces.Add(parameterDifference);
                 } else {
-                    // now we handle modification of parameter values of this parameter
-                    this.loadParameterValues(parameter, pak2Parameter, entityDifference); // TODO has to be implemented
+                    ParameterDifference parameterDifference = loadParameterValues(parameter, pak2Parameter, entityDifference);
+
+                    if (null != parameterDifference) {
+                        entityDifference.parameterDiffereces.Add(parameterDifference);
+                    }
                 }
             }
             // afterwards we check if any parameter has been created - we dont want any parameter values here, just newly created parameters
@@ -131,6 +134,98 @@ namespace AIPAKDifferentiation {
             } else {
                 return null;
             }
+        }
+
+        /*
+         * Checks if the parameter in both entities from each PAK are the same
+         * The performance of this part is really bad currently
+         */
+        private ParameterDifference loadParameterValues(Parameter parameter, Parameter pak2Parameter, EntityDifference entityDifference) {
+            ParameterDifference parameterDifference = new ParameterDifference(parameter, PARAMETER_DIFFERENCE_TYPE.MODIFIED);
+
+            ParameterData data = parameter.content;
+            if (data.dataType == pak2Parameter.content.dataType) {
+                // this part is trash - maybe change that if everything is clear in the end
+                switch (data.dataType) {
+                    case DataType.STRING:
+                        cString cString = (cString)parameter.content;
+                        cString cString2 = (cString)pak2Parameter.content;
+                        parameterDifference.valueBefore = data.dataType.ToString() + ": " + cString.value;
+                        parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + cString2.value;
+                        break;
+                    case DataType.FLOAT:
+                        cFloat cFloat = (cFloat)parameter.content;
+                        cFloat cFloat2 = (cFloat)pak2Parameter.content;
+                        parameterDifference.valueBefore = data.dataType.ToString() + ": " + cFloat.value.ToString();
+                        parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + cFloat2.value.ToString();
+                        break;
+                    case DataType.INTEGER:
+                        cInteger cInteger = (cInteger)parameter.content;
+                        cInteger cInteger2 = (cInteger)pak2Parameter.content;
+                        parameterDifference.valueBefore = data.dataType.ToString() + ": " + cInteger.value.ToString();
+                        parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + cInteger2.value.ToString();
+                        break;
+                    case DataType.BOOL:
+                        cBool cBool = (cBool)parameter.content;
+                        cBool cBool2 = (cBool)pak2Parameter.content;
+                        parameterDifference.valueBefore = data.dataType.ToString() + ": " + cBool.value.ToString();
+                        parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + cBool2.value.ToString();
+                        break;
+                    case DataType.VECTOR:
+                        // TODO
+                        break;
+                    case DataType.TRANSFORM:
+                        cTransform cTransform = (cTransform)parameter.content;
+                        cTransform cTransform2 = (cTransform)pak2Parameter.content;
+                        parameterDifference.valueBefore = data.dataType.ToString() + ": " + cTransform.position.ToString();
+                        parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + cTransform2.position.ToString();
+                        break;
+                    case DataType.ENUM:
+                        // TODO
+                        break;
+                    case DataType.SPLINE:
+                        // TODO
+                        break;
+                    case DataType.RESOURCE:
+                        // TODO
+                        break;
+                    case DataType.FILEPATH:
+                        // TODO
+                        break;
+                    case DataType.OBJECT:
+                        // TODO
+                        break;
+                    case DataType.ZONE_LINK_PTR:
+                        // TODO
+                        break;
+                    case DataType.ZONE_PTR:
+                        // TODO
+                        break;
+                    case DataType.MARKER:
+                        // TODO
+                        break;
+                    case DataType.CHARACTER:
+                        // TODO
+                        break;
+                    case DataType.CAMERA:
+                        // TODO
+                        break;
+                    case DataType.NONE:
+                    default:
+                        // Do nothing - default values already set
+                        break;
+                }
+            } else { // dataType was changed of this parameter (this case probably shouldn't exist since it's not possible to date to edit the datatype itself)
+                parameterDifference.valueBefore = "Initial type: " + data.dataType.ToString();
+                parameterDifference.valueAfter = "New type" + pak2Parameter.content.dataType.ToString();
+            }
+
+            // check if they are the same - if yes there is no difference
+            if (parameterDifference.valueBefore == parameterDifference.valueAfter) {
+                return null;
+            }
+
+            return parameterDifference;
         }
 
         private EntityDifference loadDifferencesLinks(Entity entity, Entity pak2Entity, CompositeDifference compositeDifference, EntityDifference entityDifference) {
@@ -165,10 +260,6 @@ namespace AIPAKDifferentiation {
             }
 
             return null;
-        }
-
-        private void loadParameterValues(Parameter parameter, Parameter pak2Parameter, EntityDifference entityDifference) {
-            
         }
     }
 }

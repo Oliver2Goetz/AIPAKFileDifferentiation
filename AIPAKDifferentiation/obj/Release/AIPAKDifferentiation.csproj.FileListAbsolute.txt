@@ -17,3 +17,4 @@ D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\obj\Release\
 D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\obj\Release\AIPAKDifferentiation.csproj.CopyComplete
 D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\obj\Release\AIPAKDifferentiation.exe
 D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\obj\Release\AIPAKDifferentiation.pdb
+D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\obj\Release\AIPAKDifferentiation.csprojAssemblyReference.cache

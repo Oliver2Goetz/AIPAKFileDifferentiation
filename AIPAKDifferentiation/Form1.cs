@@ -60,6 +60,7 @@ namespace AIPAKDifferentiation {
                         compositeDifference.composite.shortGUID.ToString(),
                         compositeDifference.composite.name,
                         "-",
+                        "-",
                         compositeDifference.differenceType.ToString()
                     );
 
@@ -72,6 +73,7 @@ namespace AIPAKDifferentiation {
                                 entityDifference.entity.shortGUID.ToString(),
                                 entityUtilsPak1.GetName(compositeDifference.composite.shortGUID, entityDifference.entity.shortGUID),
                                 entityDifference.entity.variant.ToString(),
+                                entityDifference.entity.variant.ToString(),
                                 entityDifference.differenceType.ToString()
                             );
 
@@ -80,9 +82,10 @@ namespace AIPAKDifferentiation {
                             foreach (ParameterDifference parameterDifference in entityDifference.parameterDiffereces) {
                                 ListViewItemEntry parameterEntry = new ListViewItemEntry(
                                     CATHODE_TYPE.PARAMETER,
+                                    parameterDifference.parameter.shortGUID.ToByteString(),
                                     parameterDifference.parameter.shortGUID.ToString(),
-                                    parameterDifference.parameter.variant.ToString(),
-                                    parameterDifference.parameter.content.dataType.ToString(),
+                                    parameterDifference.valueBefore,
+                                    parameterDifference.valueAfter,
                                     parameterDifference.differenceType.ToString()
                                 );
 
@@ -95,6 +98,7 @@ namespace AIPAKDifferentiation {
                                     linkDifference.link.connectionID.ToString(),
                                     "childID: " + linkDifference.link.childID,
                                     "parentParamID: " + linkDifference.link.parentParamID + " | childParamID: " + linkDifference.link.childParamID,
+                                    "-",
                                     linkDifference.differenceType.ToString()
                                 );
 

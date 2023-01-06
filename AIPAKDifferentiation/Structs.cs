@@ -39,6 +39,8 @@ namespace AIPAKDifferentiation {
 
         public Parameter parameter;
         public PARAMETER_DIFFERENCE_TYPE differenceType;
+        public string valueBefore = "-";
+        public string valueAfter = "-";
 
         public ParameterDifference(Parameter parameter, PARAMETER_DIFFERENCE_TYPE differenceType) {
             this.parameter = parameter;
@@ -61,26 +63,29 @@ namespace AIPAKDifferentiation {
 
         private CATHODE_TYPE cathodeType;
         private string identifier; // in case of composite and entity this should be the shortGuid. Parameter doesn't have a shortGuid as of now
-        private string compositeName;
         private string name;
+        private string valueBefore;
+        private string valueAfter;
         private string differenceType;
 
-        public ListViewItemEntry(CATHODE_TYPE cathodeType, string identifier, string compositeName, string name, string differenceType) {
+        public ListViewItemEntry(CATHODE_TYPE cathodeType, string identifier, string name, string valueBefore, string valueAfter, string differenceType) {
             this.cathodeType = cathodeType;
             this.identifier = identifier;
-            this.compositeName = compositeName;
             this.name = name;
+            this.valueBefore = valueBefore;
+            this.valueAfter = valueAfter;
             this.differenceType = differenceType;
         }
 
         public string[] ToStringArray() {
-            string[] arr = new string[5];
+            string[] arr = new string[6];
 
             arr[0] = this.cathodeType.ToString();
             arr[1] = this.identifier;
-            arr[2] = this.compositeName;
-            arr[3] = this.name;
-            arr[4] = this.differenceType;
+            arr[2] = this.name;
+            arr[3] = this.valueBefore;
+            arr[4] = this.valueAfter;
+            arr[5] = this.differenceType;
 
             return arr;
         }
