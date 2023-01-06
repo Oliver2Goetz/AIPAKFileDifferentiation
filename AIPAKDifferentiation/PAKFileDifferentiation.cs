@@ -234,8 +234,7 @@ namespace AIPAKDifferentiation {
             // first we check for deletion (modification of a link is not possible - in this case it would be a new link
             foreach (EntityLink link  in entity.childLinks) {
                 EntityLink pak2Link = pak2Entity.childLinks.Find(x => x.connectionID == link.connectionID);
-
-                if (null == pak2Link.connectionID) {
+                if (null == pak2Link.connectionID.val) {
                     LinkDifference linkDifference = new LinkDifference(link, LINK_DIFFERENCE_TYPE.DELETED);
                     linkDifferences.Add(linkDifference);
                 }
@@ -243,7 +242,7 @@ namespace AIPAKDifferentiation {
             // afterwards we check if any link has been created
             foreach (EntityLink pak2Link in pak2Entity.childLinks) {
                 EntityLink foundPak1Link = entity.childLinks.Find(x => x.connectionID == pak2Link.connectionID);
-                if (null == foundPak1Link.connectionID) {
+                if (null == foundPak1Link.connectionID.val) {
                     LinkDifference linkDifference = new LinkDifference(pak2Link, LINK_DIFFERENCE_TYPE.CREATED);
                     linkDifferences.Add(linkDifference);
                 }
