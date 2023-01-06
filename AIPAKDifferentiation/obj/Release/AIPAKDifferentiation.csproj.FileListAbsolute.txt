@@ -1,11 +1,6 @@
 D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\bin\Release\AIPAKDifferentiation.exe.config
 D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\bin\Release\AIPAKDifferentiation.exe
 D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\bin\Release\AIPAKDifferentiation.pdb
-D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\bin\Release\CathodeLib.dll
-D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\bin\Release\System.Buffers.dll
-D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\bin\Release\System.Memory.dll
-D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\bin\Release\System.Numerics.Vectors.dll
-D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\bin\Release\System.Runtime.CompilerServices.Unsafe.dll
 D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\bin\Release\System.Buffers.xml
 D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\bin\Release\System.Memory.xml
 D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\bin\Release\System.Numerics.Vectors.xml
@@ -17,4 +12,5 @@ D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\obj\Release\
 D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\obj\Release\AIPAKDifferentiation.csproj.CopyComplete
 D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\obj\Release\AIPAKDifferentiation.exe
 D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\obj\Release\AIPAKDifferentiation.pdb
-D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\obj\Release\AIPAKDifferentiation.csprojAssemblyReference.cache
+D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\obj\Release\AIPAKDifferentiation.csproj.AssemblyReference.cache
+D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\obj\Release\AIPAKDifferentiation.csproj.Fody.CopyLocal.cache
