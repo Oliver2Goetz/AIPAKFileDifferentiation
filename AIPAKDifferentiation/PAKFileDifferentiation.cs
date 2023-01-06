@@ -19,6 +19,8 @@ namespace AIPAKDifferentiation {
 
         Commands pak1 = null;
         Commands pak2 = null;
+        public EntityUtils entityUtilsPak1 = null;
+        public EntityUtils entityUtilsPak2 = null;
 
         List<CompositeDifference> compositeDifferences = new List<CompositeDifference>();
 
@@ -33,6 +35,8 @@ namespace AIPAKDifferentiation {
             // Load PAKs
             this.pak1 = new Commands(pakPath1);
             this.pak2 = new Commands(pakPath2);
+            this.entityUtilsPak1 = new EntityUtils(this.pak1);
+            this.entityUtilsPak2 = new EntityUtils(this.pak2);
         }
 
         public List<CompositeDifference> loadDifferences() {

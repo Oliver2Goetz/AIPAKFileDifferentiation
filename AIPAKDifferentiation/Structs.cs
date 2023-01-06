@@ -60,14 +60,14 @@ namespace AIPAKDifferentiation {
     class ListViewItemEntry {
 
         private CATHODE_TYPE cathodeType;
-        private ShortGuid shortGuid;
+        private string identifier; // in case of composite and entity this should be the shortGuid. Parameter doesn't have a shortGuid as of now
         private string compositeName;
         private string name;
         private string differenceType;
 
-        public ListViewItemEntry(CATHODE_TYPE cathodeType, ShortGuid shortGuid, string compositeName, string name, string differenceType) {
+        public ListViewItemEntry(CATHODE_TYPE cathodeType, string identifier, string compositeName, string name, string differenceType) {
             this.cathodeType = cathodeType;
-            this.shortGuid = shortGuid;
+            this.identifier = identifier;
             this.compositeName = compositeName;
             this.name = name;
             this.differenceType = differenceType;
@@ -77,7 +77,7 @@ namespace AIPAKDifferentiation {
             string[] arr = new string[5];
 
             arr[0] = this.cathodeType.ToString();
-            arr[1] = this.shortGuid.ToString();
+            arr[1] = this.identifier;
             arr[2] = this.compositeName;
             arr[3] = this.name;
             arr[4] = this.differenceType;

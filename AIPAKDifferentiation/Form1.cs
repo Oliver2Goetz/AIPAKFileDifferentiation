@@ -18,6 +18,8 @@ namespace AIPAKDifferentiation {
 
         private string pakPath1 = "";
         private string pakPath2 = "";
+        EntityUtils entityUtilsPak1 = null;
+        EntityUtils entityUtilsPak2 = null;
 
         private List<CompositeDifference> compositeDifferences = new List<CompositeDifference>();
 
@@ -45,6 +47,8 @@ namespace AIPAKDifferentiation {
 
         private void loadPakFileDifferences() {
             PAKFileDifferentiation pakFileDifferentiation = new PAKFileDifferentiation(this.pakPath1, this.pakPath2);
+            this.entityUtilsPak1 = pakFileDifferentiation.entityUtilsPak1;
+            this.entityUtilsPak2 = pakFileDifferentiation.entityUtilsPak2;
             this.compositeDifferences = pakFileDifferentiation.loadDifferences();
         }
 
@@ -53,9 +57,9 @@ namespace AIPAKDifferentiation {
                 foreach (CompositeDifference compositeDifference in differences) {
                     ListViewItemEntry compositeEntry = new ListViewItemEntry(
                         CATHODE_TYPE.COMPOSITE,
-                        compositeDifference.composite.shortGUID,
-                        "-",
+                        compositeDifference.composite.shortGUID.ToString(),
                         compositeDifference.composite.name,
+                        "-",
                         compositeDifference.differenceType.ToString()
                     );
 
@@ -65,8 +69,8 @@ namespace AIPAKDifferentiation {
                         if (this.isValidEntityToShow(entityDifference)) {
                             ListViewItemEntry entityEntry = new ListViewItemEntry(
                                 CATHODE_TYPE.ENTITY,
-                                entityDifference.entity.shortGUID,
-                                compositeDifference.composite.name,
+                                entityDifference.entity.shortGUID.ToString(),
+                                entityUtilsPak1.GetName(compositeDifference.composite.shortGUID, entityDifference.entity.shortGUID),
                                 entityDifference.entity.variant.ToString(),
                                 entityDifference.differenceType.ToString()
                             );
@@ -76,8 +80,8 @@ namespace AIPAKDifferentiation {
                             foreach (ParameterDifference parameterDifference in entityDifference.parameterDiffereces) {
                                 ListViewItemEntry parameterEntry = new ListViewItemEntry(
                                     CATHODE_TYPE.PARAMETER,
-                                    parameterDifference.parameter.shortGUID,
-                                    "entity: " + entityDifference.entity.shortGUID.ToString() + " in composite: " + compositeDifference.composite.name,
+                                    parameterDifference.parameter.shortGUID.ToString(),
+                                    parameterDifference.parameter.variant.ToString(),
                                     parameterDifference.parameter.content.dataType.ToString(),
                                     parameterDifference.differenceType.ToString()
                                 );
@@ -88,7 +92,7 @@ namespace AIPAKDifferentiation {
                             foreach (LinkDifference linkDifference in entityDifference.linkDifferences) {
                                 ListViewItemEntry linkEntry = new ListViewItemEntry(
                                     CATHODE_TYPE.LINK,
-                                    linkDifference.link.connectionID,
+                                    linkDifference.link.connectionID.ToString(),
                                     "childID: " + linkDifference.link.childID,
                                     "parentParamID: " + linkDifference.link.parentParamID + " | childParamID: " + linkDifference.link.childParamID,
                                     linkDifference.differenceType.ToString()

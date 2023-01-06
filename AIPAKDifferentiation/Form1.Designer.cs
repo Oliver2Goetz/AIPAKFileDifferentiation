@@ -28,8 +28,8 @@
             this.listviewDifferences = new System.Windows.Forms.ListView();
             this.columnCathodeType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnGuid = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnCompositeName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnValue = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnDifferenceType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.labelDifferences = new System.Windows.Forms.Label();
             this.buttonBrowsePak1 = new System.Windows.Forms.Button();
@@ -58,8 +58,8 @@
             this.listviewDifferences.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnCathodeType,
             this.columnGuid,
-            this.columnCompositeName,
             this.columnName,
+            this.columnValue,
             this.columnDifferenceType});
             this.listviewDifferences.FullRowSelect = true;
             this.listviewDifferences.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
@@ -85,15 +85,15 @@
             this.columnGuid.Text = "Guid";
             this.columnGuid.Width = 90;
             // 
-            // columnCompositeName
-            // 
-            this.columnCompositeName.Text = "composite name";
-            this.columnCompositeName.Width = 330;
-            // 
             // columnName
             // 
             this.columnName.Text = "Name";
             this.columnName.Width = 330;
+            // 
+            // columnValue
+            // 
+            this.columnValue.Text = "Value";
+            this.columnValue.Width = 330;
             // 
             // columnDifferenceType
             // 
@@ -201,10 +201,10 @@
         private System.Windows.Forms.ListView listviewDifferences;
         private System.Windows.Forms.Label labelDifferences;
         private System.Windows.Forms.ColumnHeader columnCathodeType;
-        private System.Windows.Forms.ColumnHeader columnName;
+        private System.Windows.Forms.ColumnHeader columnValue;
         private System.Windows.Forms.ColumnHeader columnDifferenceType;
         private System.Windows.Forms.ColumnHeader columnGuid;
-        private System.Windows.Forms.ColumnHeader columnCompositeName;
+        private System.Windows.Forms.ColumnHeader columnName;
         private System.Windows.Forms.Button buttonBrowsePak1;
         private System.Windows.Forms.Button buttonBrowsePak2;
         private System.Windows.Forms.Label labelPak1;
