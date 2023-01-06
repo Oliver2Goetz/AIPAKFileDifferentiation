@@ -93,12 +93,19 @@ namespace AIPAKDifferentiation {
                             }
 
                             foreach (LinkDifference linkDifference in entityDifference.linkDifferences) {
+                                string valueBefore = "[" + linkDifference.link.parentParamID.ToString() + "] => [" + linkDifference.link.childParamID + "]";
+                                string valueAfter = "-";
+                                if (linkDifference.differenceType == LINK_DIFFERENCE_TYPE.CREATED) {
+                                    valueAfter = valueBefore;
+                                    valueBefore = "-";
+                                }
+
                                 ListViewItemEntry linkEntry = new ListViewItemEntry(
                                     CATHODE_TYPE.LINK,
                                     linkDifference.link.connectionID.ToString(),
-                                    "childID: " + linkDifference.link.childID,
-                                    "parentParamID: " + linkDifference.link.parentParamID + " | childParamID: " + linkDifference.link.childParamID,
-                                    "-",
+                                    "entityID: " + entityDifference.entity.shortGUID.ToString() + " childID: " + linkDifference.link.childID,
+                                    valueBefore,
+                                    valueAfter,
                                     linkDifference.differenceType.ToString()
                                 );
 
