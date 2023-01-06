@@ -4,17 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using CATHODE.Commands;
+using CATHODE;
+using CATHODE.Scripting;
+using CATHODE.Scripting.Internal;
 
 namespace AIPAKDifferentiation {
 
     class CompositeDifference {
 
-        public CathodeComposite composite;
+        public Composite composite;
         public COMPOSITE_DIFFERENCE_TYPE differenceType;
         public List<EntityDifference> entityDifferences = new List<EntityDifference>();
 
-        public CompositeDifference(CathodeComposite composite, COMPOSITE_DIFFERENCE_TYPE differenceType) {
+        public CompositeDifference(Composite composite, COMPOSITE_DIFFERENCE_TYPE differenceType) {
             this.composite = composite;
             this.differenceType = differenceType;
         }
@@ -22,12 +24,12 @@ namespace AIPAKDifferentiation {
 
     class EntityDifference {
 
-        public CathodeEntity entity;
+        public Entity entity;
         public ENTITIY_DIFFERENCE_TYPE differenceType;
         public List<ParameterDifference> parameterDiffereces = new List<ParameterDifference>();
         public List<LinkDifference> linkDifferences = new List<LinkDifference>();
 
-        public EntityDifference(CathodeEntity entity, ENTITIY_DIFFERENCE_TYPE differenceType) {
+        public EntityDifference(Entity entity, ENTITIY_DIFFERENCE_TYPE differenceType) {
             this.entity = entity;
             this.differenceType = differenceType;
         }
@@ -35,10 +37,10 @@ namespace AIPAKDifferentiation {
 
     class ParameterDifference {
 
-        public CathodeLoadedParameter parameter;
+        public Parameter parameter;
         public PARAMETER_DIFFERENCE_TYPE differenceType;
 
-        public ParameterDifference(CathodeLoadedParameter parameter, PARAMETER_DIFFERENCE_TYPE differenceType) {
+        public ParameterDifference(Parameter parameter, PARAMETER_DIFFERENCE_TYPE differenceType) {
             this.parameter = parameter;
             this.differenceType = differenceType;
         }
@@ -46,10 +48,10 @@ namespace AIPAKDifferentiation {
 
     class LinkDifference {
 
-        public CathodeEntityLink link;
+        public EntityLink link;
         public LINK_DIFFERENCE_TYPE differenceType;
 
-        public LinkDifference(CathodeEntityLink link, LINK_DIFFERENCE_TYPE differenceType) {
+        public LinkDifference(EntityLink link, LINK_DIFFERENCE_TYPE differenceType) {
             this.link = link;
             this.differenceType = differenceType;
         }

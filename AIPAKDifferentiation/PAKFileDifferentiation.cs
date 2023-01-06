@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 
-using CATHODE.Commands;
+using CATHODE;
+using CATHODE.Scripting;
+using CATHODE.Scripting.Internal;
 
 namespace AIPAKDifferentiation {
 
@@ -15,8 +17,8 @@ namespace AIPAKDifferentiation {
         private string pakPath1 = "";
         private string pakPath2 = "";
 
-        CommandsPAK pak1 = null;
-        CommandsPAK pak2 = null;
+        Commands pak1 = null;
+        Commands pak2 = null;
 
         List<CompositeDifference> compositeDifferences = new List<CompositeDifference>();
 
@@ -29,8 +31,8 @@ namespace AIPAKDifferentiation {
             this.pakPath2 = pakPath2;
 
             // Load PAKs
-            this.pak1 = new CommandsPAK(pakPath1);
-            this.pak2 = new CommandsPAK(pakPath2);
+            this.pak1 = new Commands(pakPath1);
+            this.pak2 = new Commands(pakPath2);
         }
 
         public List<CompositeDifference> loadDifferences() {
@@ -44,7 +46,7 @@ namespace AIPAKDifferentiation {
         }
 
         private void loadDifferencesComposites() {
-            foreach (CathodeComposite composite in pak1.Composites) {
+            foreach (Composite composite in pak1.Composites) {
                 // first we check for composite deletion
                 if (!pak2.GetCompositeNames().ToList().Contains(composite.name)) {
                     CompositeDifference compositeDifference = new CompositeDifference(composite, COMPOSITE_DIFFERENCE_TYPE.DELETED);
@@ -55,7 +57,7 @@ namespace AIPAKDifferentiation {
                 }
             }
             // afterwards we check if any composite has been created - this does not mean we want all the entities and parameter inside the newly created composite. We only want the composite in this case
-            foreach (CathodeComposite pak2composite in pak2.Composites) {
+            foreach (Composite pak2composite in pak2.Composites) {
                 if (!pak1.GetCompositeNames().ToList().Contains(pak2composite.name)) {
                     CompositeDifference compositeDifference = new CompositeDifference(pak2composite, COMPOSITE_DIFFERENCE_TYPE.CREATED);
                     this.compositeDifferences.Add(compositeDifference);
@@ -63,12 +65,12 @@ namespace AIPAKDifferentiation {
             }
         }
 
-        private void loadDifferencesEntities(CathodeComposite composite, CathodeComposite pak2Composite) {
+        private void loadDifferencesEntities(Composite composite, Composite pak2Composite) {
             CompositeDifference compositeDifference = new CompositeDifference(composite, COMPOSITE_DIFFERENCE_TYPE.MODIFIED);
             
-            foreach (CathodeEntity entity in composite.GetEntities()) {
+            foreach (Entity entity in composite.GetEntities()) {
                 // first we check for entity deletion
-                CathodeEntity pak2Entity = pak2Composite.GetEntityByID(entity.shortGUID);
+                Entity pak2Entity = pak2Composite.GetEntityByID(entity.shortGUID);
                 if (pak2Entity == null) {
                     EntityDifference entityDifference = new EntityDifference(entity, ENTITIY_DIFFERENCE_TYPE.DELETED);
                     compositeDifference.entityDifferences.Add(entityDifference);
@@ -83,7 +85,7 @@ namespace AIPAKDifferentiation {
                 }
             }
             // afterwards we check if any entity has been created - we dont want any parameters here, just the newly created entities
-            foreach (CathodeEntity pak2Entity in pak2Composite.GetEntities()) {
+            foreach (Entity pak2Entity in pak2Composite.GetEntities()) {
                 if (null == composite.GetEntityByID(pak2Entity.shortGUID)) { // null means the entity with guid from composite2 wasn't found in composite1
                     EntityDifference entityDifference = new EntityDifference(pak2Entity, ENTITIY_DIFFERENCE_TYPE.CREATED);
                     compositeDifference.entityDifferences.Add(entityDifference);
@@ -96,13 +98,12 @@ namespace AIPAKDifferentiation {
             }
         }
 
-        private EntityDifference loadDifferencesParameters(CathodeEntity entity, CathodeEntity pak2Entity, CompositeDifference compositeDifference) {
+        private EntityDifference loadDifferencesParameters(Entity entity, Entity pak2Entity, CompositeDifference compositeDifference) {
             EntityDifference entityDifference = new EntityDifference(entity, ENTITIY_DIFFERENCE_TYPE.MODIFIED);
 
-            foreach (CathodeLoadedParameter parameter in entity.parameters) {
+            foreach (Parameter parameter in entity.parameters) {
                 // first we check for parameter deletion
-                CathodeParameter content = parameter.content;
-                CathodeLoadedParameter pak2Parameter = pak2Entity.parameters.Find(x => x.shortGUID == parameter.shortGUID);
+                Parameter pak2Parameter = pak2Entity.parameters.Find(x => x.shortGUID == parameter.shortGUID);
                 if(null == pak2Parameter) {
                     ParameterDifference parameterDifference = new ParameterDifference(parameter, PARAMETER_DIFFERENCE_TYPE.DELETED);
                     entityDifference.parameterDiffereces.Add(parameterDifference);
@@ -112,8 +113,8 @@ namespace AIPAKDifferentiation {
                 }
             }
             // afterwards we check if any parameter has been created - we dont want any parameter values here, just newly created parameters
-            foreach (CathodeLoadedParameter pak2Parameter in pak2Entity.parameters) {
-                CathodeLoadedParameter foundPak1Parameter = entity.parameters.Find(x => x.shortGUID == pak2Parameter.shortGUID);
+            foreach (Parameter pak2Parameter in pak2Entity.parameters) {
+                Parameter foundPak1Parameter = entity.parameters.Find(x => x.shortGUID == pak2Parameter.shortGUID);
                 if (null == foundPak1Parameter) {
                     ParameterDifference parameterDifference = new ParameterDifference(pak2Parameter, PARAMETER_DIFFERENCE_TYPE.CREATED);
                     entityDifference.parameterDiffereces.Add(parameterDifference);
@@ -128,12 +129,12 @@ namespace AIPAKDifferentiation {
             }
         }
 
-        private EntityDifference loadDifferencesLinks(CathodeEntity entity, CathodeEntity pak2Entity, CompositeDifference compositeDifference, EntityDifference entityDifference) {
+        private EntityDifference loadDifferencesLinks(Entity entity, Entity pak2Entity, CompositeDifference compositeDifference, EntityDifference entityDifference) {
             List<LinkDifference> linkDifferences = new List<LinkDifference>();
 
             // first we check for deletion (modification of a link is not possible - in this case it would be a new link
-            foreach (CathodeEntityLink link  in entity.childLinks) {
-                CathodeEntityLink pak2Link = pak2Entity.childLinks.Find(x => x.connectionID == link.connectionID);
+            foreach (EntityLink link  in entity.childLinks) {
+                EntityLink pak2Link = pak2Entity.childLinks.Find(x => x.connectionID == link.connectionID);
 
                 if (null == pak2Link.connectionID) {
                     LinkDifference linkDifference = new LinkDifference(link, LINK_DIFFERENCE_TYPE.DELETED);
@@ -141,8 +142,8 @@ namespace AIPAKDifferentiation {
                 }
             }
             // afterwards we check if any link has been created
-            foreach (CathodeEntityLink pak2Link in pak2Entity.childLinks) {
-                CathodeEntityLink foundPak1Link = entity.childLinks.Find(x => x.connectionID == pak2Link.connectionID);
+            foreach (EntityLink pak2Link in pak2Entity.childLinks) {
+                EntityLink foundPak1Link = entity.childLinks.Find(x => x.connectionID == pak2Link.connectionID);
                 if (null == foundPak1Link.connectionID) {
                     LinkDifference linkDifference = new LinkDifference(pak2Link, LINK_DIFFERENCE_TYPE.CREATED);
                     linkDifferences.Add(linkDifference);
@@ -162,8 +163,8 @@ namespace AIPAKDifferentiation {
             return null;
         }
 
-        private void loadParameterValues(CathodeLoadedParameter parameter, CathodeLoadedParameter pak2Parameter, EntityDifference entityDifference) {
-
+        private void loadParameterValues(Parameter parameter, Parameter pak2Parameter, EntityDifference entityDifference) {
+            
         }
     }
 }

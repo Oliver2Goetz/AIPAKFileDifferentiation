@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 
-using CATHODE.Commands;
+using CATHODE;
+using CATHODE.Scripting;
 
 namespace AIPAKDifferentiation {
 
@@ -76,7 +77,7 @@ namespace AIPAKDifferentiation {
                                 ListViewItemEntry parameterEntry = new ListViewItemEntry(
                                     CATHODE_TYPE.PARAMETER,
                                     parameterDifference.parameter.shortGUID,
-                                    compositeDifference.composite.name,
+                                    "entity: " + entityDifference.entity.shortGUID.ToString() + " in composite: " + compositeDifference.composite.name,
                                     parameterDifference.parameter.content.dataType.ToString(),
                                     parameterDifference.differenceType.ToString()
                                 );
@@ -143,19 +144,12 @@ namespace AIPAKDifferentiation {
 
             if (entityDifference.entity.variant == EntityVariant.OVERRIDE && checkboxEntityHideOverrides.Checked) {
                 isValid = false;
-            } else if (entityDifference.entity.variant == EntityVariant.NOT_SETUP && checkboxEntityHideNotSetup.Checked) {
-                isValid = false;
             }
 
             return isValid;
         }
 
         private void checkboxEntityHideOverrides_CheckedChanged(object sender, EventArgs e) {
-            listviewDifferences.Items.Clear();
-            this.drawDifferencesToListView(this.compositeDifferences);
-        }
-
-        private void checkboxEntityHideNotSetup_CheckedChanged(object sender, EventArgs e) {
             listviewDifferences.Items.Clear();
             this.drawDifferencesToListView(this.compositeDifferences);
         }

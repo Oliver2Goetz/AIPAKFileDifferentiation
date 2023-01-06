@@ -38,7 +38,6 @@
             this.labelPak2 = new System.Windows.Forms.Label();
             this.fileDialog = new System.Windows.Forms.OpenFileDialog();
             this.checkboxEntityHideOverrides = new System.Windows.Forms.CheckBox();
-            this.checkboxEntityHideNotSetup = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // buttonPakShowDifferences
@@ -170,23 +169,11 @@
             this.checkboxEntityHideOverrides.UseVisualStyleBackColor = true;
             this.checkboxEntityHideOverrides.CheckedChanged += new System.EventHandler(this.checkboxEntityHideOverrides_CheckedChanged);
             // 
-            // checkboxEntityHideNotSetup
-            // 
-            this.checkboxEntityHideNotSetup.AutoSize = true;
-            this.checkboxEntityHideNotSetup.Location = new System.Drawing.Point(300, 93);
-            this.checkboxEntityHideNotSetup.Name = "checkboxEntityHideNotSetup";
-            this.checkboxEntityHideNotSetup.Size = new System.Drawing.Size(152, 17);
-            this.checkboxEntityHideNotSetup.TabIndex = 7;
-            this.checkboxEntityHideNotSetup.Text = "Hide NOT_SETUP entities";
-            this.checkboxEntityHideNotSetup.UseVisualStyleBackColor = true;
-            this.checkboxEntityHideNotSetup.CheckedChanged += new System.EventHandler(this.checkboxEntityHideNotSetup_CheckedChanged);
-            // 
             // AIPAKDifferentiation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(984, 561);
-            this.Controls.Add(this.checkboxEntityHideNotSetup);
             this.Controls.Add(this.checkboxEntityHideOverrides);
             this.Controls.Add(this.labelPak2);
             this.Controls.Add(this.labelPak1);
@@ -224,7 +211,6 @@
         private System.Windows.Forms.Label labelPak2;
         private System.Windows.Forms.OpenFileDialog fileDialog;
         private System.Windows.Forms.CheckBox checkboxEntityHideOverrides;
-        private System.Windows.Forms.CheckBox checkboxEntityHideNotSetup;
     }
 }
 
