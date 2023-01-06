@@ -175,7 +175,7 @@ namespace AIPAKDifferentiation {
                         cVector3 cVector3 = (cVector3)parameter.content;
                         cVector3 cVector32 = (cVector3)pak2Parameter.content;
                         parameterDifference.valueBefore = data.dataType.ToString() + ": " + cVector3.value.ToString();
-                        parameterDifference.valueBefore = pak2Parameter.content.dataType.ToString() + ": " + cVector32.value.ToString();
+                        parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + cVector32.value.ToString();
                         break;
                     case DataType.TRANSFORM:
                         cTransform cTransform = (cTransform)parameter.content;
@@ -213,9 +213,10 @@ namespace AIPAKDifferentiation {
                     case DataType.CAMERA:
                         // TODO
                         break;
+
                     case DataType.NONE:
                     default:
-                        // Do nothing - default values already set
+                        // Do nothing - default values are already set
                         break;
                 }
             } else { // dataType was changed of this parameter (this case probably shouldn't exist since it's not possible to date to edit the datatype itself)
