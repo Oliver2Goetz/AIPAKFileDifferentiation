@@ -12,9 +12,11 @@ using System.Windows.Forms;
 using CATHODE;
 using CATHODE.Scripting;
 
-namespace AIPAKDifferentiation {
+namespace AIPAKDifferentiation
+{
 
-    public partial class AIPAKDifferentiation : Form {
+    public partial class AIPAKDifferentiation : Form
+    {
 
         private string pakPath1 = "";
         private string pakPath2 = "";
@@ -59,7 +61,7 @@ namespace AIPAKDifferentiation {
 
             if (null != differences) {
                 foreach (CompositeDifference compositeDifference in differences) {
-                    if (isShowComposites()) {
+                    if (this.isShowComposites() && this.showDifferenceTypeByDifferenceType(compositeDifference.differenceType)) {
                         ListViewItemEntry compositeEntry = new ListViewItemEntry(
                             CATHODE_TYPE.COMPOSITE,
                             compositeDifference.composite.shortGUID.ToString(),
@@ -74,7 +76,7 @@ namespace AIPAKDifferentiation {
 
                     foreach (EntityDifference entityDifference in compositeDifference.entityDifferences) {
                         if (this.isValidEntityToShow(entityDifference)) {
-                            if (this.isShowEntities()) {
+                            if (this.isShowEntities() && this.showDifferenceTypeByDifferenceType(entityDifference.differenceType)) {
                                 ListViewItemEntry entityEntry = new ListViewItemEntry(
                                     CATHODE_TYPE.ENTITY,
                                     entityDifference.entity.shortGUID.ToString(),
@@ -88,7 +90,7 @@ namespace AIPAKDifferentiation {
                             }
 
                             foreach (ParameterDifference parameterDifference in entityDifference.parameterDiffereces) {
-                                if (this.isShowParameters()) {
+                                if (this.isShowParameters() && this.showDifferenceTypeByDifferenceType(parameterDifference.differenceType)) {
                                     ListViewItemEntry parameterEntry = new ListViewItemEntry(
                                         CATHODE_TYPE.PARAMETER,
                                         parameterDifference.parameter.shortGUID.ToByteString(),
@@ -103,7 +105,7 @@ namespace AIPAKDifferentiation {
                             }
 
                             foreach (LinkDifference linkDifference in entityDifference.linkDifferences) {
-                                if (this.isShowLinks()) {
+                                if (this.isShowLinks() && this.showDifferenceTypeByDifferenceType(linkDifference.differenceType)) {
                                     string valueBefore = "[" + linkDifference.link.parentParamID.ToString() + "] => [" + linkDifference.link.childParamID + "]";
                                     string valueAfter = "-";
                                     if (linkDifference.differenceType == DIFFERENCE_TYPE.CREATED) {
@@ -199,6 +201,36 @@ namespace AIPAKDifferentiation {
         }
 
         /*
+         * Validates if the given differenceType of the given differenceType is allowed to be shown
+         * The param differenceType is given by the corresponding composite, entity, parameter or link
+         */
+        private bool showDifferenceTypeByDifferenceType(DIFFERENCE_TYPE differenceType) {
+            bool show = true;
+
+            switch (differenceType) {
+                case DIFFERENCE_TYPE.CREATED:
+                    if (this.checkboxHideCreated.Checked) {
+                        show = false;
+                    }
+                    break;
+                case DIFFERENCE_TYPE.MODIFIED:
+                    if (this.checkboxHideModified.Checked) {
+                        show = false;
+                    }
+                    break;
+                case DIFFERENCE_TYPE.DELETED:
+                    if (this.checkboxHideDeleted.Checked) {
+                        show = false;
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            return show;
+        }
+
+        /*
          * Checks if an entity is valid -> used for filtering unwanted entities out (eg. override)
          */
         private bool isValidEntityToShow(EntityDifference entityDifference) {
@@ -216,6 +248,8 @@ namespace AIPAKDifferentiation {
             this.preparedDifferencesList = getDifferencesAsListViewItemList(this.compositeDifferences);
             listviewDifferences.Items.AddRange(this.preparedDifferencesList.ToArray());
         }
+
+        #region filters
 
         private void checkboxEntityHideOverrides_CheckedChanged(object sender, EventArgs e) {
             this.refreshListViewWithFilters();
@@ -236,5 +270,19 @@ namespace AIPAKDifferentiation {
         private void checkboxHideLinks_CheckedChanged(object sender, EventArgs e) {
             this.refreshListViewWithFilters();
         }
+
+        private void checkHideCreated_CheckedChanged(object sender, EventArgs e) {
+            this.refreshListViewWithFilters();
+        }
+
+        private void checkboxHideModified_CheckedChanged(object sender, EventArgs e) {
+            this.refreshListViewWithFilters();
+        }
+
+        private void checkboxHideDeleted_CheckedChanged(object sender, EventArgs e) {
+            this.refreshListViewWithFilters();
+        }
+
+        #endregion
     }
 }
