@@ -68,7 +68,7 @@ namespace AIPAKDifferentiation {
                         compositeDifference.differenceType.ToString()
                     );
 
-                    preparedDifferencesList.Add(new ListViewItem(compositeEntry.ToStringArray()));
+                    preparedDifferencesList.Add(new ListViewItem(compositeEntry.ToStringArray(), 0, Color.Black, Color.LightGray, new Font("Microsoft Sans Serif", 8.25f)));
 
                     foreach (EntityDifference entityDifference in compositeDifference.entityDifferences) {
                         if (this.isValidEntityToShow(entityDifference)) {
@@ -124,6 +124,14 @@ namespace AIPAKDifferentiation {
         }
 
         private void buttonBrowsePak1_Click(object sender, EventArgs e) {
+            string initialDirectory = "";
+            if (0 < this.pakPath1.Length) {
+                string directoryName = Path.GetDirectoryName(this.pakPath1);
+                if (Directory.Exists(directoryName)) {
+                    initialDirectory = directoryName;
+                }
+            }
+
             this.pakPath1 = this.getFileDialogResult("Select PAK 1");
             labelPak1.Text = "PAK 1: " + this.pakPath1;
             this.setToolTip(labelPak1, this.pakPath1);
@@ -131,15 +139,24 @@ namespace AIPAKDifferentiation {
         }
 
         private void buttonBrowsePak2_Click(object sender, EventArgs e) {
+            string initialDirectory = "";
+            if (0 < this.pakPath2.Length) {
+                string directoryName = Path.GetDirectoryName(this.pakPath2);
+                if (Directory.Exists(directoryName)) {
+                    initialDirectory = directoryName;
+                }
+            }
+
             this.pakPath2 = this.getFileDialogResult("Select PAK 2");
             labelPak2.Text = "PAK 2: " + this.pakPath2;
             this.setToolTip(labelPak2, this.pakPath2);
         }
 
-        private string getFileDialogResult(string title) {
+        private string getFileDialogResult(string title, string initialDirectory = "") {
             string result = "";
 
             fileDialog.Title = title;
+            fileDialog.InitialDirectory = initialDirectory;
 
             if (fileDialog.ShowDialog() == DialogResult.OK) {
                 result = fileDialog.FileName;
