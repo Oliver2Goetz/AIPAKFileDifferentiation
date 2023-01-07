@@ -13,10 +13,10 @@ namespace AIPAKDifferentiation {
     class CompositeDifference {
 
         public Composite composite;
-        public COMPOSITE_DIFFERENCE_TYPE differenceType;
+        public DIFFERENCE_TYPE differenceType;
         public List<EntityDifference> entityDifferences = new List<EntityDifference>();
 
-        public CompositeDifference(Composite composite, COMPOSITE_DIFFERENCE_TYPE differenceType) {
+        public CompositeDifference(Composite composite, DIFFERENCE_TYPE differenceType) {
             this.composite = composite;
             this.differenceType = differenceType;
         }
@@ -25,11 +25,11 @@ namespace AIPAKDifferentiation {
     class EntityDifference {
 
         public Entity entity;
-        public ENTITIY_DIFFERENCE_TYPE differenceType;
+        public DIFFERENCE_TYPE differenceType;
         public List<ParameterDifference> parameterDiffereces = new List<ParameterDifference>();
         public List<LinkDifference> linkDifferences = new List<LinkDifference>();
 
-        public EntityDifference(Entity entity, ENTITIY_DIFFERENCE_TYPE differenceType) {
+        public EntityDifference(Entity entity, DIFFERENCE_TYPE differenceType) {
             this.entity = entity;
             this.differenceType = differenceType;
         }
@@ -38,11 +38,11 @@ namespace AIPAKDifferentiation {
     class ParameterDifference {
 
         public Parameter parameter;
-        public PARAMETER_DIFFERENCE_TYPE differenceType;
+        public DIFFERENCE_TYPE differenceType;
         public string valueBefore = "-";
         public string valueAfter = "-";
 
-        public ParameterDifference(Parameter parameter, PARAMETER_DIFFERENCE_TYPE differenceType) {
+        public ParameterDifference(Parameter parameter, DIFFERENCE_TYPE differenceType) {
             this.parameter = parameter;
             this.differenceType = differenceType;
         }
@@ -51,9 +51,9 @@ namespace AIPAKDifferentiation {
     class LinkDifference {
 
         public EntityLink link;
-        public LINK_DIFFERENCE_TYPE differenceType;
+        public DIFFERENCE_TYPE differenceType;
 
-        public LinkDifference(EntityLink link, LINK_DIFFERENCE_TYPE differenceType) {
+        public LinkDifference(EntityLink link, DIFFERENCE_TYPE differenceType) {
             this.link = link;
             this.differenceType = differenceType;
         }
@@ -98,26 +98,20 @@ namespace AIPAKDifferentiation {
         LINK
     }
 
-    enum COMPOSITE_DIFFERENCE_TYPE {
-        CREATED,   // means that in PAK2 this composite was created
-        MODIFIED,  // means that in PAK2 this composite was modified (on it's entities)
-        DELETED    // means that in PAK2 this composite was deleted
-    }
-
-    enum ENTITIY_DIFFERENCE_TYPE {
-        CREATED,   // means that in PAK2 this entity was created
-        MODIFIED,  // means that in PAK2 this entity was modified (on it's parameter)
-        DELETED    // means that in PAK2 this entity was deleted
-    }
-
-    enum PARAMETER_DIFFERENCE_TYPE {
-        CREATED,   // means that in PAK2 this parameter was created
-        MODIFIED,  // means that in PAK2 this parameter was modified (on it's parameter settings)
-        DELETED    // means that in PAK2 this parameter was deleted
-    }
-
-    enum LINK_DIFFERENCE_TYPE {
-        CREATED,   // means that in PAK2 this link was created
-        DELETED    // means that in PAK2 this link was deleted
+    enum DIFFERENCE_TYPE {
+        // means that in PAK2 this composite was created// means that in PAK2 this entity was created
+        // means that in PAK2 this entity was created
+        // means that in PAK2 this parameter was created
+        // means that in PAK2 this link was created
+        CREATED,
+        // means that in PAK2 this composite was modified (on it's entities)
+        // means that in PAK2 this entity was modified (on it's parameter)
+        // means that in PAK2 this parameter was modified (on it's parameter settings)
+        MODIFIED,
+        // means that in PAK2 this composite was deleted
+        // means that in PAK2 this entity was deleted
+        // means that in PAK2 this parameter was deleted
+        // means that in PAK2 this link was deleted
+        DELETED
     }
 }

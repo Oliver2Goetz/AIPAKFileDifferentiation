@@ -106,7 +106,7 @@ namespace AIPAKDifferentiation {
                                 if (this.isShowLinks()) {
                                     string valueBefore = "[" + linkDifference.link.parentParamID.ToString() + "] => [" + linkDifference.link.childParamID + "]";
                                     string valueAfter = "-";
-                                    if (linkDifference.differenceType == LINK_DIFFERENCE_TYPE.CREATED) {
+                                    if (linkDifference.differenceType == DIFFERENCE_TYPE.CREATED) {
                                         valueAfter = valueBefore;
                                         valueBefore = "-";
                                     }
