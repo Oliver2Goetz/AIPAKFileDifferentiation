@@ -40,6 +40,10 @@
             this.fileDialog = new System.Windows.Forms.OpenFileDialog();
             this.checkboxEntityHideOverrides = new System.Windows.Forms.CheckBox();
             this.labelFilters = new System.Windows.Forms.Label();
+            this.checkboxHideComposites = new System.Windows.Forms.CheckBox();
+            this.checkboxHideEntities = new System.Windows.Forms.CheckBox();
+            this.checkboxHideParameters = new System.Windows.Forms.CheckBox();
+            this.checkboxHideLinks = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // buttonPakShowDifferences
@@ -187,11 +191,59 @@
             this.labelFilters.TabIndex = 8;
             this.labelFilters.Text = "Filters:";
             // 
+            // checkboxHideComposites
+            // 
+            this.checkboxHideComposites.AutoSize = true;
+            this.checkboxHideComposites.Location = new System.Drawing.Point(395, 93);
+            this.checkboxHideComposites.Name = "checkboxHideComposites";
+            this.checkboxHideComposites.Size = new System.Drawing.Size(104, 17);
+            this.checkboxHideComposites.TabIndex = 9;
+            this.checkboxHideComposites.Text = "Hide composites";
+            this.checkboxHideComposites.UseVisualStyleBackColor = true;
+            this.checkboxHideComposites.CheckedChanged += new System.EventHandler(this.checkboxHideComposites_CheckedChanged);
+            // 
+            // checkboxHideEntities
+            // 
+            this.checkboxHideEntities.AutoSize = true;
+            this.checkboxHideEntities.Location = new System.Drawing.Point(505, 93);
+            this.checkboxHideEntities.Name = "checkboxHideEntities";
+            this.checkboxHideEntities.Size = new System.Drawing.Size(84, 17);
+            this.checkboxHideEntities.TabIndex = 10;
+            this.checkboxHideEntities.Text = "Hide entities";
+            this.checkboxHideEntities.UseVisualStyleBackColor = true;
+            this.checkboxHideEntities.CheckedChanged += new System.EventHandler(this.checkboxHideEntities_CheckedChanged);
+            // 
+            // checkboxHideParameters
+            // 
+            this.checkboxHideParameters.AutoSize = true;
+            this.checkboxHideParameters.Location = new System.Drawing.Point(595, 93);
+            this.checkboxHideParameters.Name = "checkboxHideParameters";
+            this.checkboxHideParameters.Size = new System.Drawing.Size(103, 17);
+            this.checkboxHideParameters.TabIndex = 11;
+            this.checkboxHideParameters.Text = "Hide parameters";
+            this.checkboxHideParameters.UseVisualStyleBackColor = true;
+            this.checkboxHideParameters.CheckedChanged += new System.EventHandler(this.checkboxHideParameters_CheckedChanged);
+            // 
+            // checkboxHideLinks
+            // 
+            this.checkboxHideLinks.AutoSize = true;
+            this.checkboxHideLinks.Location = new System.Drawing.Point(704, 93);
+            this.checkboxHideLinks.Name = "checkboxHideLinks";
+            this.checkboxHideLinks.Size = new System.Drawing.Size(72, 17);
+            this.checkboxHideLinks.TabIndex = 11;
+            this.checkboxHideLinks.Text = "Hide links";
+            this.checkboxHideLinks.UseVisualStyleBackColor = true;
+            this.checkboxHideLinks.CheckedChanged += new System.EventHandler(this.checkboxHideLinks_CheckedChanged);
+            // 
             // AIPAKDifferentiation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1284, 661);
+            this.Controls.Add(this.checkboxHideLinks);
+            this.Controls.Add(this.checkboxHideParameters);
+            this.Controls.Add(this.checkboxHideEntities);
+            this.Controls.Add(this.checkboxHideComposites);
             this.Controls.Add(this.labelFilters);
             this.Controls.Add(this.checkboxEntityHideOverrides);
             this.Controls.Add(this.labelPak2);
@@ -232,6 +284,10 @@
         private System.Windows.Forms.CheckBox checkboxEntityHideOverrides;
         private System.Windows.Forms.ColumnHeader columnValueAfter;
         private System.Windows.Forms.Label labelFilters;
+        private System.Windows.Forms.CheckBox checkboxHideComposites;
+        private System.Windows.Forms.CheckBox checkboxHideEntities;
+        private System.Windows.Forms.CheckBox checkboxHideParameters;
+        private System.Windows.Forms.CheckBox checkboxHideLinks;
     }
 }
 

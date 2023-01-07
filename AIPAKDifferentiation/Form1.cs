@@ -59,61 +59,69 @@ namespace AIPAKDifferentiation {
 
             if (null != differences) {
                 foreach (CompositeDifference compositeDifference in differences) {
-                    ListViewItemEntry compositeEntry = new ListViewItemEntry(
-                        CATHODE_TYPE.COMPOSITE,
-                        compositeDifference.composite.shortGUID.ToString(),
-                        compositeDifference.composite.name,
-                        "-",
-                        "-",
-                        compositeDifference.differenceType.ToString()
-                    );
+                    if (isShowComposites()) {
+                        ListViewItemEntry compositeEntry = new ListViewItemEntry(
+                            CATHODE_TYPE.COMPOSITE,
+                            compositeDifference.composite.shortGUID.ToString(),
+                            compositeDifference.composite.name,
+                            "-",
+                            "-",
+                            compositeDifference.differenceType.ToString()
+                        );
 
-                    preparedDifferencesList.Add(new ListViewItem(compositeEntry.ToStringArray(), 0, Color.Black, Color.LightGray, new Font("Microsoft Sans Serif", 8.25f)));
+                        preparedDifferencesList.Add(new ListViewItem(compositeEntry.ToStringArray(), 0, Color.Black, Color.LightGray, new Font("Microsoft Sans Serif", 8.25f)));
+                    }
 
                     foreach (EntityDifference entityDifference in compositeDifference.entityDifferences) {
                         if (this.isValidEntityToShow(entityDifference)) {
-                            ListViewItemEntry entityEntry = new ListViewItemEntry(
-                                CATHODE_TYPE.ENTITY,
-                                entityDifference.entity.shortGUID.ToString(),
-                                entityUtilsPak1.GetName(compositeDifference.composite.shortGUID, entityDifference.entity.shortGUID),
-                                entityDifference.entity.variant.ToString(),
-                                entityDifference.entity.variant.ToString(),
-                                entityDifference.differenceType.ToString()
-                            );
-
-                            preparedDifferencesList.Add(new ListViewItem(entityEntry.ToStringArray()));
-
-                            foreach (ParameterDifference parameterDifference in entityDifference.parameterDiffereces) {
-                                ListViewItemEntry parameterEntry = new ListViewItemEntry(
-                                    CATHODE_TYPE.PARAMETER,
-                                    parameterDifference.parameter.shortGUID.ToByteString(),
-                                    parameterDifference.parameter.shortGUID.ToString(),
-                                    parameterDifference.valueBefore,
-                                    parameterDifference.valueAfter,
-                                    parameterDifference.differenceType.ToString()
+                            if (this.isShowEntities()) {
+                                ListViewItemEntry entityEntry = new ListViewItemEntry(
+                                    CATHODE_TYPE.ENTITY,
+                                    entityDifference.entity.shortGUID.ToString(),
+                                    entityUtilsPak1.GetName(compositeDifference.composite.shortGUID, entityDifference.entity.shortGUID),
+                                    entityDifference.entity.variant.ToString(),
+                                    entityDifference.entity.variant.ToString(),
+                                    entityDifference.differenceType.ToString()
                                 );
 
-                                preparedDifferencesList.Add(new ListViewItem(parameterEntry.ToStringArray()));
+                                preparedDifferencesList.Add(new ListViewItem(entityEntry.ToStringArray()));
+                            }
+
+                            foreach (ParameterDifference parameterDifference in entityDifference.parameterDiffereces) {
+                                if (this.isShowParameters()) {
+                                    ListViewItemEntry parameterEntry = new ListViewItemEntry(
+                                        CATHODE_TYPE.PARAMETER,
+                                        parameterDifference.parameter.shortGUID.ToByteString(),
+                                        parameterDifference.parameter.shortGUID.ToString(),
+                                        parameterDifference.valueBefore,
+                                        parameterDifference.valueAfter,
+                                        parameterDifference.differenceType.ToString()
+                                    );
+
+                                    preparedDifferencesList.Add(new ListViewItem(parameterEntry.ToStringArray()));
+                                }
                             }
 
                             foreach (LinkDifference linkDifference in entityDifference.linkDifferences) {
-                                string valueBefore = "[" + linkDifference.link.parentParamID.ToString() + "] => [" + linkDifference.link.childParamID + "]";
-                                string valueAfter = "-";
-                                if (linkDifference.differenceType == LINK_DIFFERENCE_TYPE.CREATED) {
-                                    valueAfter = valueBefore;
-                                    valueBefore = "-";
+                                if (this.isShowLinks()) {
+                                    string valueBefore = "[" + linkDifference.link.parentParamID.ToString() + "] => [" + linkDifference.link.childParamID + "]";
+                                    string valueAfter = "-";
+                                    if (linkDifference.differenceType == LINK_DIFFERENCE_TYPE.CREATED) {
+                                        valueAfter = valueBefore;
+                                        valueBefore = "-";
+                                    }
+
+                                    ListViewItemEntry linkEntry = new ListViewItemEntry(
+                                        CATHODE_TYPE.LINK,
+                                        linkDifference.link.connectionID.ToString(),
+                                        "entityID: " + entityDifference.entity.shortGUID.ToString() + " childID: " + linkDifference.link.childID,
+                                        valueBefore,
+                                        valueAfter,
+                                        linkDifference.differenceType.ToString()
+                                    );
+
+                                    preparedDifferencesList.Add(new ListViewItem(linkEntry.ToStringArray()));
                                 }
-
-                                ListViewItemEntry linkEntry = new ListViewItemEntry(
-                                    CATHODE_TYPE.LINK,
-                                    linkDifference.link.connectionID.ToString(),
-                                    "entityID: " + entityDifference.entity.shortGUID.ToString() + " childID: " + linkDifference.link.childID,
-                                    valueBefore,
-                                    valueAfter,
-                                    linkDifference.differenceType.ToString()
-                                );
-
-                                preparedDifferencesList.Add(new ListViewItem(linkEntry.ToStringArray()));
                             }
                         }
                     }
@@ -132,10 +140,10 @@ namespace AIPAKDifferentiation {
                 }
             }
 
-            this.pakPath1 = this.getFileDialogResult("Select PAK 1");
+            this.pakPath1 = this.getFileDialogResult("Select PAK 1", initialDirectory);
             labelPak1.Text = "PAK 1: " + this.pakPath1;
             this.setToolTip(labelPak1, this.pakPath1);
-            
+
         }
 
         private void buttonBrowsePak2_Click(object sender, EventArgs e) {
@@ -147,7 +155,7 @@ namespace AIPAKDifferentiation {
                 }
             }
 
-            this.pakPath2 = this.getFileDialogResult("Select PAK 2");
+            this.pakPath2 = this.getFileDialogResult("Select PAK 2", initialDirectory);
             labelPak2.Text = "PAK 2: " + this.pakPath2;
             this.setToolTip(labelPak2, this.pakPath2);
         }
@@ -174,6 +182,22 @@ namespace AIPAKDifferentiation {
             toolTip.SetToolTip(control, text);
         }
 
+        private bool isShowComposites() {
+            return !checkboxHideComposites.Checked;
+        }
+
+        private bool isShowEntities() {
+            return !checkboxHideEntities.Checked;
+        }
+
+        private bool isShowParameters() {
+            return !checkboxHideParameters.Checked;
+        }
+
+        private bool isShowLinks() {
+            return !checkboxHideLinks.Checked;
+        }
+
         /*
          * Checks if an entity is valid -> used for filtering unwanted entities out (eg. override)
          */
@@ -187,10 +211,30 @@ namespace AIPAKDifferentiation {
             return isValid;
         }
 
-        private void checkboxEntityHideOverrides_CheckedChanged(object sender, EventArgs e) {
+        private void refreshListViewWithFilters() {
             listviewDifferences.Items.Clear();
             this.preparedDifferencesList = getDifferencesAsListViewItemList(this.compositeDifferences);
             listviewDifferences.Items.AddRange(this.preparedDifferencesList.ToArray());
+        }
+
+        private void checkboxEntityHideOverrides_CheckedChanged(object sender, EventArgs e) {
+            this.refreshListViewWithFilters();
+        }
+
+        private void checkboxHideComposites_CheckedChanged(object sender, EventArgs e) {
+            this.refreshListViewWithFilters();
+        }
+
+        private void checkboxHideEntities_CheckedChanged(object sender, EventArgs e) {
+            this.refreshListViewWithFilters();
+        }
+
+        private void checkboxHideParameters_CheckedChanged(object sender, EventArgs e) {
+            this.refreshListViewWithFilters();
+        }
+
+        private void checkboxHideLinks_CheckedChanged(object sender, EventArgs e) {
+            this.refreshListViewWithFilters();
         }
     }
 }
