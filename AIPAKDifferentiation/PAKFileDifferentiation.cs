@@ -193,10 +193,26 @@ namespace AIPAKDifferentiation {
                         parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + cTransform2.position.ToString();
                         break;
                     case DataType.ENUM:
-                        // TODO
+                        // TODO make enums better
+                        cEnum cEnum = (cEnum)parameter.content;
+                        cEnum cEnum2 = (cEnum)pak2Parameter.content;
+                        parameterDifference.valueBefore = data.dataType.ToString() + ": [enumIndex:" + cEnum.enumID.ToString() + "], [enumID:" + cEnum.enumID + "]";
+                        parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": [enumIndex:" + cEnum.enumID.ToString() + "], [enumID:" + cEnum.enumID + "]";
                         break;
                     case DataType.SPLINE:
-                        // TODO
+                        // TODO make splines better
+                        cSpline cSpline = (cSpline)parameter.content;
+                        cSpline cSpline2 = (cSpline)pak2Parameter.content;
+                        string str1 = cSpline.dataType.ToString() + ":";
+                        foreach (cTransform c in cSpline.splinePoints) {
+                            str1 += " [position: " + c.position.ToString() + ", rotation: " + c.rotation.ToString() + "]";
+                        }
+                        string str2 = cSpline2.dataType.ToString() + ":";
+                        foreach (cTransform c2 in cSpline2.splinePoints) {
+                            str2 += " [position: " + c2.position.ToString() + ", rotation: " + c2.rotation.ToString() + "]";
+                        }
+                        parameterDifference.valueBefore = str1;
+                        parameterDifference.valueAfter = str2;
                         break;
                     case DataType.RESOURCE:
                         // TODO
