@@ -176,7 +176,7 @@
             // checkboxEntityHideOverrides
             // 
             this.checkboxEntityHideOverrides.AutoSize = true;
-            this.checkboxEntityHideOverrides.Location = new System.Drawing.Point(197, 81);
+            this.checkboxEntityHideOverrides.Location = new System.Drawing.Point(610, 81);
             this.checkboxEntityHideOverrides.Name = "checkboxEntityHideOverrides";
             this.checkboxEntityHideOverrides.Size = new System.Drawing.Size(143, 17);
             this.checkboxEntityHideOverrides.TabIndex = 7;
@@ -197,7 +197,7 @@
             // checkboxHideComposites
             // 
             this.checkboxHideComposites.AutoSize = true;
-            this.checkboxHideComposites.Location = new System.Drawing.Point(386, 81);
+            this.checkboxHideComposites.Location = new System.Drawing.Point(197, 81);
             this.checkboxHideComposites.Name = "checkboxHideComposites";
             this.checkboxHideComposites.Size = new System.Drawing.Size(104, 17);
             this.checkboxHideComposites.TabIndex = 9;
@@ -208,7 +208,7 @@
             // checkboxHideEntities
             // 
             this.checkboxHideEntities.AutoSize = true;
-            this.checkboxHideEntities.Location = new System.Drawing.Point(496, 81);
+            this.checkboxHideEntities.Location = new System.Drawing.Point(307, 81);
             this.checkboxHideEntities.Name = "checkboxHideEntities";
             this.checkboxHideEntities.Size = new System.Drawing.Size(84, 17);
             this.checkboxHideEntities.TabIndex = 10;
@@ -219,7 +219,7 @@
             // checkboxHideParameters
             // 
             this.checkboxHideParameters.AutoSize = true;
-            this.checkboxHideParameters.Location = new System.Drawing.Point(586, 81);
+            this.checkboxHideParameters.Location = new System.Drawing.Point(397, 81);
             this.checkboxHideParameters.Name = "checkboxHideParameters";
             this.checkboxHideParameters.Size = new System.Drawing.Size(103, 17);
             this.checkboxHideParameters.TabIndex = 11;
@@ -230,7 +230,7 @@
             // checkboxHideLinks
             // 
             this.checkboxHideLinks.AutoSize = true;
-            this.checkboxHideLinks.Location = new System.Drawing.Point(695, 81);
+            this.checkboxHideLinks.Location = new System.Drawing.Point(506, 81);
             this.checkboxHideLinks.Name = "checkboxHideLinks";
             this.checkboxHideLinks.Size = new System.Drawing.Size(72, 17);
             this.checkboxHideLinks.TabIndex = 11;
@@ -252,7 +252,7 @@
             // checkboxHideModified
             // 
             this.checkboxHideModified.AutoSize = true;
-            this.checkboxHideModified.Location = new System.Drawing.Point(290, 102);
+            this.checkboxHideModified.Location = new System.Drawing.Point(307, 102);
             this.checkboxHideModified.Name = "checkboxHideModified";
             this.checkboxHideModified.Size = new System.Drawing.Size(90, 17);
             this.checkboxHideModified.TabIndex = 13;
@@ -263,7 +263,7 @@
             // checkboxHideDeleted
             // 
             this.checkboxHideDeleted.AutoSize = true;
-            this.checkboxHideDeleted.Location = new System.Drawing.Point(386, 102);
+            this.checkboxHideDeleted.Location = new System.Drawing.Point(397, 102);
             this.checkboxHideDeleted.Name = "checkboxHideDeleted";
             this.checkboxHideDeleted.Size = new System.Drawing.Size(86, 17);
             this.checkboxHideDeleted.TabIndex = 14;

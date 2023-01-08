@@ -106,6 +106,11 @@ namespace AIPAKDifferentiation {
             EntityDifference entityDifference = new EntityDifference(entity, DIFFERENCE_TYPE.MODIFIED);
 
             foreach (Parameter parameter in entity.parameters) {
+                // do not handle resources currently - we don't want to see the differences as of now
+                if (parameter.content.dataType == DataType.RESOURCE) {
+                    continue;
+                }
+
                 // first we check for parameter deletion
                 Parameter pak2Parameter = pak2Entity.parameters.Find(x => x.shortGUID == parameter.shortGUID);
                 if(null == pak2Parameter) {
@@ -121,6 +126,10 @@ namespace AIPAKDifferentiation {
             }
             // afterwards we check if any parameter has been created - we dont want any parameter values here, just newly created parameters
             foreach (Parameter pak2Parameter in pak2Entity.parameters) {
+                // same as above - do not handle resources currently - we don't want to see the differences as of now
+                if (pak2Parameter.content.dataType == DataType.RESOURCE) {
+                    continue;
+                }
                 Parameter foundPak1Parameter = entity.parameters.Find(x => x.shortGUID == pak2Parameter.shortGUID);
                 if (null == foundPak1Parameter) {
                     ParameterDifference parameterDifference = new ParameterDifference(pak2Parameter, DIFFERENCE_TYPE.CREATED);
