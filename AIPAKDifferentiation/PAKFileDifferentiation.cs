@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using System.Windows.Forms;
 
 using CATHODE;
 using CATHODE.Scripting;
@@ -25,7 +20,7 @@ namespace AIPAKDifferentiation {
         List<CompositeDifference> compositeDifferences = new List<CompositeDifference>();
 
         /**
-         * This class compares two PAK files with each other and shows the differences in composites, entities and parameters
+         * This class compares two PAK files with each other and shows the differences in composites, entities, parameters and links
          * pakPath1 is handeled like the original PAK file, while pakPath2 is considered modified
          */
         public PAKFileDifferentiation(string pakPath1, string pakPath2) {
@@ -113,7 +108,7 @@ namespace AIPAKDifferentiation {
 
                 // first we check for parameter deletion
                 Parameter pak2Parameter = pak2Entity.parameters.Find(x => x.shortGUID == parameter.shortGUID);
-                if(null == pak2Parameter) {
+                if (null == pak2Parameter) {
                     ParameterDifference parameterDifference = new ParameterDifference(parameter, DIFFERENCE_TYPE.DELETED);
                     entityDifference.parameterDiffereces.Add(parameterDifference);
                 } else {
