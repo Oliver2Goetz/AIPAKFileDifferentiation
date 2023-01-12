@@ -83,7 +83,7 @@ namespace AIPAKDifferentiation
                             compositeDifference.differenceType.ToString()
                         );
 
-                        preparedDifferencesList.Add(new ListViewItem(compositeEntry.ToStringArray(), 0, Color.Black, Color.LightGray, new Font("Microsoft Sans Serif", 8.25f)));
+                        preparedDifferencesList.Add(new ListViewItem(compositeEntry.ToStringArray(), 0, Color.Black, Color.FromArgb(150, 150, 150), new Font("Microsoft Sans Serif", 8.25f)));
                     }
 
                     foreach (EntityDifference entityDifference in compositeDifference.entityDifferences) {
@@ -98,7 +98,7 @@ namespace AIPAKDifferentiation
                                     entityDifference.differenceType.ToString()
                                 );
 
-                                preparedDifferencesList.Add(new ListViewItem(entityEntry.ToStringArray()));
+                                preparedDifferencesList.Add(new ListViewItem(entityEntry.ToStringArray(), 0, Color.Black, Color.LightGray, new Font("Microsoft Sans Serif", 8.25f)));
                             }
 
                             foreach (ParameterDifference parameterDifference in entityDifference.parameterDiffereces) {
