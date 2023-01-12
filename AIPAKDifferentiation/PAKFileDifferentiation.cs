@@ -17,8 +17,8 @@ namespace AIPAKDifferentiation {
         private string pakPath1 = "";
         private string pakPath2 = "";
 
-        Commands pak1 = null;
-        Commands pak2 = null;
+        public Commands pak1 = null;
+        public Commands pak2 = null;
         public EntityUtils entityUtilsPak1 = null;
         public EntityUtils entityUtilsPak2 = null;
 

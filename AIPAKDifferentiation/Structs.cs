@@ -99,7 +99,7 @@ namespace AIPAKDifferentiation {
     }
 
     enum DIFFERENCE_TYPE {
-        // means that in PAK2 this composite was created// means that in PAK2 this entity was created
+        // means that in PAK2 this composite was created
         // means that in PAK2 this entity was created
         // means that in PAK2 this parameter was created
         // means that in PAK2 this link was created

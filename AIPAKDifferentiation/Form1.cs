@@ -44,16 +44,32 @@ namespace AIPAKDifferentiation
             }
             listviewDifferences.Items.Clear();
 
-            this.loadPakFileDifferences();
-            this.preparedDifferencesList = getDifferencesAsListViewItemList(this.compositeDifferences);
-            listviewDifferences.Items.AddRange(this.preparedDifferencesList.ToArray());
+            bool success = this.loadPakFileDifferences();
+            
+            if (success) {
+                this.preparedDifferencesList = getDifferencesAsListViewItemList(this.compositeDifferences);
+                listviewDifferences.Items.AddRange(this.preparedDifferencesList.ToArray());
+            } else {
+                listviewDifferences.Items.Clear();
+            }
         }
 
-        private void loadPakFileDifferences() {
+        private bool loadPakFileDifferences() {
             PAKFileDifferentiation pakFileDifferentiation = new PAKFileDifferentiation(this.pakPath1, this.pakPath2);
+            if (pakFileDifferentiation.pak1.EntryPoints[0].name != pakFileDifferentiation.pak2.EntryPoints[0].name) {
+                string namePak1 = pakFileDifferentiation.pak1.EntryPoints[0].name.Split('\\').Last();
+                string namePak2 = pakFileDifferentiation.pak2.EntryPoints[0].name.Split('\\').Last();
+                string message = "Both PAKs have to be from the same level!\nPAK 1: " + namePak1 + "\nPAK 2: " + namePak2;
+                MessageBox.Show(message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                return false;
+            }
+
             this.entityUtilsPak1 = pakFileDifferentiation.entityUtilsPak1;
             this.entityUtilsPak2 = pakFileDifferentiation.entityUtilsPak2;
             this.compositeDifferences = pakFileDifferentiation.loadDifferences();
+
+            return true;
         }
 
         private List<ListViewItem> getDifferencesAsListViewItemList(List<CompositeDifference> differences) {
