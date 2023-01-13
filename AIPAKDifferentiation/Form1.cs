@@ -38,13 +38,11 @@ namespace AIPAKDifferentiation
 
                 return;
             }
-            listviewDifferences.Items.Clear();
 
             bool success = this.loadPakFileDifferences();
             
             if (success) {
-                this.preparedDifferencesList = getDifferencesAsListViewItemList(this.compositeDifferences);
-                listviewDifferences.Items.AddRange(this.preparedDifferencesList.ToArray());
+                this.buildListView();
             } else {
                 listviewDifferences.Items.Clear();
             }
@@ -255,13 +253,23 @@ namespace AIPAKDifferentiation
             return isValid;
         }
 
-        private void refreshListViewWithFilters() {
+        /*
+         * Display the listview with it's differences
+         */
+        private void buildListView() {
             listviewDifferences.Items.Clear();
             this.preparedDifferencesList = getDifferencesAsListViewItemList(this.compositeDifferences);
             listviewDifferences.Items.AddRange(this.preparedDifferencesList.ToArray());
         }
 
         #region filters
+        
+        /*
+         * Refreshs listview with all the filters
+         */
+        private void refreshListViewWithFilters() {
+            this.buildListView();
+        }
 
         private void checkboxEntityHideOverrides_CheckedChanged(object sender, EventArgs e) {
             this.refreshListViewWithFilters();
