@@ -6,52 +6,60 @@ using CATHODE.Scripting.Internal;
 
 namespace AIPAKDifferentiation {
 
-    class CompositeDifference {
+    abstract class AbstractDifference {
+        public DIFFERENCE_TYPE differenceType;
+    }
+
+    class CompositeDifference : AbstractDifference {
 
         public Composite composite;
-        public DIFFERENCE_TYPE differenceType;
         public List<EntityDifference> entityDifferences = new List<EntityDifference>();
+        public Composite composite2; // in case of CREATED = null, MODIFIED = pak2Composite, DELETED = null
 
-        public CompositeDifference(Composite composite, DIFFERENCE_TYPE differenceType) {
+        public CompositeDifference(Composite composite, DIFFERENCE_TYPE differenceType, Composite composite2) {
             this.composite = composite;
             this.differenceType = differenceType;
+            this.composite2 = composite2;
         }
     }
 
-    class EntityDifference {
+    class EntityDifference : AbstractDifference {
 
         public Entity entity;
-        public DIFFERENCE_TYPE differenceType;
         public List<ParameterDifference> parameterDiffereces = new List<ParameterDifference>();
         public List<LinkDifference> linkDifferences = new List<LinkDifference>();
+        public Entity entity2;
 
-        public EntityDifference(Entity entity, DIFFERENCE_TYPE differenceType) {
+        public EntityDifference(Entity entity, DIFFERENCE_TYPE differenceType, Entity entity2) {
             this.entity = entity;
             this.differenceType = differenceType;
+            this.entity2 = entity2;
         }
     }
 
-    class ParameterDifference {
+    class ParameterDifference : AbstractDifference {
 
         public Parameter parameter;
-        public DIFFERENCE_TYPE differenceType;
         public string valueBefore = "-";
         public string valueAfter = "-";
+        public Parameter parameter2;
 
-        public ParameterDifference(Parameter parameter, DIFFERENCE_TYPE differenceType) {
+        public ParameterDifference(Parameter parameter, DIFFERENCE_TYPE differenceType, Parameter parameter2) {
             this.parameter = parameter;
             this.differenceType = differenceType;
+            this.parameter2 = parameter2;
         }
     }
 
-    class LinkDifference {
+    class LinkDifference : AbstractDifference {
 
         public EntityLink link;
-        public DIFFERENCE_TYPE differenceType;
+        public EntityLink? link2;
 
-        public LinkDifference(EntityLink link, DIFFERENCE_TYPE differenceType) {
+        public LinkDifference(EntityLink link, DIFFERENCE_TYPE differenceType, EntityLink? link2) {
             this.link = link;
             this.differenceType = differenceType;
+            this.link2 = link2;
         }
     }
 
@@ -87,6 +95,47 @@ namespace AIPAKDifferentiation {
         }
     }
 
+    class TreeNodeEntry {
+
+        public CATHODE_TYPE cathodeType;
+        public DIFFERENCE_TYPE differenceType;
+        public AbstractDifference difference;
+        public string identifier;
+        public string name;
+        public string valueBefore;
+        public string valueAfter;
+
+        public TreeNodeEntry(CATHODE_TYPE cathodeType, string identifier, string name, string valueBefore, string valueAfter, DIFFERENCE_TYPE differenceType, AbstractDifference difference) {
+            this.cathodeType = cathodeType;
+            this.differenceType = differenceType;
+            this.difference = difference;
+            this.identifier = identifier;
+            this.name = name;
+            this.valueBefore = valueBefore;
+            this.valueAfter = valueAfter;
+        }
+
+        /*
+         * Returns the casted difference
+         */
+        public AbstractDifference getDifference() {
+            switch (cathodeType) {
+                case CATHODE_TYPE.COMPOSITE:
+                    return (CompositeDifference)this.difference;
+                case CATHODE_TYPE.ENTITY:
+                    return (EntityDifference)this.difference;
+                case CATHODE_TYPE.PARAMETER:
+                    return (ParameterDifference)this.difference;
+                case CATHODE_TYPE.LINK:
+                    return (LinkDifference)this.difference;
+                default:
+                    break;
+            }
+
+            return null;
+        }
+    }
+
     enum CATHODE_TYPE {
         COMPOSITE,
         ENTITY,
@@ -109,5 +158,10 @@ namespace AIPAKDifferentiation {
         // means that in PAK2 this parameter was deleted
         // means that in PAK2 this link was deleted
         DELETED
+    }
+
+    enum DISPLAY_MODE {
+        LISTVIEW, // show differences in a list view
+        TREEVIEW  // show differences in a tree view
     }
 }

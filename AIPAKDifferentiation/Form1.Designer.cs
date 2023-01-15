@@ -47,6 +47,11 @@
             this.checkboxHideCreated = new System.Windows.Forms.CheckBox();
             this.checkboxHideModified = new System.Windows.Forms.CheckBox();
             this.checkboxHideDeleted = new System.Windows.Forms.CheckBox();
+            this.buttonSwitchView = new System.Windows.Forms.Button();
+            this.panelTreeView = new System.Windows.Forms.Panel();
+            this.treeviewDifferences = new System.Windows.Forms.TreeView();
+            this.panelTreeViewDetails = new System.Windows.Forms.Panel();
+            this.panelTreeView.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonPakShowDifferences
@@ -74,7 +79,6 @@
             this.listviewDifferences.FullRowSelect = true;
             this.listviewDifferences.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listviewDifferences.HideSelection = false;
-            this.listviewDifferences.HoverSelection = true;
             this.listviewDifferences.Location = new System.Drawing.Point(12, 149);
             this.listviewDifferences.Name = "listviewDifferences";
             this.listviewDifferences.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -98,7 +102,7 @@
             // columnName
             // 
             this.columnName.Text = "Name";
-            this.columnName.Width = 500;
+            this.columnName.Width = 510;
             // 
             // columnValueBefore
             // 
@@ -271,11 +275,53 @@
             this.checkboxHideDeleted.UseVisualStyleBackColor = true;
             this.checkboxHideDeleted.CheckedChanged += new System.EventHandler(this.checkboxHideDeleted_CheckedChanged);
             // 
+            // buttonSwitchView
+            // 
+            this.buttonSwitchView.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.buttonSwitchView.Location = new System.Drawing.Point(1187, 102);
+            this.buttonSwitchView.Name = "buttonSwitchView";
+            this.buttonSwitchView.Size = new System.Drawing.Size(85, 26);
+            this.buttonSwitchView.TabIndex = 15;
+            this.buttonSwitchView.TabStop = false;
+            this.buttonSwitchView.Text = "listview";
+            this.buttonSwitchView.UseVisualStyleBackColor = true;
+            this.buttonSwitchView.Click += new System.EventHandler(this.buttonSwitchView_Click);
+            // 
+            // panelTreeView
+            // 
+            this.panelTreeView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelTreeView.Controls.Add(this.treeviewDifferences);
+            this.panelTreeView.Controls.Add(this.panelTreeViewDetails);
+            this.panelTreeView.Location = new System.Drawing.Point(12, 149);
+            this.panelTreeView.Name = "panelTreeView";
+            this.panelTreeView.Size = new System.Drawing.Size(1260, 500);
+            this.panelTreeView.TabIndex = 16;
+            this.panelTreeView.Visible = false;
+            // 
+            // treeviewDifferences
+            // 
+            this.treeviewDifferences.Location = new System.Drawing.Point(4, 4);
+            this.treeviewDifferences.Name = "treeviewDifferences";
+            this.treeviewDifferences.Size = new System.Drawing.Size(741, 491);
+            this.treeviewDifferences.TabIndex = 0;
+            this.treeviewDifferences.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeviewDifferences_AfterSelect);
+            // 
+            // panelTreeViewDetails
+            // 
+            this.panelTreeViewDetails.BackColor = System.Drawing.Color.White;
+            this.panelTreeViewDetails.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelTreeViewDetails.Location = new System.Drawing.Point(750, 4);
+            this.panelTreeViewDetails.Name = "panelTreeViewDetails";
+            this.panelTreeViewDetails.Size = new System.Drawing.Size(505, 491);
+            this.panelTreeViewDetails.TabIndex = 1;
+            // 
             // AIPAKDifferentiation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1284, 661);
+            this.Controls.Add(this.panelTreeView);
+            this.Controls.Add(this.buttonSwitchView);
             this.Controls.Add(this.checkboxHideDeleted);
             this.Controls.Add(this.checkboxHideModified);
             this.Controls.Add(this.checkboxHideCreated);
@@ -300,6 +346,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AIPAKDifferentiation";
             this.Load += new System.EventHandler(this.AIPAKDifferentiation_Load);
+            this.panelTreeView.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -330,6 +377,10 @@
         private System.Windows.Forms.CheckBox checkboxHideCreated;
         private System.Windows.Forms.CheckBox checkboxHideModified;
         private System.Windows.Forms.CheckBox checkboxHideDeleted;
+        private System.Windows.Forms.Button buttonSwitchView;
+        private System.Windows.Forms.Panel panelTreeView;
+        private System.Windows.Forms.Panel panelTreeViewDetails;
+        private System.Windows.Forms.TreeView treeviewDifferences;
     }
 }
 

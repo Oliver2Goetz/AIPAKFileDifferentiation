@@ -11,8 +11,7 @@ using CATHODE.Scripting;
 namespace AIPAKDifferentiation
 {
 
-    public partial class AIPAKDifferentiation : Form
-    {
+    public partial class AIPAKDifferentiation : Form {
 
         private string pakPath1 = "";
         private string pakPath2 = "";
@@ -20,7 +19,10 @@ namespace AIPAKDifferentiation
         EntityUtils entityUtilsPak2 = null;
 
         private List<CompositeDifference> compositeDifferences = new List<CompositeDifference>();
-        private List<ListViewItem> preparedDifferencesList = new List<ListViewItem>();
+        private List<ListViewItem> preparedDifferenceItemList = new List<ListViewItem>();
+        private List<TreeNode> preparedDifferenceNodeList = new List<TreeNode>();
+
+        private DISPLAY_MODE displayMode = DISPLAY_MODE.LISTVIEW;
 
         public AIPAKDifferentiation() {
             InitializeComponent();
@@ -40,9 +42,9 @@ namespace AIPAKDifferentiation
             }
 
             bool success = this.loadPakFileDifferences();
-            
+
             if (success) {
-                this.buildListView();
+                this.buildActiveView();
             } else {
                 listviewDifferences.Items.Clear();
             }
@@ -141,6 +143,92 @@ namespace AIPAKDifferentiation
             }
 
             return preparedDifferencesList;
+        }
+
+        private List<TreeNode> getDifferencesAsTreeNodeList(List<CompositeDifference> differences) {
+            List<TreeNode> preparedDifferenceNodes = new List<TreeNode>();
+
+            if (null == differences) {
+                return preparedDifferenceNodes;
+            }
+
+            foreach (CompositeDifference compositeDifference in differences) {
+                TreeNodeEntry compositeEntry = new TreeNodeEntry(
+                    CATHODE_TYPE.COMPOSITE,
+                    compositeDifference.composite.shortGUID.ToString(),
+                    compositeDifference.composite.name,
+                    "-",
+                    "-",
+                    compositeDifference.differenceType,
+                    compositeDifference
+                );
+
+                TreeNode treeNodeComposite = new TreeNode(compositeEntry.name);
+                treeNodeComposite.Tag = compositeEntry;
+                preparedDifferenceNodes.Add(treeNodeComposite);
+
+                foreach (EntityDifference entityDifference in compositeDifference.entityDifferences) {
+                    TreeNodeEntry entityEntry = new TreeNodeEntry(
+                        CATHODE_TYPE.ENTITY,
+                        entityDifference.entity.shortGUID.ToString(),
+                        entityUtilsPak1.GetName(compositeDifference.composite.shortGUID, entityDifference.entity.shortGUID),
+                        entityDifference.entity.variant.ToString(),
+                        entityDifference.entity.variant.ToString(),
+                        entityDifference.differenceType,
+                        entityDifference
+                    );
+
+                    TreeNode treeNodeEntity = new TreeNode(entityEntry.name);
+                    treeNodeEntity.Tag = entityEntry;
+                    treeNodeComposite.Nodes.Add(treeNodeEntity);
+
+                    TreeNode treeNodeEntityParameters = new TreeNode("parameters");
+                    TreeNode treeNodeEntityLinks = new TreeNode("links");
+                    treeNodeEntity.Nodes.Add(treeNodeEntityParameters);
+                    treeNodeEntity.Nodes.Add(treeNodeEntityLinks);
+
+                    foreach (ParameterDifference parameterDifference in entityDifference.parameterDiffereces) {
+                        TreeNodeEntry parameterEntry = new TreeNodeEntry(
+                            CATHODE_TYPE.PARAMETER,
+                            parameterDifference.parameter.shortGUID.ToByteString(),
+                            parameterDifference.parameter.shortGUID.ToString(),
+                            parameterDifference.valueBefore,
+                            parameterDifference.valueAfter,
+                            parameterDifference.differenceType,
+                            parameterDifference
+                        );
+
+                        TreeNode treeNodeParameter = new TreeNode(parameterEntry.name);
+                        treeNodeParameter.Tag = parameterEntry;
+                        treeNodeEntityParameters.Nodes.Add(treeNodeParameter);
+                    }
+
+                    foreach (LinkDifference linkDifference in entityDifference.linkDifferences) {
+                        string valueBefore = "[" + linkDifference.link.parentParamID.ToString() + "] => [" + linkDifference.link.childParamID + "]";
+                        string valueAfter = "-";
+                        if (linkDifference.differenceType == DIFFERENCE_TYPE.CREATED) {
+                            valueAfter = valueBefore;
+                            valueBefore = "-";
+                        }
+
+                        TreeNodeEntry linkEntry = new TreeNodeEntry(
+                            CATHODE_TYPE.LINK,
+                            linkDifference.link.connectionID.ToString(),
+                            "entityID: " + entityDifference.entity.shortGUID.ToString() + " childID: " + linkDifference.link.childID,
+                            valueBefore,
+                            valueAfter,
+                            linkDifference.differenceType,
+                            linkDifference
+                        );
+
+                        TreeNode treeNodeLink = new TreeNode(linkEntry.name);
+                        treeNodeLink.Tag = linkEntry;
+                        treeNodeEntityLinks.Nodes.Add(treeNodeLink);
+                    }
+                }
+            }
+
+            return preparedDifferenceNodes;
         }
 
         private void buttonBrowsePak1_Click(object sender, EventArgs e) {
@@ -253,56 +341,116 @@ namespace AIPAKDifferentiation
             return isValid;
         }
 
+        #region view mode
+
+        /*
+         * Build the currently active view
+         */
+        private void buildActiveView() { 
+            if (displayMode == DISPLAY_MODE.LISTVIEW) {
+                this.buildListView();
+            } else {
+                this.buildTreeView();
+            }
+        }
+
         /*
          * Display the listview with it's differences
          */
         private void buildListView() {
             listviewDifferences.Items.Clear();
-            this.preparedDifferencesList = getDifferencesAsListViewItemList(this.compositeDifferences);
-            listviewDifferences.Items.AddRange(this.preparedDifferencesList.ToArray());
+            this.preparedDifferenceItemList = getDifferencesAsListViewItemList(this.compositeDifferences);
+            listviewDifferences.Items.AddRange(this.preparedDifferenceItemList.ToArray());
         }
 
-        #region filters
-        
+        private void buildTreeView() {
+            treeviewDifferences.Nodes.Clear();
+            this.preparedDifferenceNodeList = this.getDifferencesAsTreeNodeList(this.compositeDifferences);
+            treeviewDifferences.Nodes.AddRange(this.preparedDifferenceNodeList.ToArray());
+        }
+
+        private void buttonSwitchView_Click(object sender, EventArgs e) {
+            if (displayMode == DISPLAY_MODE.LISTVIEW) {
+                listviewDifferences.Hide();
+                panelTreeView.Show();
+                displayMode = DISPLAY_MODE.TREEVIEW;
+            } else {
+                panelTreeView.Hide();
+                listviewDifferences.Show();
+                displayMode = DISPLAY_MODE.LISTVIEW;
+            }
+
+            buttonSwitchView.Text = displayMode.ToString().ToLower();
+        }
+
         /*
-         * Refreshs listview with all the filters
+         * Gets executed once a tree view node has been clicked
          */
-        private void refreshListViewWithFilters() {
-            this.buildListView();
+        private void treeviewDifferences_AfterSelect(object sender, TreeViewEventArgs e) {
+            if (treeviewDifferences.SelectedNode != null) {
+                TreeNodeEntry entry = (TreeNodeEntry)treeviewDifferences.SelectedNode.Tag;
+                buildTreeViewDetails(entry);
+            }
         }
 
-        private void checkboxEntityHideOverrides_CheckedChanged(object sender, EventArgs e) {
-            this.refreshListViewWithFilters();
-        }
+        /*
+         * Build the treeview details of hte current selected TreeNode
+         */
+        private void buildTreeViewDetails(TreeNodeEntry entry) {
+            if (null != entry) {
+                panelTreeViewDetails.Controls.Clear();
 
-        private void checkboxHideComposites_CheckedChanged(object sender, EventArgs e) {
-            this.refreshListViewWithFilters();
-        }
+                Label test = new Label();
+                test.Font = new Font(FontFamily.GenericSansSerif, 10);
+                test.Location = new Point(5, 5);
+                test.Size = new Size(500, 486);
 
-        private void checkboxHideEntities_CheckedChanged(object sender, EventArgs e) {
-            this.refreshListViewWithFilters();
-        }
+                test.Text = entry.cathodeType.ToString().ToLower() + " difference";
+                test.Text += "\n\ndifference type: " + entry.differenceType.ToString();
+                test.Text += "\nvalue before: " + entry.valueBefore;
+                test.Text += "\nvalue after: " + entry.valueAfter;
 
-        private void checkboxHideParameters_CheckedChanged(object sender, EventArgs e) {
-            this.refreshListViewWithFilters();
-        }
-
-        private void checkboxHideLinks_CheckedChanged(object sender, EventArgs e) {
-            this.refreshListViewWithFilters();
-        }
-
-        private void checkHideCreated_CheckedChanged(object sender, EventArgs e) {
-            this.refreshListViewWithFilters();
-        }
-
-        private void checkboxHideModified_CheckedChanged(object sender, EventArgs e) {
-            this.refreshListViewWithFilters();
-        }
-
-        private void checkboxHideDeleted_CheckedChanged(object sender, EventArgs e) {
-            this.refreshListViewWithFilters();
+                panelTreeViewDetails.Controls.Add(test);
+            }
         }
 
         #endregion
+
+        #region filters
+
+        private void checkboxEntityHideOverrides_CheckedChanged(object sender, EventArgs e) {
+        this.buildActiveView();
+    }
+
+    private void checkboxHideComposites_CheckedChanged(object sender, EventArgs e) {
+        this.buildActiveView();
+    }
+
+    private void checkboxHideEntities_CheckedChanged(object sender, EventArgs e) {
+        this.buildActiveView();
+    }
+
+    private void checkboxHideParameters_CheckedChanged(object sender, EventArgs e) {
+        this.buildActiveView();
+    }
+
+    private void checkboxHideLinks_CheckedChanged(object sender, EventArgs e) {
+        this.buildActiveView();
+    }
+
+    private void checkHideCreated_CheckedChanged(object sender, EventArgs e) {
+        this.buildActiveView();
+    }
+
+    private void checkboxHideModified_CheckedChanged(object sender, EventArgs e) {
+        this.buildActiveView();
+    }
+
+    private void checkboxHideDeleted_CheckedChanged(object sender, EventArgs e) {
+        this.buildActiveView();
+    }
+
+    #endregion
+
     }
 }
