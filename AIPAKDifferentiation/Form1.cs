@@ -8,8 +8,9 @@ using System.Windows.Forms;
 using CATHODE;
 using CATHODE.Scripting;
 
-namespace AIPAKDifferentiation
-{
+using AIPAKDifferentiation.Views;
+
+namespace AIPAKDifferentiation {
 
     public partial class AIPAKDifferentiation : Form {
 
@@ -23,6 +24,7 @@ namespace AIPAKDifferentiation
         private List<TreeNode> preparedDifferenceNodeList = new List<TreeNode>();
 
         private DISPLAY_MODE displayMode = DISPLAY_MODE.LISTVIEW;
+        private TreeViewDetails treeViewDetails;
 
         public AIPAKDifferentiation() {
             InitializeComponent();
@@ -42,6 +44,7 @@ namespace AIPAKDifferentiation
             }
 
             bool success = this.loadPakFileDifferences();
+            this.treeViewDetails = new TreeViewDetails(this.entityUtilsPak1, this.entityUtilsPak2);
 
             if (success) {
                 this.buildActiveView();
@@ -355,7 +358,7 @@ namespace AIPAKDifferentiation
         }
 
         /*
-         * Display the listview with it's differences
+         * Display the listview with the differences
          */
         private void buildListView() {
             listviewDifferences.Items.Clear();
@@ -363,6 +366,9 @@ namespace AIPAKDifferentiation
             listviewDifferences.Items.AddRange(this.preparedDifferenceItemList.ToArray());
         }
 
+        /*
+         * Display the treeview with the differences
+         */
         private void buildTreeView() {
             treeviewDifferences.Nodes.Clear();
             this.preparedDifferenceNodeList = this.getDifferencesAsTreeNodeList(this.compositeDifferences);
@@ -399,18 +405,8 @@ namespace AIPAKDifferentiation
         private void buildTreeViewDetails(TreeNodeEntry entry) {
             if (null != entry) {
                 panelTreeViewDetails.Controls.Clear();
-
-                Label test = new Label();
-                test.Font = new Font(FontFamily.GenericSansSerif, 10);
-                test.Location = new Point(5, 5);
-                test.Size = new Size(500, 486);
-
-                test.Text = entry.cathodeType.ToString().ToLower() + " difference";
-                test.Text += "\n\ndifference type: " + entry.differenceType.ToString();
-                test.Text += "\nvalue before: " + entry.valueBefore;
-                test.Text += "\nvalue after: " + entry.valueAfter;
-
-                panelTreeViewDetails.Controls.Add(test);
+                Label label = this.treeViewDetails.buildTreeViewDetails(entry);
+                panelTreeViewDetails.Controls.Add(label);
             }
         }
 

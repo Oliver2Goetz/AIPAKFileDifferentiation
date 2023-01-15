@@ -55,11 +55,15 @@ namespace AIPAKDifferentiation {
 
         public EntityLink link;
         public EntityLink? link2;
+        public Composite composite;
+        public Entity entity;
 
-        public LinkDifference(EntityLink link, DIFFERENCE_TYPE differenceType, EntityLink? link2) {
+        public LinkDifference(EntityLink link, DIFFERENCE_TYPE differenceType, EntityLink? link2, Composite composite, Entity entity) {
             this.link = link;
             this.differenceType = differenceType;
             this.link2 = link2;
+            this.composite = composite;
+            this.entity = entity;
         }
     }
 
@@ -113,26 +117,6 @@ namespace AIPAKDifferentiation {
             this.name = name;
             this.valueBefore = valueBefore;
             this.valueAfter = valueAfter;
-        }
-
-        /*
-         * Returns the casted difference
-         */
-        public AbstractDifference getDifference() {
-            switch (cathodeType) {
-                case CATHODE_TYPE.COMPOSITE:
-                    return (CompositeDifference)this.difference;
-                case CATHODE_TYPE.ENTITY:
-                    return (EntityDifference)this.difference;
-                case CATHODE_TYPE.PARAMETER:
-                    return (ParameterDifference)this.difference;
-                case CATHODE_TYPE.LINK:
-                    return (LinkDifference)this.difference;
-                default:
-                    break;
-            }
-
-            return null;
         }
     }
 

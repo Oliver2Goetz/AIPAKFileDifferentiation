@@ -259,7 +259,7 @@ namespace AIPAKDifferentiation {
             foreach (EntityLink link  in entity.childLinks) {
                 EntityLink pak2Link = pak2Entity.childLinks.Find(x => x.connectionID == link.connectionID);
                 if (null == pak2Link.connectionID.val) {
-                    LinkDifference linkDifference = new LinkDifference(link, DIFFERENCE_TYPE.DELETED, null);
+                    LinkDifference linkDifference = new LinkDifference(link, DIFFERENCE_TYPE.DELETED, null, compositeDifference.composite, entity);
                     linkDifferences.Add(linkDifference);
                 } else {
                     // TODO implement link moficiations -> modification of links seems to be possible in the current staging branch of OpenCAGE
@@ -269,7 +269,7 @@ namespace AIPAKDifferentiation {
             foreach (EntityLink pak2Link in pak2Entity.childLinks) {
                 EntityLink foundPak1Link = entity.childLinks.Find(x => x.connectionID == pak2Link.connectionID);
                 if (null == foundPak1Link.connectionID.val) {
-                    LinkDifference linkDifference = new LinkDifference(pak2Link, DIFFERENCE_TYPE.CREATED, null);
+                    LinkDifference linkDifference = new LinkDifference(pak2Link, DIFFERENCE_TYPE.CREATED, null, compositeDifference.composite, pak2Entity);
                     linkDifferences.Add(linkDifference);
                 }
             }
