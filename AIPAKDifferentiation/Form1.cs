@@ -22,6 +22,7 @@ namespace AIPAKDifferentiation {
         private List<TreeNode> preparedDifferenceNodeList = new List<TreeNode>();
 
         private DifferenceListViewItemList differencesAsListViewItemList = null;
+        private DifferenceTreeNodeList differencesAsTreeNodeList = null;
 
         private DISPLAY_MODE displayMode = DISPLAY_MODE.LISTVIEW;
         private TreeViewDetails treeViewDetails;
@@ -77,94 +78,9 @@ namespace AIPAKDifferentiation {
             this.entityUtilsPak2 = pakFileDifferentiation.entityUtilsPak2;
             this.compositeDifferences = pakFileDifferentiation.loadDifferences();
             this.differencesAsListViewItemList = new DifferenceListViewItemList(this, this.entityUtilsPak1, this.entityUtilsPak2);
+            this.differencesAsTreeNodeList = new DifferenceTreeNodeList(this.entityUtilsPak1, this.entityUtilsPak2);
 
             return true;
-        }
-
-        private List<TreeNode> getDifferencesAsTreeNodeList(List<CompositeDifference> differences) {
-            List<TreeNode> preparedDifferenceNodes = new List<TreeNode>();
-
-            if (null == differences) {
-                return preparedDifferenceNodes;
-            }
-
-            foreach (CompositeDifference compositeDifference in differences) {
-                TreeNodeEntry compositeEntry = new TreeNodeEntry(
-                    CATHODE_TYPE.COMPOSITE,
-                    compositeDifference.composite.shortGUID.ToString(),
-                    compositeDifference.composite.name,
-                    "-",
-                    "-",
-                    compositeDifference.differenceType,
-                    compositeDifference
-                );
-
-                TreeNode treeNodeComposite = new TreeNode(compositeEntry.name);
-                treeNodeComposite.Tag = compositeEntry;
-                preparedDifferenceNodes.Add(treeNodeComposite);
-
-                foreach (EntityDifference entityDifference in compositeDifference.entityDifferences) {
-                    TreeNodeEntry entityEntry = new TreeNodeEntry(
-                        CATHODE_TYPE.ENTITY,
-                        entityDifference.entity.shortGUID.ToString(),
-                        entityUtilsPak1.GetName(compositeDifference.composite.shortGUID, entityDifference.entity.shortGUID),
-                        entityDifference.entity.variant.ToString(),
-                        entityDifference.entity.variant.ToString(),
-                        entityDifference.differenceType,
-                        entityDifference
-                    );
-
-                    TreeNode treeNodeEntity = new TreeNode(entityEntry.name);
-                    treeNodeEntity.Tag = entityEntry;
-                    treeNodeComposite.Nodes.Add(treeNodeEntity);
-
-                    TreeNode treeNodeEntityParameters = new TreeNode("parameters");
-                    TreeNode treeNodeEntityLinks = new TreeNode("links");
-                    treeNodeEntity.Nodes.Add(treeNodeEntityParameters);
-                    treeNodeEntity.Nodes.Add(treeNodeEntityLinks);
-
-                    foreach (ParameterDifference parameterDifference in entityDifference.parameterDiffereces) {
-                        TreeNodeEntry parameterEntry = new TreeNodeEntry(
-                            CATHODE_TYPE.PARAMETER,
-                            parameterDifference.parameter.shortGUID.ToByteString(),
-                            parameterDifference.parameter.shortGUID.ToString(),
-                            parameterDifference.valueBefore,
-                            parameterDifference.valueAfter,
-                            parameterDifference.differenceType,
-                            parameterDifference
-                        );
-
-                        TreeNode treeNodeParameter = new TreeNode(parameterEntry.name);
-                        treeNodeParameter.Tag = parameterEntry;
-                        treeNodeEntityParameters.Nodes.Add(treeNodeParameter);
-                    }
-
-                    foreach (LinkDifference linkDifference in entityDifference.linkDifferences) {
-                        string valueBefore = "[" + linkDifference.link.parentParamID.ToString() + "] => [" + linkDifference.link.childParamID + "]";
-                        string valueAfter = "-";
-                        if (linkDifference.differenceType == DIFFERENCE_TYPE.CREATED) {
-                            valueAfter = valueBefore;
-                            valueBefore = "-";
-                        }
-
-                        TreeNodeEntry linkEntry = new TreeNodeEntry(
-                            CATHODE_TYPE.LINK,
-                            linkDifference.link.connectionID.ToString(),
-                            "entityID: " + entityDifference.entity.shortGUID.ToString() + " childID: " + linkDifference.link.childID,
-                            valueBefore,
-                            valueAfter,
-                            linkDifference.differenceType,
-                            linkDifference
-                        );
-
-                        TreeNode treeNodeLink = new TreeNode(linkEntry.name);
-                        treeNodeLink.Tag = linkEntry;
-                        treeNodeEntityLinks.Nodes.Add(treeNodeLink);
-                    }
-                }
-            }
-
-            return preparedDifferenceNodes;
         }
 
         /*
@@ -257,7 +173,7 @@ namespace AIPAKDifferentiation {
          */
         private void buildTreeView() {
             treeviewDifferences.Nodes.Clear();
-            this.preparedDifferenceNodeList = this.getDifferencesAsTreeNodeList(this.compositeDifferences);
+            this.preparedDifferenceNodeList = this.differencesAsTreeNodeList.getDifferencesAsTreeNodeList(this.compositeDifferences);
             treeviewDifferences.Nodes.AddRange(this.preparedDifferenceNodeList.ToArray());
         }
 
