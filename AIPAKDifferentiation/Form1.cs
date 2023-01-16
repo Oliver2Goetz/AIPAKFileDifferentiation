@@ -151,7 +151,7 @@ namespace AIPAKDifferentiation {
         /*
          * Build the currently active view
          */
-        private void buildActiveView() { 
+        private void buildActiveView() {
             if (displayMode == DISPLAY_MODE.LISTVIEW) {
                 this.buildListView();
             } else {
@@ -184,10 +184,12 @@ namespace AIPAKDifferentiation {
             if (displayMode == DISPLAY_MODE.LISTVIEW) {
                 listviewDifferences.Hide();
                 panelTreeView.Show();
+                hideFilters();
                 displayMode = DISPLAY_MODE.TREEVIEW;
             } else {
                 panelTreeView.Hide();
                 listviewDifferences.Show();
+                showFilters();
                 displayMode = DISPLAY_MODE.LISTVIEW;
             }
 
@@ -218,6 +220,36 @@ namespace AIPAKDifferentiation {
         #endregion
 
         #region filters
+
+        /*
+         * Shows all the filters
+         */
+        private void showFilters() {
+            labelFilters.Show();
+            checkboxHideComposites.Show();
+            checkboxHideEntities.Show();
+            checkboxHideParameters.Show();
+            checkboxHideLinks.Show();
+            checkboxEntityHideOverrides.Show();
+            checkboxHideCreated.Show();
+            checkboxHideModified.Show();
+            checkboxHideDeleted.Show();
+        }
+
+        /*
+         * Hides all the filters
+         */
+        private void hideFilters() {
+            labelFilters.Hide();
+            checkboxHideComposites.Hide();
+            checkboxHideEntities.Hide();
+            checkboxHideParameters.Hide();
+            checkboxHideLinks.Hide();
+            checkboxEntityHideOverrides.Hide();
+            checkboxHideCreated.Hide();
+            checkboxHideModified.Hide();
+            checkboxHideDeleted.Hide();
+        }
 
         private void checkboxEntityHideOverrides_CheckedChanged(object sender, EventArgs e) {
             this.buildActiveView();
