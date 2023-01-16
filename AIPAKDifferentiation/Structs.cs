@@ -13,27 +13,31 @@ namespace AIPAKDifferentiation {
     class CompositeDifference : AbstractDifference {
 
         public Composite composite;
+        public Composite compositePak2; // in case of CREATED = null, MODIFIED = pak2Composite, DELETED = null
         public List<EntityDifference> entityDifferences = new List<EntityDifference>();
-        public Composite composite2; // in case of CREATED = null, MODIFIED = pak2Composite, DELETED = null
 
-        public CompositeDifference(Composite composite, DIFFERENCE_TYPE differenceType, Composite composite2) {
+        public CompositeDifference(Composite composite, DIFFERENCE_TYPE differenceType, Composite compositePak2) {
             this.composite = composite;
             this.differenceType = differenceType;
-            this.composite2 = composite2;
+            this.compositePak2 = compositePak2;
         }
     }
 
     class EntityDifference : AbstractDifference {
 
         public Entity entity;
+        public Entity entityPak2;
+        public Composite composite;
+        public Composite compositePak2;
         public List<ParameterDifference> parameterDiffereces = new List<ParameterDifference>();
         public List<LinkDifference> linkDifferences = new List<LinkDifference>();
-        public Entity entity2;
 
-        public EntityDifference(Entity entity, DIFFERENCE_TYPE differenceType, Entity entity2) {
+        public EntityDifference(Entity entity, DIFFERENCE_TYPE differenceType, Entity entityPak2, Composite composite, Composite compositePak2) {
             this.entity = entity;
             this.differenceType = differenceType;
-            this.entity2 = entity2;
+            this.entityPak2 = entityPak2;
+            this.composite = composite;
+            this.compositePak2 = compositePak2;
         }
     }
 
@@ -42,28 +46,35 @@ namespace AIPAKDifferentiation {
         public Parameter parameter;
         public string valueBefore = "-";
         public string valueAfter = "-";
-        public Parameter parameter2;
+        public Parameter parameterPak2;
 
-        public ParameterDifference(Parameter parameter, DIFFERENCE_TYPE differenceType, Parameter parameter2) {
+        public ParameterDifference(Parameter parameter, DIFFERENCE_TYPE differenceType, Parameter parameterPak2) {
             this.parameter = parameter;
             this.differenceType = differenceType;
-            this.parameter2 = parameter2;
+            this.parameterPak2 = parameterPak2;
         }
     }
 
     class LinkDifference : AbstractDifference {
 
         public EntityLink link;
-        public EntityLink? link2;
+        public EntityLink linkPak2;
         public Composite composite;
+        public Composite compositePak2;
         public Entity entity;
+        public Entity entityPak2;
 
-        public LinkDifference(EntityLink link, DIFFERENCE_TYPE differenceType, EntityLink? link2, Composite composite, Entity entity) {
+        /*
+         * If a link has been CREATED - link and linkPak2 are the same -> both are from PAK2 (this is also the case for DELETED -> both are from PAK1)
+         */
+        public LinkDifference(EntityLink link, DIFFERENCE_TYPE differenceType, EntityLink linkPak2, Composite composite, Composite compositePak2, Entity entity, Entity entityPak2) {
             this.link = link;
             this.differenceType = differenceType;
-            this.link2 = link2;
+            this.linkPak2 = linkPak2;
             this.composite = composite;
+            this.compositePak2 = compositePak2;
             this.entity = entity;
+            this.entityPak2 = entityPak2;
         }
     }
 

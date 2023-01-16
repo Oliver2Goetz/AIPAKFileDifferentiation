@@ -58,7 +58,7 @@ namespace AIPAKDifferentiation {
             // afterwards we check if any composite has been created - this does not mean we want all the entities and parameter inside the newly created composite. We only want the composite in this case
             foreach (Composite pak2composite in pak2.Composites) {
                 if (!pak1.GetCompositeNames().ToList().Contains(pak2composite.name)) {
-                    CompositeDifference compositeDifference = new CompositeDifference(pak2composite, DIFFERENCE_TYPE.CREATED, null);
+                    CompositeDifference compositeDifference = new CompositeDifference(null, DIFFERENCE_TYPE.CREATED, pak2composite);
                     this.compositeDifferences.Add(compositeDifference);
                 }
             }
@@ -71,7 +71,7 @@ namespace AIPAKDifferentiation {
                 // first we check for entity deletion
                 Entity pak2Entity = pak2Composite.GetEntityByID(entity.shortGUID);
                 if (pak2Entity == null) {
-                    EntityDifference entityDifference = new EntityDifference(entity, DIFFERENCE_TYPE.DELETED, null);
+                    EntityDifference entityDifference = new EntityDifference(entity, DIFFERENCE_TYPE.DELETED, null, composite, pak2Composite);
                     compositeDifference.entityDifferences.Add(entityDifference);
                 } else {
                     // now we handle modifications with parameters and links of this entity
@@ -86,7 +86,7 @@ namespace AIPAKDifferentiation {
             // afterwards we check if any entity has been created - we dont want any parameters here, just the newly created entities
             foreach (Entity pak2Entity in pak2Composite.GetEntities()) {
                 if (null == composite.GetEntityByID(pak2Entity.shortGUID)) { // null means the entity with guid from composite2 wasn't found in composite1
-                    EntityDifference entityDifference = new EntityDifference(pak2Entity, DIFFERENCE_TYPE.CREATED, null);
+                    EntityDifference entityDifference = new EntityDifference(null, DIFFERENCE_TYPE.CREATED, pak2Entity, composite, pak2Composite);
                     compositeDifference.entityDifferences.Add(entityDifference);
                 }
             }
@@ -98,7 +98,7 @@ namespace AIPAKDifferentiation {
         }
 
         private EntityDifference loadDifferencesParameters(Entity entity, Entity pak2Entity, CompositeDifference compositeDifference) {
-            EntityDifference entityDifference = new EntityDifference(entity, DIFFERENCE_TYPE.MODIFIED, pak2Entity);
+            EntityDifference entityDifference = new EntityDifference(entity, DIFFERENCE_TYPE.MODIFIED, pak2Entity, compositeDifference.composite, compositeDifference.compositePak2);
 
             foreach (Parameter parameter in entity.parameters) {
                 // do not handle resources currently - we don't want to see the differences as of now
@@ -127,7 +127,7 @@ namespace AIPAKDifferentiation {
                 }
                 Parameter foundPak1Parameter = entity.parameters.Find(x => x.shortGUID == pak2Parameter.shortGUID);
                 if (null == foundPak1Parameter) {
-                    ParameterDifference parameterDifference = new ParameterDifference(pak2Parameter, DIFFERENCE_TYPE.CREATED, null);
+                    ParameterDifference parameterDifference = new ParameterDifference(null, DIFFERENCE_TYPE.CREATED, pak2Parameter);
                     entityDifference.parameterDiffereces.Add(parameterDifference);
                 }
             }
@@ -259,7 +259,7 @@ namespace AIPAKDifferentiation {
             foreach (EntityLink link  in entity.childLinks) {
                 EntityLink pak2Link = pak2Entity.childLinks.Find(x => x.connectionID == link.connectionID);
                 if (null == pak2Link.connectionID.val) {
-                    LinkDifference linkDifference = new LinkDifference(link, DIFFERENCE_TYPE.DELETED, null, compositeDifference.composite, entity);
+                    LinkDifference linkDifference = new LinkDifference(link, DIFFERENCE_TYPE.DELETED, link, compositeDifference.composite, compositeDifference.compositePak2, entity, pak2Entity);
                     linkDifferences.Add(linkDifference);
                 } else {
                     // TODO implement link moficiations -> modification of links seems to be possible in the current staging branch of OpenCAGE
@@ -269,13 +269,13 @@ namespace AIPAKDifferentiation {
             foreach (EntityLink pak2Link in pak2Entity.childLinks) {
                 EntityLink foundPak1Link = entity.childLinks.Find(x => x.connectionID == pak2Link.connectionID);
                 if (null == foundPak1Link.connectionID.val) {
-                    LinkDifference linkDifference = new LinkDifference(pak2Link, DIFFERENCE_TYPE.CREATED, null, compositeDifference.composite, pak2Entity);
+                    LinkDifference linkDifference = new LinkDifference(pak2Link, DIFFERENCE_TYPE.CREATED, pak2Link, compositeDifference.composite, compositeDifference.composite, entity, pak2Entity);
                     linkDifferences.Add(linkDifference);
                 }
             }
 
             if (null == entityDifference && 0 < linkDifferences.Count) {
-                entityDifference = new EntityDifference(entity, DIFFERENCE_TYPE.MODIFIED, pak2Entity);
+                entityDifference = new EntityDifference(entity, DIFFERENCE_TYPE.MODIFIED, pak2Entity, compositeDifference.composite, compositeDifference.compositePak2);
                 compositeDifference.entityDifferences.Add(entityDifference);
             }
             if (0 < linkDifferences.Count) {

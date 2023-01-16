@@ -23,6 +23,8 @@ namespace AIPAKDifferentiation {
         private List<ListViewItem> preparedDifferenceItemList = new List<ListViewItem>();
         private List<TreeNode> preparedDifferenceNodeList = new List<TreeNode>();
 
+        private DifferenceListViewItemList differencesAsListViewItemList = null;
+
         private DISPLAY_MODE displayMode = DISPLAY_MODE.LISTVIEW;
         private TreeViewDetails treeViewDetails;
 
@@ -67,85 +69,9 @@ namespace AIPAKDifferentiation {
             this.entityUtilsPak1 = pakFileDifferentiation.entityUtilsPak1;
             this.entityUtilsPak2 = pakFileDifferentiation.entityUtilsPak2;
             this.compositeDifferences = pakFileDifferentiation.loadDifferences();
+            this.differencesAsListViewItemList = new DifferenceListViewItemList(this, this.entityUtilsPak1, this.entityUtilsPak2);
 
             return true;
-        }
-
-        private List<ListViewItem> getDifferencesAsListViewItemList(List<CompositeDifference> differences) {
-            List<ListViewItem> preparedDifferencesList = new List<ListViewItem>();
-
-            if (null != differences) {
-                foreach (CompositeDifference compositeDifference in differences) {
-                    if (this.isShowComposites() && this.showDifferenceTypeByDifferenceType(compositeDifference.differenceType)) {
-                        ListViewItemEntry compositeEntry = new ListViewItemEntry(
-                            CATHODE_TYPE.COMPOSITE,
-                            compositeDifference.composite.shortGUID.ToString(),
-                            compositeDifference.composite.name,
-                            "-",
-                            "-",
-                            compositeDifference.differenceType.ToString()
-                        );
-
-                        preparedDifferencesList.Add(new ListViewItem(compositeEntry.ToStringArray(), 0, Color.Black, Color.FromArgb(150, 150, 150), new Font("Microsoft Sans Serif", 8.25f)));
-                    }
-
-                    foreach (EntityDifference entityDifference in compositeDifference.entityDifferences) {
-                        if (this.isValidEntityToShow(entityDifference)) {
-                            if (this.isShowEntities() && this.showDifferenceTypeByDifferenceType(entityDifference.differenceType)) {
-                                ListViewItemEntry entityEntry = new ListViewItemEntry(
-                                    CATHODE_TYPE.ENTITY,
-                                    entityDifference.entity.shortGUID.ToString(),
-                                    entityUtilsPak1.GetName(compositeDifference.composite.shortGUID, entityDifference.entity.shortGUID),
-                                    entityDifference.entity.variant.ToString(),
-                                    entityDifference.entity.variant.ToString(),
-                                    entityDifference.differenceType.ToString()
-                                );
-
-                                preparedDifferencesList.Add(new ListViewItem(entityEntry.ToStringArray(), 0, Color.Black, Color.LightGray, new Font("Microsoft Sans Serif", 8.25f)));
-                            }
-
-                            foreach (ParameterDifference parameterDifference in entityDifference.parameterDiffereces) {
-                                if (this.isShowParameters() && this.showDifferenceTypeByDifferenceType(parameterDifference.differenceType)) {
-                                    ListViewItemEntry parameterEntry = new ListViewItemEntry(
-                                        CATHODE_TYPE.PARAMETER,
-                                        parameterDifference.parameter.shortGUID.ToByteString(),
-                                        parameterDifference.parameter.shortGUID.ToString(),
-                                        parameterDifference.valueBefore,
-                                        parameterDifference.valueAfter,
-                                        parameterDifference.differenceType.ToString()
-                                    );
-
-                                    preparedDifferencesList.Add(new ListViewItem(parameterEntry.ToStringArray()));
-                                }
-                            }
-
-                            foreach (LinkDifference linkDifference in entityDifference.linkDifferences) {
-                                if (this.isShowLinks() && this.showDifferenceTypeByDifferenceType(linkDifference.differenceType)) {
-                                    string valueBefore = "[" + linkDifference.link.parentParamID.ToString() + "] => [" + linkDifference.link.childParamID + "]";
-                                    string valueAfter = "-";
-                                    if (linkDifference.differenceType == DIFFERENCE_TYPE.CREATED) {
-                                        valueAfter = valueBefore;
-                                        valueBefore = "-";
-                                    }
-
-                                    ListViewItemEntry linkEntry = new ListViewItemEntry(
-                                        CATHODE_TYPE.LINK,
-                                        linkDifference.link.connectionID.ToString(),
-                                        "entityID: " + entityDifference.entity.shortGUID.ToString() + " childID: " + linkDifference.link.childID,
-                                        valueBefore,
-                                        valueAfter,
-                                        linkDifference.differenceType.ToString()
-                                    );
-
-                                    preparedDifferencesList.Add(new ListViewItem(linkEntry.ToStringArray()));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            return preparedDifferencesList;
         }
 
         private List<TreeNode> getDifferencesAsTreeNodeList(List<CompositeDifference> differences) {
@@ -285,65 +211,6 @@ namespace AIPAKDifferentiation {
             toolTip.SetToolTip(control, text);
         }
 
-        private bool isShowComposites() {
-            return !checkboxHideComposites.Checked;
-        }
-
-        private bool isShowEntities() {
-            return !checkboxHideEntities.Checked;
-        }
-
-        private bool isShowParameters() {
-            return !checkboxHideParameters.Checked;
-        }
-
-        private bool isShowLinks() {
-            return !checkboxHideLinks.Checked;
-        }
-
-        /*
-         * Validates if the given differenceType of the given differenceType is allowed to be shown
-         * The param differenceType is given by the corresponding composite, entity, parameter or link
-         */
-        private bool showDifferenceTypeByDifferenceType(DIFFERENCE_TYPE differenceType) {
-            bool show = true;
-
-            switch (differenceType) {
-                case DIFFERENCE_TYPE.CREATED:
-                    if (this.checkboxHideCreated.Checked) {
-                        show = false;
-                    }
-                    break;
-                case DIFFERENCE_TYPE.MODIFIED:
-                    if (this.checkboxHideModified.Checked) {
-                        show = false;
-                    }
-                    break;
-                case DIFFERENCE_TYPE.DELETED:
-                    if (this.checkboxHideDeleted.Checked) {
-                        show = false;
-                    }
-                    break;
-                default:
-                    break;
-            }
-
-            return show;
-        }
-
-        /*
-         * Checks if an entity is valid -> used for filtering unwanted entities out (eg. override)
-         */
-        private bool isValidEntityToShow(EntityDifference entityDifference) {
-            bool isValid = true;
-
-            if (entityDifference.entity.variant == EntityVariant.OVERRIDE && checkboxEntityHideOverrides.Checked) {
-                isValid = false;
-            }
-
-            return isValid;
-        }
-
         #region view mode
 
         /*
@@ -362,7 +229,7 @@ namespace AIPAKDifferentiation {
          */
         private void buildListView() {
             listviewDifferences.Items.Clear();
-            this.preparedDifferenceItemList = getDifferencesAsListViewItemList(this.compositeDifferences);
+            this.preparedDifferenceItemList = this.differencesAsListViewItemList.getDifferencesAsListViewItemList(this.compositeDifferences);
             listviewDifferences.Items.AddRange(this.preparedDifferenceItemList.ToArray());
         }
 
