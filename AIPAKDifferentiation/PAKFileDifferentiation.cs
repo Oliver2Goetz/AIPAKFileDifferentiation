@@ -187,8 +187,8 @@ namespace AIPAKDifferentiation {
                     case DataType.TRANSFORM:
                         cTransform cTransform = (cTransform)parameter.content;
                         cTransform cTransform2 = (cTransform)pak2Parameter.content;
-                        parameterDifference.valueBefore = data.dataType.ToString() + ": " + cTransform.position.ToString();
-                        parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + cTransform2.position.ToString();
+                        parameterDifference.valueBefore = data.dataType.ToString() + ": " + cTransform.position.ToString() + ", " + cTransform.rotation.ToString();
+                        parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + cTransform2.position.ToString() + ", " + cTransform.rotation.ToString();
                         break;
                     case DataType.ENUM:
                         // TODO make enums better
