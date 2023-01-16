@@ -19,7 +19,7 @@ namespace AIPAKDifferentiation {
 
         List<CompositeDifference> compositeDifferences = new List<CompositeDifference>();
 
-        /**
+        /*
          * This class compares two PAK files with each other and shows the differences in composites, entities, parameters and links
          * pakPath1 is handeled like the original PAK file, while pakPath2 is considered modified
          */
@@ -34,6 +34,9 @@ namespace AIPAKDifferentiation {
             this.entityUtilsPak2 = new EntityUtils(this.pak2);
         }
 
+        /*
+         * Gets all the differences
+         */
         public List<CompositeDifference> loadDifferences() {
             if (pak1.Loaded && pak2.Loaded) {
                 this.loadDifferencesComposites();

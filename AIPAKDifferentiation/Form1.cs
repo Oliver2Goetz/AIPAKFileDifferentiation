@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.IO;
 using System.Windows.Forms;
 
-using CATHODE;
 using CATHODE.Scripting;
 
 using AIPAKDifferentiation.Views;
@@ -38,6 +36,10 @@ namespace AIPAKDifferentiation {
             this.pakPath2 = @"C:\Users\Oliver\Desktop\Programming\Alien Isolation\AIPAKDifferentiation\examplePAKs\COMMANDS_TECH_HUB_modified.PAK";
         }
 
+        /*
+         * button click - show all the differences from the selected PAK files
+         * Shows a MessagBox on error
+         */
         private void buttonPakShowDifferences_Click(object sender, EventArgs e) {
             if (0 >= this.pakPath1.Length || 0 >= this.pakPath2.Length || !File.Exists(this.pakPath1) || !File.Exists(this.pakPath2)) {
                 MessageBox.Show("Select 2 PAK files to compare.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -46,15 +48,20 @@ namespace AIPAKDifferentiation {
             }
 
             bool success = this.loadPakFileDifferences();
-            this.treeViewDetails = new TreeViewDetails(this.entityUtilsPak1, this.entityUtilsPak2);
 
             if (success) {
+                this.treeViewDetails = new TreeViewDetails(this.entityUtilsPak1, this.entityUtilsPak2);
                 this.buildActiveView();
             } else {
                 listviewDifferences.Items.Clear();
+                treeviewDifferences.Nodes.Clear();
             }
         }
 
+        /*
+         * Reads both given PAK files and loads all the differences
+         * Shows a MessageBox on error
+         */
         private bool loadPakFileDifferences() {
             PAKFileDifferentiation pakFileDifferentiation = new PAKFileDifferentiation(this.pakPath1, this.pakPath2);
             if (pakFileDifferentiation.pak1.EntryPoints[0].name != pakFileDifferentiation.pak2.EntryPoints[0].name) {
@@ -160,6 +167,9 @@ namespace AIPAKDifferentiation {
             return preparedDifferenceNodes;
         }
 
+        /*
+         * button click - opens file dialog for PAK1
+         */
         private void buttonBrowsePak1_Click(object sender, EventArgs e) {
             string initialDirectory = "";
             if (0 < this.pakPath1.Length) {
@@ -175,6 +185,9 @@ namespace AIPAKDifferentiation {
 
         }
 
+        /*
+         * button click - opens file dialog for PAK2
+         */
         private void buttonBrowsePak2_Click(object sender, EventArgs e) {
             string initialDirectory = "";
             if (0 < this.pakPath2.Length) {
@@ -189,6 +202,9 @@ namespace AIPAKDifferentiation {
             this.setToolTip(labelPak2, this.pakPath2);
         }
 
+        /*
+         * Opens a file dialog and returns the result
+         */
         private string getFileDialogResult(string title, string initialDirectory = "") {
             string result = "";
 
@@ -202,6 +218,9 @@ namespace AIPAKDifferentiation {
             return result;
         }
 
+        /*
+         * Sets a tooltip onto the given Control
+         */
         private void setToolTip(Control control, string text) {
             ToolTip toolTip = new ToolTip();
             toolTip.ToolTipIcon = ToolTipIcon.None;
@@ -242,6 +261,9 @@ namespace AIPAKDifferentiation {
             treeviewDifferences.Nodes.AddRange(this.preparedDifferenceNodeList.ToArray());
         }
 
+        /*
+         * Button click - switches the view
+         */
         private void buttonSwitchView_Click(object sender, EventArgs e) {
             if (displayMode == DISPLAY_MODE.LISTVIEW) {
                 listviewDifferences.Hide();
@@ -282,36 +304,36 @@ namespace AIPAKDifferentiation {
         #region filters
 
         private void checkboxEntityHideOverrides_CheckedChanged(object sender, EventArgs e) {
-        this.buildActiveView();
-    }
+            this.buildActiveView();
+        }
 
-    private void checkboxHideComposites_CheckedChanged(object sender, EventArgs e) {
-        this.buildActiveView();
-    }
+        private void checkboxHideComposites_CheckedChanged(object sender, EventArgs e) {
+            this.buildActiveView();
+        }
 
-    private void checkboxHideEntities_CheckedChanged(object sender, EventArgs e) {
-        this.buildActiveView();
-    }
+        private void checkboxHideEntities_CheckedChanged(object sender, EventArgs e) {
+            this.buildActiveView();
+        }
 
-    private void checkboxHideParameters_CheckedChanged(object sender, EventArgs e) {
-        this.buildActiveView();
-    }
+        private void checkboxHideParameters_CheckedChanged(object sender, EventArgs e) {
+            this.buildActiveView();
+        }
 
-    private void checkboxHideLinks_CheckedChanged(object sender, EventArgs e) {
-        this.buildActiveView();
-    }
+        private void checkboxHideLinks_CheckedChanged(object sender, EventArgs e) {
+            this.buildActiveView();
+        }
 
-    private void checkHideCreated_CheckedChanged(object sender, EventArgs e) {
-        this.buildActiveView();
-    }
+        private void checkHideCreated_CheckedChanged(object sender, EventArgs e) {
+            this.buildActiveView();
+        }
 
-    private void checkboxHideModified_CheckedChanged(object sender, EventArgs e) {
-        this.buildActiveView();
-    }
+        private void checkboxHideModified_CheckedChanged(object sender, EventArgs e) {
+            this.buildActiveView();
+        }
 
-    private void checkboxHideDeleted_CheckedChanged(object sender, EventArgs e) {
-        this.buildActiveView();
-    }
+        private void checkboxHideDeleted_CheckedChanged(object sender, EventArgs e) {
+            this.buildActiveView();
+        }
 
     #endregion
 
