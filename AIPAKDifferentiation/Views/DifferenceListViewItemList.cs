@@ -77,8 +77,7 @@ namespace AIPAKDifferentiation.Views {
                     }
 
                     foreach (EntityDifference entityDifference in compositeDifference.entityDifferences) {
-                        // TODO fix how checks for OVERRIDES work
-                        //if (this.isValidEntityToShow(entityDifference.entity)) {
+                        if (this.isValidEntityToShow(entityDifference)) {
                             if (this.isShowEntities() && this.showDifferenceTypeByDifferenceType(entityDifference.differenceType)) {
 
                                 string identifier = "";
@@ -184,7 +183,7 @@ namespace AIPAKDifferentiation.Views {
                                     preparedDifferencesList.Add(new ListViewItem(linkEntry.ToStringArray()));
                                 }
                             }
-                        //}
+                        }
                     }
                 }
             }
@@ -206,8 +205,13 @@ namespace AIPAKDifferentiation.Views {
         /*
          * Checks if an entity is valid -> used for filtering unwanted entities out (eg. override)
          */
-        private bool isValidEntityToShow(Entity entity) {
+        private bool isValidEntityToShow(EntityDifference entityDifference) {
             bool isValid = true;
+
+            Entity entity = entityDifference.entity;
+            if (entityDifference.differenceType == DIFFERENCE_TYPE.CREATED) {
+                entity = entityDifference.entityPak2;
+            }
 
             if (entity.variant == EntityVariant.OVERRIDE && checkboxEntityHideOverrides.Checked) {
                 isValid = false;
