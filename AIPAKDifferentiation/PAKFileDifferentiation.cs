@@ -71,6 +71,11 @@ namespace AIPAKDifferentiation {
             CompositeDifference compositeDifference = new CompositeDifference(composite, DIFFERENCE_TYPE.MODIFIED, pak2Composite);
             
             foreach (Entity entity in composite.GetEntities()) {
+                string name = entityUtilsPak1.GetName(composite.shortGUID, entity.shortGUID);
+                if (name == "Xenomorph_NPC_1") {
+                    string setBreakpoint = "1";
+                }
+
                 // first we check for entity deletion
                 Entity pak2Entity = pak2Composite.GetEntityByID(entity.shortGUID);
                 if (pak2Entity == null) {
@@ -131,6 +136,7 @@ namespace AIPAKDifferentiation {
                 Parameter foundPak1Parameter = entity.parameters.Find(x => x.shortGUID == pak2Parameter.shortGUID);
                 if (null == foundPak1Parameter) {
                     ParameterDifference parameterDifference = new ParameterDifference(null, DIFFERENCE_TYPE.CREATED, pak2Parameter);
+                    parameterDifference.valueAfter = this.getParameterValue(pak2Parameter);
                     entityDifference.parameterDiffereces.Add(parameterDifference);
                 }
             }
@@ -255,6 +261,88 @@ namespace AIPAKDifferentiation {
             return parameterDifference;
         }
 
+        /*
+         * Gets the readable value for the given parameter, e.g: STRING: example
+         */
+        private string getParameterValue(Parameter parameter) {
+            string value = "";
+
+            ParameterData data = parameter.content;
+
+            // this part is trash - maybe change that if everything is clear in the end
+            switch (data.dataType) {
+                case DataType.STRING:
+                    cString cString = (cString)parameter.content;
+                    value = data.dataType.ToString() + ": " + cString.value;
+                    break;
+                case DataType.FLOAT:
+                    cFloat cFloat = (cFloat)parameter.content;
+                    value = data.dataType.ToString() + ": " + cFloat.value.ToString();
+                    break;
+                case DataType.INTEGER:
+                    cInteger cInteger = (cInteger)parameter.content;
+                    value = data.dataType.ToString() + ": " + cInteger.value.ToString();
+                    break;
+                case DataType.BOOL:
+                    cBool cBool = (cBool)parameter.content;
+                    value = data.dataType.ToString() + ": " + cBool.value.ToString();
+                    break;
+                case DataType.VECTOR:
+                    cVector3 cVector3 = (cVector3)parameter.content;
+                    value = data.dataType.ToString() + ": " + cVector3.value.ToString();
+                    break;
+                case DataType.TRANSFORM:
+                    cTransform cTransform = (cTransform)parameter.content;
+                    value = data.dataType.ToString() + ": " + cTransform.position.ToString() + ", " + cTransform.rotation.ToString();
+                    break;
+                case DataType.ENUM:
+                    // TODO make enums better
+                    cEnum cEnum = (cEnum)parameter.content;
+                    value = data.dataType.ToString() + ": [enumIndex:" + cEnum.enumID.ToString() + "], [enumID:" + cEnum.enumID + "]";
+                    break;
+                case DataType.SPLINE:
+                    // TODO make splines better
+                    cSpline cSpline = (cSpline)parameter.content;
+                    string str1 = cSpline.dataType.ToString() + ":";
+                    foreach (cTransform c in cSpline.splinePoints) {
+                        str1 += " [position: " + c.position.ToString() + ", rotation: " + c.rotation.ToString() + "]";
+                    }
+                    value = str1;
+                    break;
+                case DataType.RESOURCE:
+                    // TODO
+                    break;
+                case DataType.FILEPATH:
+                    // TODO
+                    break;
+                case DataType.OBJECT:
+                    // TODO
+                    break;
+                case DataType.ZONE_LINK_PTR:
+                    // TODO
+                    break;
+                case DataType.ZONE_PTR:
+                    // TODO
+                    break;
+                case DataType.MARKER:
+                    // TODO
+                    break;
+                case DataType.CHARACTER:
+                    // TODO
+                    break;
+                case DataType.CAMERA:
+                    // TODO
+                    break;
+
+                case DataType.NONE:
+                default:
+                    value = "<<Unkown type: Please create an bug report it this occurs>>";
+                    break;
+            }
+
+            return value;
+        }
+
         private EntityDifference loadDifferencesLinks(Entity entity, Entity pak2Entity, CompositeDifference compositeDifference, EntityDifference entityDifference) {
             List<LinkDifference> linkDifferences = new List<LinkDifference>();
 
@@ -287,7 +375,7 @@ namespace AIPAKDifferentiation {
                 return entityDifference;
             }
 
-            return null;
+            return entityDifference;
         }
     }
 }

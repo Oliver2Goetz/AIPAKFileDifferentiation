@@ -35,6 +35,9 @@ namespace AIPAKDifferentiation {
             // for testing
             this.pakPath1 = @"C:\Users\Oliver\Desktop\Programming\Alien Isolation\AIPAKDifferentiation\examplePAKs\COMMANDS_TECH_HUB_vanilla.PAK";
             this.pakPath2 = @"C:\Users\Oliver\Desktop\Programming\Alien Isolation\AIPAKDifferentiation\examplePAKs\COMMANDS_TECH_HUB_modified.PAK";
+
+            this.differencesAsListViewItemList = new DifferenceListViewItemList(this, null, null);
+            this.differencesAsTreeNodeList = new DifferenceTreeNodeList(null, null);
         }
 
         /*
