@@ -47,6 +47,9 @@ namespace AIPAKDifferentiation {
             return null;
         }
 
+        /*
+         * Loads differences for composites
+         */
         private void loadDifferencesComposites() {
             foreach (Composite composite in pak1.Composites) {
                 // first we check for composite deletion
@@ -67,14 +70,14 @@ namespace AIPAKDifferentiation {
             }
         }
 
+        /*
+         * Loads differences for entities
+         */
         private void loadDifferencesEntities(Composite composite, Composite pak2Composite) {
             CompositeDifference compositeDifference = new CompositeDifference(composite, DIFFERENCE_TYPE.MODIFIED, pak2Composite);
             
             foreach (Entity entity in composite.GetEntities()) {
                 string name = entityUtilsPak1.GetName(composite.shortGUID, entity.shortGUID);
-                if (name == "Xenomorph_NPC_1") {
-                    string setBreakpoint = "1";
-                }
 
                 // first we check for entity deletion
                 Entity pak2Entity = pak2Composite.GetEntityByID(entity.shortGUID);
@@ -105,6 +108,9 @@ namespace AIPAKDifferentiation {
             }
         }
 
+        /*
+         * Loads differences for parameters
+         */
         private EntityDifference loadDifferencesParameters(Entity entity, Entity pak2Entity, CompositeDifference compositeDifference) {
             EntityDifference entityDifference = new EntityDifference(entity, DIFFERENCE_TYPE.MODIFIED, pak2Entity, compositeDifference.composite, compositeDifference.compositePak2);
 
@@ -263,6 +269,7 @@ namespace AIPAKDifferentiation {
 
         /*
          * Gets the readable value for the given parameter, e.g: STRING: example
+         * Maybe merge this function and loadParameterValues() together later
          */
         private string getParameterValue(Parameter parameter) {
             string value = "";
@@ -343,6 +350,9 @@ namespace AIPAKDifferentiation {
             return value;
         }
 
+        /*
+         * Loads differences for links
+         */
         private EntityDifference loadDifferencesLinks(Entity entity, Entity pak2Entity, CompositeDifference compositeDifference, EntityDifference entityDifference) {
             List<LinkDifference> linkDifferences = new List<LinkDifference>();
 
