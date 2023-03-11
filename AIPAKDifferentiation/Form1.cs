@@ -101,7 +101,6 @@ namespace AIPAKDifferentiation {
             this.pakPath1 = this.getFileDialogResult("Select PAK 1", initialDirectory);
             labelPak1.Text = "PAK 1: " + this.pakPath1;
             this.setToolTip(labelPak1, this.pakPath1);
-
         }
 
         /*
