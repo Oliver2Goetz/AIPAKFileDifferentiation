@@ -139,6 +139,8 @@ namespace AIPAKDifferentiation {
     }
 
     enum DIFFERENCE_TYPE {
+        // used for debugging purposes only and must not be used on release builds
+        DEBUG,
         // means that in PAK2 this composite was created
         // means that in PAK2 this entity was created
         // means that in PAK2 this parameter was created

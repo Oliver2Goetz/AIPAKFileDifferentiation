@@ -89,9 +89,9 @@ namespace AIPAKDifferentiation {
                     EntityDifference entityDifference = this.loadDifferencesParameters(entity, pak2Entity, compositeDifference);
                     entityDifference = this.loadDifferencesLinks(entity, pak2Entity, compositeDifference, entityDifference);
 
-                    if (null != entityDifference) {
-                        compositeDifference.entityDifferences.Add(entityDifference);
-                    }
+                    //if (null != entityDifference) {
+                    //    compositeDifference.entityDifferences.Add(entityDifference);
+                    //}
                 }
             }
             // afterwards we check if any entity has been created - we dont want any parameters here, just the newly created entities
@@ -343,7 +343,7 @@ namespace AIPAKDifferentiation {
 
                 case DataType.NONE:
                 default:
-                    value = "<<Unkown type: Please create an bug report it this occurs>>";
+                    value = "<<Unkown type: Please create an bug report if this occurs>>";
                     break;
             }
 
