@@ -80,11 +80,23 @@ namespace AIPAKDifferentiation.Views {
             content += "entity type: [coming soon] \n\n";
 
             // parameters
-            content += "parameters: " + entityDifference.entity.parameters.Count() + "\n";
+            int parameterCount = 0;
+            if (entityDifference.differenceType == DIFFERENCE_TYPE.CREATED) {
+                parameterCount = entityDifference.entityPak2.parameters.Count();
+            } else {
+                parameterCount = entityDifference.entity.parameters.Count();
+            }
+            content += "parameters: " + parameterCount + "\n";
             content += "parameter differences: " + entityDifference.parameterDiffereces.Count() + "\n\n";
 
             // links
-            content += "child links: " + entityDifference.entity.childLinks.Count() + "\n";
+            int childLinkCount = 0;
+            if (entityDifference.differenceType == DIFFERENCE_TYPE.CREATED) {
+                childLinkCount = entityDifference.entityPak2.childLinks.Count();
+            } else {
+                childLinkCount = entityDifference.entity.childLinks.Count();
+            }
+            content += "child links: " + childLinkCount + "\n";
             content += "child link differences: " + entityDifference.linkDifferences.Count();
 
             return content;
