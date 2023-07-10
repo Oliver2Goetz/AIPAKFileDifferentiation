@@ -17,16 +17,11 @@ D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\obj\Debug\AI
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\bin\Debug\AIPAKDifferentiation.exe.config
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\bin\Debug\AIPAKDifferentiation.exe
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\bin\Debug\AIPAKDifferentiation.pdb
-D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\bin\Debug\System.Buffers.xml
-D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\bin\Debug\System.Memory.xml
-D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\bin\Debug\System.Numerics.Vectors.xml
-D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Debug\AIPAKDifferentiation.csproj.AssemblyReference.cache
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Debug\AIPAKDifferentiation.AIPAKDifferentiation.resources
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Debug\AIPAKDifferentiation.Properties.Resources.resources
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Debug\AIPAKDifferentiation.csproj.GenerateResource.cache
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Debug\AIPAKDifferentiation.csproj.CoreCompileInputs.cache
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Debug\AIPAKDifferentiation.csproj.Fody.CopyLocal.cache
-D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Debug\AIPAKDifferentiation.csproj.CopyComplete
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Debug\AIPAKDifferentiation.exe
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Debug\AIPAKDifferentiation.pdb

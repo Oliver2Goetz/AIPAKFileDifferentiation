@@ -35,6 +35,10 @@
       "frameworks": {
         "net472": {
           "dependencies": {
+            "CathodeLib": {
+              "target": "Package",
+              "version": "[0.3.3, )"
+            },
             "Costura.Fody": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers",
               "suppressParent": "All",

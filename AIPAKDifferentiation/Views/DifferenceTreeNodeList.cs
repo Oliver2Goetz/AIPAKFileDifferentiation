@@ -9,16 +9,7 @@ namespace AIPAKDifferentiation.Views {
 
     class DifferenceTreeNodeList {
 
-        EntityUtils entityUtilsPak1;
-        EntityUtils entityUtilsPak2;
-
-        /*
-         * @param entityUtilsPak1 : EntityUtils for PAK1
-         * @param entityUtilsPak2 : EntityUtils for PAK2
-         */
-        public DifferenceTreeNodeList(EntityUtils entityUtilsPak1, EntityUtils entityUtilsPak2) {
-            this.entityUtilsPak1 = entityUtilsPak1;
-            this.entityUtilsPak2 = entityUtilsPak2;
+        public DifferenceTreeNodeList() {
         }
 
         /*
@@ -73,13 +64,13 @@ namespace AIPAKDifferentiation.Views {
                     switch (entityDifference.differenceType) {
                         case DIFFERENCE_TYPE.CREATED:
                             entityIdentifier = entityDifference.entityPak2.shortGUID.ToString();
-                            entityName = entityUtilsPak2.GetName(entityDifference.compositePak2.shortGUID, entityDifference.entityPak2.shortGUID);
+                            entityName = EntityUtils.GetName(entityDifference.compositePak2.shortGUID, entityDifference.entityPak2.shortGUID);
                             entityVariant = entityDifference.entityPak2.variant.ToString();
                             break;
                         case DIFFERENCE_TYPE.MODIFIED:
                         case DIFFERENCE_TYPE.DELETED:
                             entityIdentifier = entityDifference.entity.shortGUID.ToString();
-                            entityName = entityUtilsPak1.GetName(entityDifference.composite.shortGUID, entityDifference.entity.shortGUID);
+                            entityName = EntityUtils.GetName(entityDifference.composite.shortGUID, entityDifference.entity.shortGUID);
                             entityVariant = entityDifference.entity.variant.ToString();
                             break;
                         default:
@@ -112,13 +103,13 @@ namespace AIPAKDifferentiation.Views {
 
                         switch (parameterDifference.differenceType) {
                             case DIFFERENCE_TYPE.CREATED:
-                                parameterIdentifier = parameterDifference.parameterPak2.shortGUID.ToByteString();
-                                parameterName = parameterDifference.parameterPak2.shortGUID.ToString();
+                                parameterIdentifier = parameterDifference.parameterPak2.name.ToByteString();
+                                parameterName = parameterDifference.parameterPak2.name.ToString();
                                 break;
                             case DIFFERENCE_TYPE.MODIFIED:
                             case DIFFERENCE_TYPE.DELETED:
-                                parameterIdentifier = parameterDifference.parameter.shortGUID.ToByteString();
-                                parameterName = parameterDifference.parameter.shortGUID.ToString();
+                                parameterIdentifier = parameterDifference.parameter.name.ToByteString();
+                                parameterName = parameterDifference.parameter.name.ToString();
                                 break;
                             default:
                                 break;

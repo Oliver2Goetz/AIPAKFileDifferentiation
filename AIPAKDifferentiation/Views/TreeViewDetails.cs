@@ -8,12 +8,7 @@ namespace AIPAKDifferentiation.Views {
 
     class TreeViewDetails {
 
-        private EntityUtils entityUtilsPak1;
-        private EntityUtils entityUtilsPak2;
-
-        public TreeViewDetails(EntityUtils entityUtilsPak1, EntityUtils entityUtilsPak2) {
-            this.entityUtilsPak1 = entityUtilsPak1;
-            this.entityUtilsPak2 = entityUtilsPak2;
+        public TreeViewDetails() {
         }
 
         /*
@@ -125,8 +120,8 @@ namespace AIPAKDifferentiation.Views {
                     // todo
                     break;
                 case DIFFERENCE_TYPE.MODIFIED:
-                    string entityName = entityUtilsPak1.GetName(linkDifference.composite.shortGUID, linkDifference.entity.shortGUID);
-                    string childEntityName = entityUtilsPak1.GetName(linkDifference.composite.shortGUID, linkDifference.link.childID);
+                    string entityName = EntityUtils.GetName(linkDifference.composite.shortGUID, linkDifference.entity.shortGUID);
+                    string childEntityName = EntityUtils.GetName(linkDifference.composite.shortGUID, linkDifference.link.childID);
                     content += "Initial value:\n";
                     content += entityName + " [" + linkDifference.link.parentParamID.ToString() + "] => " +
                         linkDifference.link.childID.ToString() + " [" + linkDifference.link.childParamID.ToString() + "]" + "\n\n";

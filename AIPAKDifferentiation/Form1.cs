@@ -14,8 +14,6 @@ namespace AIPAKDifferentiation {
 
         private string pakPath1 = "";
         private string pakPath2 = "";
-        EntityUtils entityUtilsPak1 = null;
-        EntityUtils entityUtilsPak2 = null;
 
         private List<CompositeDifference> compositeDifferences = new List<CompositeDifference>();
         private List<ListViewItem> preparedDifferenceItemList = new List<ListViewItem>();
@@ -36,8 +34,8 @@ namespace AIPAKDifferentiation {
             this.pakPath1 = @"C:\Users\Oliver\Desktop\Programming\Alien Isolation\AIPAKDifferentiation\examplePAKs\COMMANDS_TECH_HUB_vanilla.PAK";
             this.pakPath2 = @"C:\Users\Oliver\Desktop\Programming\Alien Isolation\AIPAKDifferentiation\examplePAKs\COMMANDS_TECH_HUB_modified.PAK";
 
-            this.differencesAsListViewItemList = new DifferenceListViewItemList(this, null, null);
-            this.differencesAsTreeNodeList = new DifferenceTreeNodeList(null, null);
+            this.differencesAsListViewItemList = new DifferenceListViewItemList(this);
+            this.differencesAsTreeNodeList = new DifferenceTreeNodeList();
         }
 
         /*
@@ -54,7 +52,7 @@ namespace AIPAKDifferentiation {
             bool success = this.loadPakFileDifferences();
 
             if (success) {
-                this.treeViewDetails = new TreeViewDetails(this.entityUtilsPak1, this.entityUtilsPak2);
+                this.treeViewDetails = new TreeViewDetails();
                 this.buildActiveView();
             } else {
                 listviewDifferences.Items.Clear();
@@ -77,11 +75,9 @@ namespace AIPAKDifferentiation {
                 return false;
             }
 
-            this.entityUtilsPak1 = pakFileDifferentiation.entityUtilsPak1;
-            this.entityUtilsPak2 = pakFileDifferentiation.entityUtilsPak2;
             this.compositeDifferences = pakFileDifferentiation.loadDifferences();
-            this.differencesAsListViewItemList = new DifferenceListViewItemList(this, this.entityUtilsPak1, this.entityUtilsPak2);
-            this.differencesAsTreeNodeList = new DifferenceTreeNodeList(this.entityUtilsPak1, this.entityUtilsPak2);
+            this.differencesAsListViewItemList = new DifferenceListViewItemList(this);
+            this.differencesAsTreeNodeList = new DifferenceTreeNodeList();
 
             return true;
         }

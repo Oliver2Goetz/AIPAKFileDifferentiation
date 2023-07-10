@@ -11,9 +11,6 @@ namespace AIPAKDifferentiation.Views {
 
         AIPAKDifferentiation form1;
 
-        EntityUtils entityUtilsPak1;
-        EntityUtils entityUtilsPak2;
-
         // checkbox filters
         CheckBox checkboxHideComposites;
         CheckBox checkboxHideEntities;
@@ -29,10 +26,8 @@ namespace AIPAKDifferentiation.Views {
          * @param entityUtilsPak1 : EntityUtils for PAK1
          * @param entityUtilsPak2 : EntityUtils for PAK2
          */
-        public DifferenceListViewItemList(AIPAKDifferentiation form, EntityUtils entityUtilsPak1, EntityUtils entityUtilsPak2) {
+        public DifferenceListViewItemList(AIPAKDifferentiation form) {
             this.form1 = form;
-            this.entityUtilsPak1 = entityUtilsPak1;
-            this.entityUtilsPak2 = entityUtilsPak2;
 
             this.initializeControls();
         }
@@ -87,13 +82,13 @@ namespace AIPAKDifferentiation.Views {
                                 switch (entityDifference.differenceType) {
                                     case DIFFERENCE_TYPE.CREATED:
                                         identifier = entityDifference.entityPak2.shortGUID.ToString();
-                                        name = entityUtilsPak2.GetName(entityDifference.compositePak2.shortGUID, entityDifference.entityPak2.shortGUID);
+                                        name = EntityUtils.GetName(entityDifference.compositePak2.shortGUID, entityDifference.entityPak2.shortGUID);
                                         variant = entityDifference.entityPak2.variant.ToString();
                                         break;
                                     case DIFFERENCE_TYPE.MODIFIED:
                                     case DIFFERENCE_TYPE.DELETED:
                                         identifier = entityDifference.entity.shortGUID.ToString();
-                                        name = entityUtilsPak1.GetName(entityDifference.composite.shortGUID, entityDifference.entity.shortGUID);
+                                        name = EntityUtils.GetName(entityDifference.composite.shortGUID, entityDifference.entity.shortGUID);
                                         variant = entityDifference.entity.variant.ToString();
                                         break;
                                     default:
@@ -120,13 +115,13 @@ namespace AIPAKDifferentiation.Views {
 
                                     switch (parameterDifference.differenceType) {
                                         case DIFFERENCE_TYPE.CREATED:
-                                            identifier = parameterDifference.parameterPak2.shortGUID.ToByteString();
-                                            name = parameterDifference.parameterPak2.shortGUID.ToString();
+                                            identifier = parameterDifference.parameterPak2.name.ToByteString();
+                                            name = parameterDifference.parameterPak2.name.ToString();
                                             break;
                                         case DIFFERENCE_TYPE.MODIFIED:
                                         case DIFFERENCE_TYPE.DELETED:
-                                            identifier = parameterDifference.parameter.shortGUID.ToByteString();
-                                            name = parameterDifference.parameter.shortGUID.ToString();
+                                            identifier = parameterDifference.parameter.name.ToByteString();
+                                            name = parameterDifference.parameter.name.ToString();
                                             break;
                                         default:
                                             break;

@@ -14,8 +14,6 @@ namespace AIPAKDifferentiation {
 
         public Commands pak1 = null;
         public Commands pak2 = null;
-        public EntityUtils entityUtilsPak1 = null;
-        public EntityUtils entityUtilsPak2 = null;
 
         List<CompositeDifference> compositeDifferences = new List<CompositeDifference>();
 
@@ -30,8 +28,6 @@ namespace AIPAKDifferentiation {
             // Load PAKs
             this.pak1 = new Commands(pakPath1);
             this.pak2 = new Commands(pakPath2);
-            this.entityUtilsPak1 = new EntityUtils(this.pak1);
-            this.entityUtilsPak2 = new EntityUtils(this.pak2);
         }
 
         /*
@@ -77,7 +73,7 @@ namespace AIPAKDifferentiation {
             CompositeDifference compositeDifference = new CompositeDifference(composite, DIFFERENCE_TYPE.MODIFIED, pak2Composite);
             
             foreach (Entity entity in composite.GetEntities()) {
-                string name = entityUtilsPak1.GetName(composite.shortGUID, entity.shortGUID);
+                string name = EntityUtils.GetName(composite.shortGUID, entity.shortGUID);
 
                 // first we check for entity deletion
                 Entity pak2Entity = pak2Composite.GetEntityByID(entity.shortGUID);
@@ -121,7 +117,7 @@ namespace AIPAKDifferentiation {
                 }
 
                 // first we check for parameter deletion
-                Parameter pak2Parameter = pak2Entity.parameters.Find(x => x.shortGUID == parameter.shortGUID);
+                Parameter pak2Parameter = pak2Entity.parameters.Find(x => x.name == parameter.name);
                 if (null == pak2Parameter) {
                     ParameterDifference parameterDifference = new ParameterDifference(parameter, DIFFERENCE_TYPE.DELETED, null);
                     entityDifference.parameterDiffereces.Add(parameterDifference);
@@ -139,7 +135,7 @@ namespace AIPAKDifferentiation {
                 if (pak2Parameter.content.dataType == DataType.RESOURCE) {
                     continue;
                 }
-                Parameter foundPak1Parameter = entity.parameters.Find(x => x.shortGUID == pak2Parameter.shortGUID);
+                Parameter foundPak1Parameter = entity.parameters.Find(x => x.name == pak2Parameter.name);
                 if (null == foundPak1Parameter) {
                     ParameterDifference parameterDifference = new ParameterDifference(null, DIFFERENCE_TYPE.CREATED, pak2Parameter);
                     parameterDifference.valueAfter = this.getParameterValue(pak2Parameter);

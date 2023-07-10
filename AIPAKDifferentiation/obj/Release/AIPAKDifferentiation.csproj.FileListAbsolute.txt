@@ -17,16 +17,11 @@ D:\Visual Studio Projects\AIPAKDifferentiation\AIPAKDifferentiation\obj\Release\
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\bin\Release\AIPAKDifferentiation.exe.config
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\bin\Release\AIPAKDifferentiation.exe
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\bin\Release\AIPAKDifferentiation.pdb
-D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\bin\Release\System.Buffers.xml
-D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\bin\Release\System.Memory.xml
-D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\bin\Release\System.Numerics.Vectors.xml
-D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\bin\Release\System.Runtime.CompilerServices.Unsafe.xml
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Release\AIPAKDifferentiation.csproj.AssemblyReference.cache
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Release\AIPAKDifferentiation.AIPAKDifferentiation.resources
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Release\AIPAKDifferentiation.Properties.Resources.resources
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Release\AIPAKDifferentiation.csproj.GenerateResource.cache
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Release\AIPAKDifferentiation.csproj.CoreCompileInputs.cache
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Release\AIPAKDifferentiation.csproj.Fody.CopyLocal.cache
-D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Release\AIPAKDifferentiation.csproj.CopyComplete
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Release\AIPAKDifferentiation.exe
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Release\AIPAKDifferentiation.pdb

@@ -141,6 +141,9 @@
     <None Include="Resources\logo.ico" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="CathodeLib">
+      <Version>0.3.3</Version>
+    </PackageReference>
     <PackageReference Include="Costura.Fody">
       <Version>5.7.0</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
