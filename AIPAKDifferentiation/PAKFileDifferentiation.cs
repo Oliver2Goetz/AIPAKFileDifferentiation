@@ -94,6 +94,7 @@ namespace AIPAKDifferentiation {
             foreach (Entity pak2Entity in pak2Composite.GetEntities()) {
                 if (null == composite.GetEntityByID(pak2Entity.shortGUID)) { // null means the entity with guid from composite2 wasn't found in composite1
                     EntityDifference entityDifference = new EntityDifference(null, DIFFERENCE_TYPE.CREATED, pak2Entity, composite, pak2Composite);
+                    this.loadParameterDifferenceByNewEntity(pak2Entity, entityDifference);
                     compositeDifference.entityDifferences.Add(entityDifference);
                 }
             }
@@ -122,7 +123,7 @@ namespace AIPAKDifferentiation {
                     ParameterDifference parameterDifference = new ParameterDifference(parameter, DIFFERENCE_TYPE.DELETED, null);
                     entityDifference.parameterDiffereces.Add(parameterDifference);
                 } else {
-                    ParameterDifference parameterDifference = loadParameterValues(parameter, pak2Parameter, entityDifference);
+                    ParameterDifference parameterDifference = loadParameterValues(parameter, pak2Parameter);
 
                     if (null != parameterDifference) {
                         entityDifference.parameterDiffereces.Add(parameterDifference);
@@ -152,10 +153,26 @@ namespace AIPAKDifferentiation {
         }
 
         /*
+         * Loads parameter values as a list of ParameterDifference's - Used for newly created entities
+         * This is a feature requested in this issue @see https://github.com/Oliver2Goetz/AIPAKFileDifferentiation/issues/2
+         */
+        private void loadParameterDifferenceByNewEntity(Entity pak2Entity, EntityDifference entityDifference) { 
+            foreach (Parameter pak2Parameter in pak2Entity.parameters) {
+                if (pak2Parameter.content.dataType == DataType.RESOURCE) {
+                    continue;
+                }
+
+                ParameterDifference parameterDifference = new ParameterDifference(null, DIFFERENCE_TYPE.CREATED, pak2Parameter);
+                parameterDifference.valueAfter = this.getParameterValue(pak2Parameter);
+                entityDifference.parameterDiffereces.Add(parameterDifference);
+            }
+        }
+
+        /*
          * Checks if the parameter in both entities from each PAK are the same
          * The performance of this part is really bad currently
          */
-        private ParameterDifference loadParameterValues(Parameter parameter, Parameter pak2Parameter, EntityDifference entityDifference) {
+        private ParameterDifference loadParameterValues(Parameter parameter, Parameter pak2Parameter) {
             ParameterDifference parameterDifference = new ParameterDifference(parameter, DIFFERENCE_TYPE.MODIFIED, pak2Parameter);
 
             ParameterData data = parameter.content;
