@@ -66,7 +66,11 @@ namespace AIPAKDifferentiation {
          */
         private bool loadPakFileDifferences() {
             PAKFileDifferentiation pakFileDifferentiation = new PAKFileDifferentiation(this.pakPath1, this.pakPath2);
-            if (pakFileDifferentiation.pak1.EntryPoints[0].name != pakFileDifferentiation.pak2.EntryPoints[0].name) {
+
+            string splittedPak1Name = pakFileDifferentiation.pak1.EntryPoints[0].name.Split('\\').Last();
+            string splittedPak2Name = pakFileDifferentiation.pak1.EntryPoints[0].name.Split('\\').Last();
+
+            if (splittedPak1Name != splittedPak2Name) {
                 string namePak1 = pakFileDifferentiation.pak1.EntryPoints[0].name.Split('\\').Last();
                 string namePak2 = pakFileDifferentiation.pak2.EntryPoints[0].name.Split('\\').Last();
                 string message = "Both PAKs have to be from the same level!\nPAK 1: " + namePak1 + "\nPAK 2: " + namePak2;
