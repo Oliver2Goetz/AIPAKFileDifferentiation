@@ -25,3 +25,14 @@ D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Debu
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Debug\AIPAKDifferentiation.csproj.Fody.CopyLocal.cache
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Debug\AIPAKDifferentiation.exe
 D:\Visual Studio Projects\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Debug\AIPAKDifferentiation.pdb
+C:\Users\Oliver\Desktop\AIPAKFileDifferentiation\AIPAKDifferentiation\bin\Debug\AIPAKDifferentiation.exe.config
+C:\Users\Oliver\Desktop\AIPAKFileDifferentiation\AIPAKDifferentiation\bin\Debug\AIPAKDifferentiation.exe
+C:\Users\Oliver\Desktop\AIPAKFileDifferentiation\AIPAKDifferentiation\bin\Debug\AIPAKDifferentiation.pdb
+C:\Users\Oliver\Desktop\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Debug\AIPAKDifferentiation.csproj.AssemblyReference.cache
+C:\Users\Oliver\Desktop\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Debug\AIPAKDifferentiation.AIPAKDifferentiation.resources
+C:\Users\Oliver\Desktop\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Debug\AIPAKDifferentiation.Properties.Resources.resources
+C:\Users\Oliver\Desktop\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Debug\AIPAKDifferentiation.csproj.GenerateResource.cache
+C:\Users\Oliver\Desktop\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Debug\AIPAKDifferentiation.csproj.CoreCompileInputs.cache
+C:\Users\Oliver\Desktop\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Debug\AIPAKDifferentiation.csproj.Fody.CopyLocal.cache
+C:\Users\Oliver\Desktop\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Debug\AIPAKDifferentiation.exe
+C:\Users\Oliver\Desktop\AIPAKFileDifferentiation\AIPAKDifferentiation\obj\Debug\AIPAKDifferentiation.pdb

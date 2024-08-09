@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "aFndIGoYcbZkFkyfwi+8tfWB2jdPyw+4taBVxNIhZDzbb5/H/RoBTzJ75O0MpicU2neiA+wB2Yurt6V6brf1SQ==",
+  "dgSpecHash": "hSeWFukRmReEGyCqxgnOxtKMYrWhIN5x7XU7K5Ixbq5AANoXteg+XWDTgRbYW+UrNz1U+QOmVDjV9GEjD5fnJw==",
   "success": true,
-  "projectFilePath": "D:\\Visual Studio Projects\\AIPAKFileDifferentiation\\AIPAKDifferentiation\\AIPAKDifferentiation.csproj",
+  "projectFilePath": "C:\\Users\\Oliver\\Desktop\\AIPAKFileDifferentiation\\AIPAKDifferentiation\\AIPAKDifferentiation.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Oliver\\.nuget\\packages\\cathodelib\\0.3.3\\cathodelib.0.3.3.nupkg.sha512",
     "C:\\Users\\Oliver\\.nuget\\packages\\costura.fody\\5.7.0\\costura.fody.5.7.0.nupkg.sha512",

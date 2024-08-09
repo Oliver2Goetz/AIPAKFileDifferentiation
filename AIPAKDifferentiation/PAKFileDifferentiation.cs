@@ -216,11 +216,24 @@ namespace AIPAKDifferentiation {
                         parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + cTransform2.position.ToString() + ", " + cTransform.rotation.ToString();
                         break;
                     case DataType.ENUM:
-                        // TODO make enums better
                         cEnum cEnum = (cEnum)parameter.content;
+                        EnumUtils.EnumDescriptor descriptor = EnumUtils.GetEnum(cEnum.enumID);
+                        string element = descriptor.Entries.ElementAtOrDefault(cEnum.enumIndex);
+                        if (element != null) {
+                            parameterDifference.valueBefore = data.dataType.ToString() + ": [" + cEnum.enumID.ToString() + ": " + descriptor.Entries.ElementAtOrDefault(cEnum.enumIndex) + " (enumIndex: " + cEnum.enumIndex + ")]";
+                        } else {
+                            parameterDifference.valueBefore = data.dataType.ToString() + ": [" + cEnum.enumID.ToString() + ": " + cEnum.enumIndex + "]";
+                        }
+
                         cEnum cEnum2 = (cEnum)pak2Parameter.content;
-                        parameterDifference.valueBefore = data.dataType.ToString() + ": [enumIndex:" + cEnum.enumID.ToString() + "], [enumID:" + cEnum.enumID + "]";
-                        parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": [enumIndex:" + cEnum.enumID.ToString() + "], [enumID:" + cEnum.enumID + "]";
+                        EnumUtils.EnumDescriptor descriptor2 = EnumUtils.GetEnum(cEnum2.enumID);
+                        string element2 = descriptor2.Entries.ElementAtOrDefault(cEnum2.enumIndex);
+                        if (element2 != null) {
+                            parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": [" + cEnum2.enumID.ToString() + ": " + descriptor2.Entries.ElementAtOrDefault(cEnum2.enumIndex) + " (enumIndex: " + cEnum2.enumIndex + ")]";
+                        } else {
+                            parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": [" + cEnum2.enumID.ToString() + ": " + cEnum2.enumIndex + "]";
+                        }
+
                         break;
                     case DataType.SPLINE:
                         // TODO make splines better
@@ -318,7 +331,13 @@ namespace AIPAKDifferentiation {
                 case DataType.ENUM:
                     // TODO make enums better
                     cEnum cEnum = (cEnum)parameter.content;
-                    value = data.dataType.ToString() + ": [enumIndex:" + cEnum.enumID.ToString() + "], [enumID:" + cEnum.enumID + "]";
+                    EnumUtils.EnumDescriptor descriptor = EnumUtils.GetEnum(cEnum.enumID);
+                    string element = descriptor.Entries.ElementAtOrDefault(cEnum.enumIndex);
+                    if (element != null) {
+                        value = data.dataType.ToString() + ": [" + cEnum.enumID.ToString() + ": " + descriptor.Entries.ElementAtOrDefault(cEnum.enumIndex) + " (enumIndex: " + cEnum.enumIndex + ")]";
+                    } else {
+                        value = data.dataType.ToString() + ": [" + cEnum.enumID.ToString() + ": " + cEnum.enumIndex + "]";
+                    }
                     break;
                 case DataType.SPLINE:
                     // TODO make splines better

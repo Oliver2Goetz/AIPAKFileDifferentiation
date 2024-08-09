@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Visual Studio Projects\\AIPAKFileDifferentiation\\AIPAKDifferentiation\\AIPAKDifferentiation.csproj": {}
+    "C:\\Users\\Oliver\\Desktop\\AIPAKFileDifferentiation\\AIPAKDifferentiation\\AIPAKDifferentiation.csproj": {}
   },
   "projects": {
-    "D:\\Visual Studio Projects\\AIPAKFileDifferentiation\\AIPAKDifferentiation\\AIPAKDifferentiation.csproj": {
+    "C:\\Users\\Oliver\\Desktop\\AIPAKFileDifferentiation\\AIPAKDifferentiation\\AIPAKDifferentiation.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Visual Studio Projects\\AIPAKFileDifferentiation\\AIPAKDifferentiation\\AIPAKDifferentiation.csproj",
+        "projectUniqueName": "C:\\Users\\Oliver\\Desktop\\AIPAKFileDifferentiation\\AIPAKDifferentiation\\AIPAKDifferentiation.csproj",
         "projectName": "AIPAKDifferentiation",
-        "projectPath": "D:\\Visual Studio Projects\\AIPAKFileDifferentiation\\AIPAKDifferentiation\\AIPAKDifferentiation.csproj",
+        "projectPath": "C:\\Users\\Oliver\\Desktop\\AIPAKFileDifferentiation\\AIPAKDifferentiation\\AIPAKDifferentiation.csproj",
         "packagesPath": "C:\\Users\\Oliver\\.nuget\\packages\\",
-        "outputPath": "D:\\Visual Studio Projects\\AIPAKFileDifferentiation\\AIPAKDifferentiation\\obj\\",
+        "outputPath": "C:\\Users\\Oliver\\Desktop\\AIPAKFileDifferentiation\\AIPAKDifferentiation\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "configFilePaths": [
@@ -24,7 +24,8 @@
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Users\\Oliver\\Downloads": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.bepinex.dev/v3/index.json": {}
         },
         "frameworks": {
           "net472": {
