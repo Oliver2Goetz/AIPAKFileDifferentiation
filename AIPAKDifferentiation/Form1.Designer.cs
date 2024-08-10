@@ -51,6 +51,7 @@
             this.panelTreeView = new System.Windows.Forms.Panel();
             this.treeviewDifferences = new System.Windows.Forms.TreeView();
             this.panelTreeViewDetails = new System.Windows.Forms.Panel();
+            this.buttonExportAsTxt = new System.Windows.Forms.Button();
             this.panelTreeView.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -315,11 +316,24 @@
             this.panelTreeViewDetails.Size = new System.Drawing.Size(505, 491);
             this.panelTreeViewDetails.TabIndex = 1;
             // 
+            // buttonExportAsTxt
+            // 
+            this.buttonExportAsTxt.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.buttonExportAsTxt.Location = new System.Drawing.Point(1106, 69);
+            this.buttonExportAsTxt.Name = "buttonExportAsTxt";
+            this.buttonExportAsTxt.Size = new System.Drawing.Size(166, 26);
+            this.buttonExportAsTxt.TabIndex = 17;
+            this.buttonExportAsTxt.TabStop = false;
+            this.buttonExportAsTxt.Text = "Export diffrences as txt";
+            this.buttonExportAsTxt.UseVisualStyleBackColor = true;
+            this.buttonExportAsTxt.Click += new System.EventHandler(this.buttonExportAsTxt_Click);
+            // 
             // AIPAKDifferentiation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1284, 661);
+            this.Controls.Add(this.buttonExportAsTxt);
             this.Controls.Add(this.panelTreeView);
             this.Controls.Add(this.buttonSwitchView);
             this.Controls.Add(this.checkboxHideDeleted);
@@ -381,6 +395,7 @@
         private System.Windows.Forms.Panel panelTreeView;
         private System.Windows.Forms.Panel panelTreeViewDetails;
         private System.Windows.Forms.TreeView treeviewDifferences;
+        private System.Windows.Forms.Button buttonExportAsTxt;
     }
 }
 

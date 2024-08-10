@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 using CATHODE.Scripting;
 
@@ -14,6 +15,9 @@ namespace AIPAKDifferentiation {
 
         private string pakPath1 = "";
         private string pakPath2 = "";
+
+        private string pak1Name = "";
+        private string pak2Name = "";
 
         private List<CompositeDifference> compositeDifferences = new List<CompositeDifference>();
         private List<ListViewItem> preparedDifferenceItemList = new List<ListViewItem>();
@@ -78,6 +82,9 @@ namespace AIPAKDifferentiation {
 
                 return false;
             }
+
+            this.pak1Name = splittedPak1Name;
+            this.pak2Name = splittedPak2Name;
 
             this.compositeDifferences = pakFileDifferentiation.loadDifferences();
             this.differencesAsListViewItemList = new DifferenceListViewItemList(this);
@@ -285,7 +292,34 @@ namespace AIPAKDifferentiation {
             this.buildActiveView();
         }
 
-    #endregion
+        #endregion
 
+        /*
+         * Exports the file
+         */
+        private void buttonExportAsTxt_Click(object sender, EventArgs e) {
+            if (0 == this.compositeDifferences.Count) {
+                MessageBox.Show("Please make sure there are differences existing to use the export.", "Export error");
+            } else {
+
+                ExportDifferences export = new ExportDifferences();
+                List<string> result = export.export(this.compositeDifferences, this.pak1Name);
+
+                if ("exception" == result[0]) {
+                    MessageBox.Show(result[1], "Export Error");
+                } else {
+                    string message = result[1] + "\n\n" + "Do you want to open the export file?";
+                    DialogResult dialogResult = MessageBox.Show(message, "Export Result", MessageBoxButtons.YesNo);
+
+                    if (dialogResult == DialogResult.Yes) {
+                        if (File.Exists(result[2])) {
+                            Process.Start(result[2]);
+                        } else {
+                            MessageBox.Show("The file does not exist: " + result[2]);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
