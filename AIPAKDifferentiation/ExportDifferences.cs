@@ -276,12 +276,11 @@ namespace AIPAKDifferentiation {
 
                 case DataType.NONE:
                 default:
-                    // Do nothing - default values are already set
+                    newValue = data.dataType.ToString() + COMPOSITE_SEPARATOR + parameter.content.ToString();
                     break;
             }
 
-            //string s = "{" + parameter.name + "=" + parameter.content + "}";
-            return "{" + newValue + " " + differenceType + "}";
+            return "{" + parameter.name + " " + newValue + " " + differenceType + "}";
         }
     }
 }
