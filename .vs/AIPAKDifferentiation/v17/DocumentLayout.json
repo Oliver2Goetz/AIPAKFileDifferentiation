@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "D:\\Visual Studio Projects\\AIPAKFileDifferentiation\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{41A6B4DD-467B-4320-BC24-6E34585E1997}|AIPAKDifferentiation\\AIPAKDifferentiation.csproj|d:\\visual studio projects\\aipakfiledifferentiation\\aipakdifferentiation\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41A6B4DD-467B-4320-BC24-6E34585E1997}|AIPAKDifferentiation\\AIPAKDifferentiation.csproj|solutionrelative:aipakdifferentiation\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41A6B4DD-467B-4320-BC24-6E34585E1997}|AIPAKDifferentiation\\AIPAKDifferentiation.csproj|d:\\visual studio projects\\aipakfiledifferentiation\\aipakdifferentiation\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{41A6B4DD-467B-4320-BC24-6E34585E1997}|AIPAKDifferentiation\\AIPAKDifferentiation.csproj|solutionrelative:aipakdifferentiation\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{41A6B4DD-467B-4320-BC24-6E34585E1997}|AIPAKDifferentiation\\AIPAKDifferentiation.csproj|d:\\visual studio projects\\aipakfiledifferentiation\\aipakdifferentiation\\exportdifferences.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{41A6B4DD-467B-4320-BC24-6E34585E1997}|AIPAKDifferentiation\\AIPAKDifferentiation.csproj|solutionrelative:aipakdifferentiation\\exportdifferences.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -27,6 +35,31 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Form1.cs",
+              "DocumentMoniker": "D:\\Visual Studio Projects\\AIPAKFileDifferentiation\\AIPAKDifferentiation\\Form1.cs",
+              "RelativeDocumentMoniker": "AIPAKDifferentiation\\Form1.cs",
+              "ToolTip": "D:\\Visual Studio Projects\\AIPAKFileDifferentiation\\AIPAKDifferentiation\\Form1.cs",
+              "RelativeToolTip": "AIPAKDifferentiation\\Form1.cs",
+              "ViewState": "AgIAADUBAAAAAAAAAAAAAEwBAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T12:31:03.931Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Form1.cs [Design]",
+              "DocumentMoniker": "D:\\Visual Studio Projects\\AIPAKFileDifferentiation\\AIPAKDifferentiation\\Form1.cs",
+              "RelativeDocumentMoniker": "AIPAKDifferentiation\\Form1.cs",
+              "ToolTip": "D:\\Visual Studio Projects\\AIPAKFileDifferentiation\\AIPAKDifferentiation\\Form1.cs [Design]",
+              "RelativeToolTip": "AIPAKDifferentiation\\Form1.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T12:29:16.788Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "ExportDifferences.cs",
               "DocumentMoniker": "D:\\Visual Studio Projects\\AIPAKFileDifferentiation\\AIPAKDifferentiation\\ExportDifferences.cs",
               "RelativeDocumentMoniker": "AIPAKDifferentiation\\ExportDifferences.cs",
@@ -39,7 +72,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "Structs.cs",
               "DocumentMoniker": "D:\\Visual Studio Projects\\AIPAKFileDifferentiation\\AIPAKDifferentiation\\Structs.cs",
               "RelativeDocumentMoniker": "AIPAKDifferentiation\\Structs.cs",
@@ -51,15 +84,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "PAKFileDifferentiation.cs",
               "DocumentMoniker": "D:\\Visual Studio Projects\\AIPAKFileDifferentiation\\AIPAKDifferentiation\\PAKFileDifferentiation.cs",
               "RelativeDocumentMoniker": "AIPAKDifferentiation\\PAKFileDifferentiation.cs",
-              "ToolTip": "D:\\Visual Studio Projects\\AIPAKFileDifferentiation\\AIPAKDifferentiation\\PAKFileDifferentiation.cs*",
-              "RelativeToolTip": "AIPAKDifferentiation\\PAKFileDifferentiation.cs*",
+              "ToolTip": "D:\\Visual Studio Projects\\AIPAKFileDifferentiation\\AIPAKDifferentiation\\PAKFileDifferentiation.cs",
+              "RelativeToolTip": "AIPAKDifferentiation\\PAKFileDifferentiation.cs",
               "ViewState": "AgIAAG0AAAAAAAAAAAAIwHgAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-27T11:25:47.052Z"
+              "WhenOpened": "2025-04-27T11:25:47.052Z",
+              "EditorCaption": ""
             }
           ]
         }

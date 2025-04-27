@@ -52,6 +52,7 @@
             this.treeviewDifferences = new System.Windows.Forms.TreeView();
             this.panelTreeViewDetails = new System.Windows.Forms.Panel();
             this.buttonExportAsTxt = new System.Windows.Forms.Button();
+            this.checkboxShowWindowOnTop = new System.Windows.Forms.CheckBox();
             this.panelTreeView.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -328,11 +329,23 @@
             this.buttonExportAsTxt.UseVisualStyleBackColor = true;
             this.buttonExportAsTxt.Click += new System.EventHandler(this.buttonExportAsTxt_Click);
             // 
+            // checkboxShowWindowOnTop
+            // 
+            this.checkboxShowWindowOnTop.AutoSize = true;
+            this.checkboxShowWindowOnTop.Location = new System.Drawing.Point(975, 75);
+            this.checkboxShowWindowOnTop.Name = "checkboxShowWindowOnTop";
+            this.checkboxShowWindowOnTop.Size = new System.Drawing.Size(125, 17);
+            this.checkboxShowWindowOnTop.TabIndex = 18;
+            this.checkboxShowWindowOnTop.Text = "Show window on top";
+            this.checkboxShowWindowOnTop.UseVisualStyleBackColor = true;
+            this.checkboxShowWindowOnTop.CheckedChanged += new System.EventHandler(this.checkboxShowWindowOnTop_CheckedChanged);
+            // 
             // AIPAKDifferentiation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1284, 661);
+            this.Controls.Add(this.checkboxShowWindowOnTop);
             this.Controls.Add(this.buttonExportAsTxt);
             this.Controls.Add(this.panelTreeView);
             this.Controls.Add(this.buttonSwitchView);
@@ -396,6 +409,7 @@
         private System.Windows.Forms.Panel panelTreeViewDetails;
         private System.Windows.Forms.TreeView treeviewDifferences;
         private System.Windows.Forms.Button buttonExportAsTxt;
+        private System.Windows.Forms.CheckBox checkboxShowWindowOnTop;
     }
 }
 

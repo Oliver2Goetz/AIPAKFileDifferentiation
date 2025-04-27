@@ -321,5 +321,16 @@ namespace AIPAKDifferentiation {
                 }
             }
         }
+
+        /*
+         * Always shows the window on top, if checked
+         */
+        private void checkboxShowWindowOnTop_CheckedChanged(object sender, EventArgs e) {
+            if (checkboxShowWindowOnTop.Checked) {
+                AIPAKDifferentiation.ActiveForm.TopMost = true;
+            } else {
+                AIPAKDifferentiation.ActiveForm.TopMost = false;
+            }
+        }
     }
 }
