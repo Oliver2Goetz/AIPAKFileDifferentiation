@@ -48,8 +48,13 @@ namespace AIPAKDifferentiation {
          */
         private void loadDifferencesComposites() {
             foreach (Composite composite in pak1.Composites) {
-                // first we check for composite deletion
-                if (!pak2.GetCompositeNames().ToList().Contains(composite.name)) {
+                // first we check for composite deletion (check 1: check if shortGuid is in both paks. check 2: In not, check if name/path of the composite exists in both paks)
+                bool pak2ContainsComposite = pak2.GetComposite(composite.shortGUID) != null;
+                if (!pak2ContainsComposite) {
+                    pak2ContainsComposite = pak2.GetCompositeNames().ToList().Contains(composite.name);
+                }
+
+                if (!pak2ContainsComposite) {
                     CompositeDifference compositeDifference = new CompositeDifference(composite, DIFFERENCE_TYPE.DELETED, null);
                     this.compositeDifferences.Add(compositeDifference);
                 } else {
@@ -59,7 +64,13 @@ namespace AIPAKDifferentiation {
             }
             // afterwards we check if any composite has been created - this does not mean we want all the entities and parameter inside the newly created composite. We only want the composite in this case
             foreach (Composite pak2composite in pak2.Composites) {
-                if (!pak1.GetCompositeNames().ToList().Contains(pak2composite.name)) {
+                // same as for checking for DELETED, here again we check if the composite exists in both paks
+                bool pak1ContainsComposite = pak1.GetComposite(pak2composite.shortGUID) != null;
+                if (!pak1ContainsComposite) {
+                    pak1ContainsComposite = pak1.GetCompositeNames().ToList().Contains(pak2composite.name);
+                }
+
+                if (!pak1ContainsComposite) {
                     CompositeDifference compositeDifference = new CompositeDifference(null, DIFFERENCE_TYPE.CREATED, pak2composite);
                     this.compositeDifferences.Add(compositeDifference);
                 }
