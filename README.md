@@ -9,6 +9,7 @@ The goal of this project is to see the differences in a modded PAK file and the 
 * Show differences between 2 PAK files
 * filters to show/hide different types and difference types
 * different views: listview and treeview (as shown in the images below)
+* export the current differences into a text file
 
 ### Usage
 Select two PAK files via the first two buttons. Click "Show differences". Loading all the differences might take a while depending on the each level and the amount differences both PAKs have.
