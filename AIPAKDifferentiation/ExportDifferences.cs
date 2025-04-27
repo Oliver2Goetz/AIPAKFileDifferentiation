@@ -102,14 +102,17 @@ namespace AIPAKDifferentiation {
          */
         private string getCompositeLine(CompositeDifference compositeDifference) {
             string compositeName = "";
-            
+            string compositeShortGuid = "";
+
             if (compositeDifference.differenceType == DIFFERENCE_TYPE.CREATED) {
                 compositeName = compositeDifference.compositePak2.name;
+                compositeShortGuid = compositeDifference.compositePak2.shortGUID.ToString();
             } else {
                 compositeName = compositeDifference.composite.name;
+                compositeShortGuid = compositeDifference.composite.shortGUID.ToString();
             }
 
-            return compositeName + " (" + compositeDifference.differenceType.ToString() + ")";
+            return "[" + compositeShortGuid + "] " + compositeName + " (" + compositeDifference.differenceType.ToString() + ")";
         }
 
         /*
