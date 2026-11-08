@@ -1,2 +1,14 @@
+# Visual Studio local state
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
 
-.vs/AIPAKDifferentiation/v15/Server/sqlite3/db.lock
+# Build and publish output
+[Bb]in/
+[Oo]bj/
+/artifacts/
+
+# Restored NuGet packages (keep package declarations in source control)
+/packages/
