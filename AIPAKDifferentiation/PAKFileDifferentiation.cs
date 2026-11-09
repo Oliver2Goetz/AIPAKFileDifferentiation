@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -46,11 +47,52 @@ namespace AIPAKDifferentiation {
             if (pak1.Loaded && pak2.Loaded) {
                 this.compositeDifferences.Clear();
                 this.loadDifferencesComposites();
+                this.sortDifferences();
 
                 return this.compositeDifferences;
             }
 
             return null;
+        }
+
+        /*
+         * Sorts the differences alphabetically.
+         */
+        private void sortDifferences() {
+            // Sort once so both views and text exports use the same sibling order.
+            // Created entries use PAK 2. Modified/Deleted entries use their displayed PAK 1 name.
+            var comparer = StringComparer.OrdinalIgnoreCase;
+            this.compositeDifferences = this.compositeDifferences
+                .OrderBy(d => (d.composite ?? d.compositePak2).name, comparer)
+                .ThenBy(d => (d.composite ?? d.compositePak2).shortGUID.AsUInt32)
+                .ToList()
+            ;
+
+            foreach (CompositeDifference compositeDifference in this.compositeDifferences) {
+                compositeDifference.entityDifferences = compositeDifference.entityDifferences
+                    .OrderBy(d => d.differenceType == DIFFERENCE_TYPE.CREATED
+                        ? d.utilsPak2.GetEntityName(d.compositePak2, d.entityPak2)
+                        : d.utils.GetEntityName(d.composite, d.entity), comparer)
+                    .ThenBy(d => (d.entity ?? d.entityPak2).shortGUID.AsUInt32)
+                    .ToList()
+                ;
+
+                foreach (EntityDifference entityDifference in compositeDifference.entityDifferences) {
+                    entityDifference.parameterDiffereces = entityDifference.parameterDiffereces
+                        .OrderBy(d => (d.parameter ?? d.parameterPak2).name.ToString(), comparer)
+                        .ThenBy(d => (d.parameter ?? d.parameterPak2).name.AsUInt32)
+                        .ToList()
+                    ;
+
+                    entityDifference.linkDifferences = entityDifference.linkDifferences
+                        .OrderBy(d => (d.differenceType == DIFFERENCE_TYPE.CREATED ? d.linkPak2 : d.link).linkedEntityID.ToString(), comparer)
+                        .ThenBy(d => (d.differenceType == DIFFERENCE_TYPE.CREATED ? d.linkPak2 : d.link).thisParamID.ToString(), comparer)
+                        .ThenBy(d => (d.differenceType == DIFFERENCE_TYPE.CREATED ? d.linkPak2 : d.link).linkedParamID.ToString(), comparer)
+                        .ThenBy(d => (d.differenceType == DIFFERENCE_TYPE.CREATED ? d.linkPak2 : d.link).ID.AsUInt32)
+                        .ToList()
+                    ;
+                }
+            }
         }
 
         /*
