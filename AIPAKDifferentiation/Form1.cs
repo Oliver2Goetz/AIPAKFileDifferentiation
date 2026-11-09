@@ -310,7 +310,20 @@ namespace AIPAKDifferentiation {
             } else {
 
                 ExportDifferences export = new ExportDifferences();
-                List<string> result = export.export(this.compositeDifferences, this.pak1Name);
+                ExportFilterOptions exportFilters = null;
+                if (this.checkboxApplyFiltersForExport.Checked) {
+                    exportFilters = new ExportFilterOptions {
+                        HideComposites = this.checkboxHideComposites.Checked,
+                        HideEntities = this.checkboxHideEntities.Checked,
+                        HideParameters = this.checkboxHideParameters.Checked,
+                        HideLinks = this.checkboxHideLinks.Checked,
+                        HideAliasEntities = this.checkboxEntityHideOverrides.Checked,
+                        HideCreated = this.checkboxHideCreated.Checked,
+                        HideModified = this.checkboxHideModified.Checked,
+                        HideDeleted = this.checkboxHideDeleted.Checked
+                    };
+                }
+                List<string> result = export.export(this.compositeDifferences, this.pak1Name, exportFilters);
 
                 if ("exception" == result[0]) {
                     MessageBox.Show(result[1], "Export Error");

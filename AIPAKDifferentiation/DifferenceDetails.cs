@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -11,8 +12,9 @@ namespace AIPAKDifferentiation {
     // Shared by tree selection and text export. Values always refer to stored PAK data.
     internal static class DifferenceDetails {
 
-        internal static string composite(CompositeDifference difference) {
+        internal static string composite(CompositeDifference difference, List<EntityDifference> filteredEntities = null) {
             Composite current = difference.composite ?? difference.compositePak2;
+            List<EntityDifference> shownEntities = filteredEntities ?? difference.entityDifferences;
 
             StringBuilder text = new StringBuilder();
             text.AppendLine("Composite - " + difference.differenceType);
@@ -20,10 +22,10 @@ namespace AIPAKDifferentiation {
             text.AppendLine("ID: " + current.shortGUID.ToByteString());
             appendCompositeSide(text, "Initial", difference.composite);
             appendCompositeSide(text, "New", difference.compositePak2);
-            text.AppendLine("Changed entities shown: " + difference.entityDifferences.Count);
+            text.AppendLine("Changed entities shown: " + shownEntities.Count);
 
             foreach (DIFFERENCE_TYPE type in new[] { DIFFERENCE_TYPE.CREATED, DIFFERENCE_TYPE.MODIFIED, DIFFERENCE_TYPE.DELETED }) {
-                text.AppendLine("  " + type + ": " + difference.entityDifferences.Count(x => x.differenceType == type));
+                text.AppendLine("  " + type + ": " + shownEntities.Count(x => x.differenceType == type));
             }
 
             return text.ToString().TrimEnd();
@@ -42,7 +44,7 @@ namespace AIPAKDifferentiation {
                 value.aliases.Count + " aliases, " + value.proxies.Count + " proxies)");
         }
 
-        internal static string entity(EntityDifference difference) {
+        internal static string entity(EntityDifference difference, int? filteredParameterCount = null, int? filteredLinkCount = null) {
             Entity current = difference.entity ?? difference.entityPak2;
             Composite composite = difference.entity == null ? difference.compositePak2 : difference.composite;
             CommandsUtils utils = difference.entity == null ? difference.utilsPak2 : difference.utils;
@@ -54,8 +56,8 @@ namespace AIPAKDifferentiation {
             text.AppendLine("Composite: " + (composite?.name ?? "unresolved"));
             appendEntitySide(text, "Initial", difference.entity, difference.commands);
             appendEntitySide(text, "New", difference.entityPak2, difference.commandsPak2);
-            text.AppendLine("Changed parameters shown: " + difference.parameterDiffereces.Count);
-            text.AppendLine("Changed links shown: " + difference.linkDifferences.Count);
+            text.AppendLine("Changed parameters shown: " + (filteredParameterCount ?? difference.parameterDiffereces.Count));
+            text.AppendLine("Changed links shown: " + (filteredLinkCount ?? difference.linkDifferences.Count));
 
             return text.ToString().TrimEnd();
         }
