@@ -20,6 +20,20 @@
     <ApplicationIcon>Resources\logo.ico</ApplicationIcon>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <PublishTrimmed>false</PublishTrimmed>
+    <DebugType>embedded</DebugType>
+    <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
+    <PublishDir>$(MSBuildThisFileDirectory)bin\Release\</PublishDir>
+    <!-- Run the publish hook even when Visual Studio considers the build up to date. -->
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="CathodeLib" Version="1.0.0" />
   </ItemGroup>
@@ -55,4 +69,11 @@
     </Compile>
     <None Remove="App.config;packages.config;FodyWeavers.xml;FodyWeavers.xsd" />
   </ItemGroup>
+
+  <Target Name="PublishReleaseExecutable" AfterTargets="Build"
+          Condition="'$(Configuration)' == 'Release' and '$(DesignTimeBuild)' != 'true' and '$(PublishReleaseOnBuild)' != 'false' and '$(_IsPublishing)' != 'true'">
+    <!-- Publish the completed build without rebuilding or re-entering this hook. -->
+    <MSBuild Projects="$(MSBuildProjectFullPath)" Targets="Publish"
+             Properties="NoBuild=true;PublishReleaseOnBuild=false" />
+  </Target>
 </Project>
