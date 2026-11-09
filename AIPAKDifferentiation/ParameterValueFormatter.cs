@@ -87,7 +87,10 @@ namespace AIPAKDifferentiation {
         }
 
         internal static string format(Parameter parameter, CommandsUtils utils = null, Entity entity = null, Composite composite = null, bool detailed = false) {
-            if (parameter?.content == null) return "<no payload>";
+            if (parameter?.content == null) {
+                return "<no payload>";
+            }
+
             ParameterData data = parameter.content;
             switch (data.dataType) {
                 case DataType.BOOL:
@@ -153,7 +156,7 @@ namespace AIPAKDifferentiation {
                     return "NONE: no value";
                 
                 case DataType.RESOURCE:
-                    return "RESOURCE: excluded from comparison (companion files required)";
+                    return formatResource((cResource)data, detailed);
                 
                 default:
                     return data.dataType + ": payload unavailable in CathodeLib 1.0";
@@ -170,14 +173,95 @@ namespace AIPAKDifferentiation {
             }
 
             ParameterData x = a.content, y = b.content;
+            if (x is cResource rx && y is cResource ry) {
+                return sameResource(rx, ry);
+            }
             if (x is cSpline sx && y is cSpline sy) {
-                if (sx.splinePoints == null || sy.splinePoints == null) return sx.splinePoints == sy.splinePoints;
+                if (sx.splinePoints == null || sy.splinePoints == null) {
+                    return sx.splinePoints == sy.splinePoints;
+                }
 
                 return sx.splinePoints.Count == sy.splinePoints.Count && sx.splinePoints.Zip(sy.splinePoints,
                     (p, q) => p.position == q.position && p.rotation == q.rotation).All(equal => equal);
             }
 
             return x == y;
+        }
+
+        // Compare only fields read directly from COMMANDS.PAK. Resolved model, animation,
+        // collision and renderable objects depend on separate level files and are omitted.
+        private static bool sameResource(cResource x, cResource y) {
+            if (x.shortGUID != y.shortGUID) {
+                return false;
+            }
+            if (x.value == null || y.value == null) {
+                return x.value == y.value;
+            }
+            if (x.value.Count != y.value.Count) {
+                return false;
+            }
+
+            // Reference order does not change the resource set.
+            bool[] matched = new bool[y.value.Count];
+            foreach (ResourceReference reference in x.value) {
+                bool found = false;
+                for (int index = 0; index < y.value.Count; index++) {
+                    if (matched[index] || !sameResourceReference(reference, y.value[index])) {
+                        continue;
+                    }
+                    matched[index] = true;
+                    found = true;
+                    break;
+                }
+                if (!found) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private static bool sameResourceReference(ResourceReference x, ResourceReference y) {
+            if (x == null || y == null) {
+                return x == y;
+            }
+
+            return x.resource_id == y.resource_id && x.resource_type == y.resource_type &&
+                x.position == y.position && x.rotation == y.rotation && x.entityID == y.entityID &&
+                (x.resource_type != ResourceType.DYNAMIC_PHYSICS_SYSTEM || x.PhysicsSystemIndex == y.PhysicsSystemIndex);
+        }
+
+        private static string formatResource(cResource resource, bool detailed) {
+            var references = resource.value;
+            string summary = "RESOURCE: ID " + resource.shortGUID.ToByteString() + "; " +
+                (references == null ? "reference data unavailable" : references.Count + " reference(s)");
+            if (references != null && references.Count > 0) {
+                summary += "; types: " + string.Join(", ", references.Where(reference => reference != null)
+                    .Select(reference => reference.resource_type.ToString()).Distinct());
+            }
+            if (!detailed || references == null) {
+                return summary;
+            }
+
+            StringBuilder result = new StringBuilder(summary);
+            for (int index = 0; index < references.Count; index++) {
+                ResourceReference reference = references[index];
+                if (reference == null) {
+                    result.Append("\r\n  [" + index + "] <no reference>");
+                    continue;
+                }
+                result.Append("\r\n  [" + index + "] Type: " + reference.resource_type);
+                result.Append("; ID: " + reference.resource_id.ToByteString());
+                result.Append("; Position (" + formatAxes(reference.position) + ")");
+                result.Append("; Rotation (" + formatAxes(reference.rotation) + ")");
+                if (reference.resource_type == ResourceType.COLLISION_MAPPING) {
+                    result.Append("; Entity ID: " + reference.entityID.ToByteString());
+                }
+                if (reference.resource_type == ResourceType.DYNAMIC_PHYSICS_SYSTEM) {
+                    result.Append("; Physics system index: " + reference.PhysicsSystemIndex);
+                }
+            }
+            result.Append("\r\n  Companion-file asset details are not compared.");
+            return result.ToString();
         }
 
     }

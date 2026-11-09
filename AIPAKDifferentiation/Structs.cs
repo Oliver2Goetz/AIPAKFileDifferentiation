@@ -29,17 +29,21 @@ namespace AIPAKDifferentiation {
         public Entity entityPak2;
         public CommandsUtils utils;
         public CommandsUtils utilsPak2;
+        public Commands commands;
+        public Commands commandsPak2;
         public Composite composite;
         public Composite compositePak2;
         public List<ParameterDifference> parameterDiffereces = new List<ParameterDifference>();
         public List<LinkDifference> linkDifferences = new List<LinkDifference>();
 
-        public EntityDifference(Entity entity, DIFFERENCE_TYPE differenceType, Entity entityPak2, Composite composite, Composite compositePak2, CommandsUtils utils, CommandsUtils utilsPak2) {
+        public EntityDifference(Entity entity, DIFFERENCE_TYPE differenceType, Entity entityPak2, Composite composite, Composite compositePak2, CommandsUtils utils, CommandsUtils utilsPak2, Commands commands = null, Commands commandsPak2 = null) {
             this.entity = entity;
             this.differenceType = differenceType;
             this.entityPak2 = entityPak2;
             this.utils = utils;
             this.utilsPak2 = utilsPak2;
+            this.commands = commands;
+            this.commandsPak2 = commandsPak2;
             this.composite = composite;
             this.compositePak2 = compositePak2;
         }

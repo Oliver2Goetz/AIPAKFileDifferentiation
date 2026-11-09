@@ -7,7 +7,7 @@ using CATHODE.Scripting;
 using CATHODE.Scripting.Internal;
 
 namespace AIPAKDifferentiation {
-    
+
     // Shared by tree selection and text export. Values always refer to stored PAK data.
     internal static class DifferenceDetails {
 
@@ -22,21 +22,24 @@ namespace AIPAKDifferentiation {
             appendCompositeSide(text, "New", difference.compositePak2);
             text.AppendLine("Changed entities shown: " + difference.entityDifferences.Count);
 
-            foreach (DIFFERENCE_TYPE type in new[] { DIFFERENCE_TYPE.CREATED, DIFFERENCE_TYPE.MODIFIED, DIFFERENCE_TYPE.DELETED }) { 
+            foreach (DIFFERENCE_TYPE type in new[] { DIFFERENCE_TYPE.CREATED, DIFFERENCE_TYPE.MODIFIED, DIFFERENCE_TYPE.DELETED }) {
                 text.AppendLine("  " + type + ": " + difference.entityDifferences.Count(x => x.differenceType == type));
             }
-            
+
             return text.ToString().TrimEnd();
         }
 
         private static void appendCompositeSide(StringBuilder text, string title, Composite value) {
-            if (value == null) { text.AppendLine(title + ": absent"); return; }
+            if (value == null) {
+                text.AppendLine(title + ": -");
+                return;
+            }
+
             text.AppendLine(title + " name: " + value.name);
             text.AppendLine(title + " ID: " + value.shortGUID.ToByteString());
             text.AppendLine(title + ": " + value.GetEntities().Count + " entities (" +
                 value.variables.Count + " variables, " + value.functions.Count + " functions, " +
-                value.aliases.Count + " aliases, " + value.proxies.Count + " proxies)")
-            ;
+                value.aliases.Count + " aliases, " + value.proxies.Count + " proxies)");
         }
 
         internal static string entity(EntityDifference difference) {
@@ -49,18 +52,28 @@ namespace AIPAKDifferentiation {
             text.AppendLine("Name: " + (utils?.GetEntityName(composite, current) ?? "unresolved"));
             text.AppendLine("ID: " + current.shortGUID.ToByteString());
             text.AppendLine("Composite: " + (composite?.name ?? "unresolved"));
-            appendEntitySide(text, "Initial", difference.entity);
-            appendEntitySide(text, "New", difference.entityPak2);
+            appendEntitySide(text, "Initial", difference.entity, difference.commands);
+            appendEntitySide(text, "New", difference.entityPak2, difference.commandsPak2);
             text.AppendLine("Changed parameters shown: " + difference.parameterDiffereces.Count);
             text.AppendLine("Changed links shown: " + difference.linkDifferences.Count);
 
             return text.ToString().TrimEnd();
         }
 
-        private static void appendEntitySide(StringBuilder text, string title, Entity value) {
-            if (value == null) { text.AppendLine(title + ": absent"); return; }
-            text.AppendLine(title + " type: " + value.variant);
-            text.AppendLine(title + " parameters: " + value.parameters.Count + " (stored; resource values excluded from comparison)");
+        private static void appendEntitySide(StringBuilder text, string title, Entity value, Commands commands) {
+            if (value == null) {
+                text.AppendLine(title + ": -");
+                return;
+            }
+
+            Composite referencedComposite = value is FunctionEntity functionEntity ? commands?.GetComposite(functionEntity.function) : null;
+            string entityType = value.variant.ToString();
+            if (referencedComposite != null) {
+                entityType += " (composite instance)";
+            }
+
+            text.AppendLine(title + " type: " + entityType);
+            text.AppendLine(title + " parameters: " + value.parameters.Count);
             text.AppendLine(title + " outgoing links: " + value.childLinks.Count);
             if (value is VariableEntity variable) {
                 text.AppendLine(title + " variable: " + variable.name + " [" + variable.name.ToByteString() + "]");
@@ -69,31 +82,40 @@ namespace AIPAKDifferentiation {
             } else if (value is ProxyEntity proxy) {
                 text.AppendLine(title + " proxy function ID: " + proxy.function.ToByteString());
                 text.AppendLine(title + " proxy path: " + path(proxy.proxy));
-                if (proxy.sequence.Count > 0 || proxy.methods.Count > 0) { 
+                if (proxy.sequence.Count > 0 || proxy.methods.Count > 0) {
                     text.AppendLine(title + " trigger sequence data: " + proxy.sequence.Count + " sequence entries, " + proxy.methods.Count + " methods (not compared)");
                 }
 
             } else if (value is AliasEntity alias) {
                 text.AppendLine(title + " alias path: " + path(alias.alias));
-            
-                } else if (value is FunctionEntity function) {
+            } else if (value is FunctionEntity function) {
                 text.AppendLine(title + " function ID: " + function.function.ToByteString());
-                text.AppendLine(title + " function name: " + function.function);
-                text.AppendLine(title + " resource references: " + function.resources.Count + " (not compared)");
-                
-                if (function is CAGEAnimation animation) { 
+                if (referencedComposite != null) {
+                    text.AppendLine(title + " referenced composite: " + referencedComposite.name);
+                } else if (function.function.IsFunctionType) {
+                    text.AppendLine(title + " function name: " + function.function.AsFunctionType);
+                }
+
+                if (function.resources.Count > 0) {
+                    text.AppendLine(title + " resource references: " + function.resources.Count + " (companion-file details not compared)");
+                }
+
+                if (function is CAGEAnimation animation) {
                     text.AppendLine(title + " animation: " + animation.connections.Count + " connections, " + animation.floatTracks.Count + " float tracks, " + animation.eventTracks.Count + " event tracks (not compared)");
                 }
 
-                if (function is TriggerSequence sequence) { 
+                if (function is TriggerSequence sequence) {
                     text.AppendLine(title + " trigger sequence: " + sequence.sequence.Count + " entries, " + sequence.methods.Count + " methods (not compared)");
                 }
             }
         }
 
         private static string path(EntityPath path) {
-            return path?.path == null || path.path.Length == 0 ? "<empty>" :
-                string.Join(" -> ", path.path.Select(id => id.ToByteString()));
+            if (path?.path == null || path.path.Length == 0) {
+                return "<empty>";
+            }
+
+            return string.Join(" -> ", path.path.Select(id => id.ToByteString()));
         }
 
         internal static string parameter(ParameterDifference difference) {
@@ -112,7 +134,7 @@ namespace AIPAKDifferentiation {
 
         private static void appendParameterSide(StringBuilder text, string title, Parameter value, CommandsUtils utils, Entity entity, Composite composite) {
             if (value == null) {
-                text.AppendLine(title + ": absent");
+                text.AppendLine(title + ": -");
                 return; 
             }
 
@@ -138,7 +160,7 @@ namespace AIPAKDifferentiation {
 
         private static void appendLinkSide(StringBuilder text, string title, EntityConnector? link, Entity source, Composite composite, CommandsUtils utils) {
             if (link == null) {
-                text.AppendLine(title + ": absent");
+                text.AppendLine(title + ": -");
                 return;
             }
 

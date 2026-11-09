@@ -133,7 +133,7 @@ namespace AIPAKDifferentiation {
                 // first we check for entity deletion
                 Entity pak2Entity = pak2Composite.GetEntityByID(entity.shortGUID);
                 if (pak2Entity == null) {
-                    EntityDifference entityDifference = new EntityDifference(entity, DIFFERENCE_TYPE.DELETED, null, composite, pak2Composite, pak1.Utils, pak2.Utils);
+                    EntityDifference entityDifference = new EntityDifference(entity, DIFFERENCE_TYPE.DELETED, null, composite, pak2Composite, pak1.Utils, pak2.Utils, this.pak1, this.pak2);
                     compositeDifference.entityDifferences.Add(entityDifference);
                 } else {
                     // now we handle modifications with parameters and links of this entity
@@ -148,7 +148,7 @@ namespace AIPAKDifferentiation {
             // afterwards we check if any entity has been created - we dont want any parameters here, just the newly created entities
             foreach (Entity pak2Entity in pak2Composite.GetEntities()) {
                 if (null == composite.GetEntityByID(pak2Entity.shortGUID)) { // null means the entity with guid from composite2 wasn't found in composite1
-                    EntityDifference entityDifference = new EntityDifference(null, DIFFERENCE_TYPE.CREATED, pak2Entity, composite, pak2Composite, pak1.Utils, pak2.Utils);
+                    EntityDifference entityDifference = new EntityDifference(null, DIFFERENCE_TYPE.CREATED, pak2Entity, composite, pak2Composite, pak1.Utils, pak2.Utils, this.pak1, this.pak2);
                     this.loadParameterDifferenceByNewEntity(pak2Entity, entityDifference);
                     compositeDifference.entityDifferences.Add(entityDifference);
                 }
@@ -164,16 +164,15 @@ namespace AIPAKDifferentiation {
          * Loads differences for parameters
          */
         private EntityDifference loadDifferencesParameters(Entity entity, Entity pak2Entity, CompositeDifference compositeDifference) {
-            EntityDifference entityDifference = new EntityDifference(entity, DIFFERENCE_TYPE.MODIFIED, pak2Entity, compositeDifference.composite, compositeDifference.compositePak2, pak1.Utils, pak2.Utils);
+            EntityDifference entityDifference = new EntityDifference(entity, DIFFERENCE_TYPE.MODIFIED, pak2Entity, compositeDifference.composite, compositeDifference.compositePak2, pak1.Utils, pak2.Utils, this.pak1, this.pak2);
 
             foreach (Parameter parameter in entity.parameters) {
-                // do not handle resources currently - we don't want to see the differences as of now
-                if (parameter.content.dataType == DataType.RESOURCE) {
+                // first we check for parameter deletion
+                Parameter pak2Parameter = pak2Entity.parameters.Find(x => x.name == parameter.name);
+                if (isEmptyResource(parameter) && (pak2Parameter == null || isEmptyResource(pak2Parameter))) {
                     continue;
                 }
 
-                // first we check for parameter deletion
-                Parameter pak2Parameter = pak2Entity.parameters.Find(x => x.name == parameter.name);
                 if (null == pak2Parameter) {
                     ParameterDifference parameterDifference = new ParameterDifference(parameter, DIFFERENCE_TYPE.DELETED, null);
                     parameterDifference.valueBefore = ParameterValueFormatter.format(parameter, this.pak1.Utils, entity, compositeDifference.composite);
@@ -190,10 +189,10 @@ namespace AIPAKDifferentiation {
             }
             // afterwards we check if any parameter has been created - we dont want any parameter values here, just newly created parameters
             foreach (Parameter pak2Parameter in pak2Entity.parameters) {
-                // same as above - do not handle resources currently - we don't want to see the differences as of now
-                if (pak2Parameter.content.dataType == DataType.RESOURCE) {
+                if (isEmptyResource(pak2Parameter)) {
                     continue;
                 }
+
                 Parameter foundPak1Parameter = entity.parameters.Find(x => x.name == pak2Parameter.name);
                 if (null == foundPak1Parameter) {
                     ParameterDifference parameterDifference = new ParameterDifference(null, DIFFERENCE_TYPE.CREATED, pak2Parameter);
@@ -217,7 +216,7 @@ namespace AIPAKDifferentiation {
          */
         private void loadParameterDifferenceByNewEntity(Entity pak2Entity, EntityDifference entityDifference) { 
             foreach (Parameter pak2Parameter in pak2Entity.parameters) {
-                if (pak2Parameter.content.dataType == DataType.RESOURCE) {
+                if (isEmptyResource(pak2Parameter)) {
                     continue;
                 }
 
@@ -229,11 +228,18 @@ namespace AIPAKDifferentiation {
         }
 
         private ParameterDifference loadParameterValues(Parameter parameter, Parameter pak2Parameter, Entity entity, Entity pak2Entity, Composite composite, Composite pak2Composite) {
-            if (ParameterValueFormatter.sameStoredValue(parameter, pak2Parameter)) return null;
+            if (ParameterValueFormatter.sameStoredValue(parameter, pak2Parameter)) {
+                return null;
+            }
+
             return new ParameterDifference(parameter, DIFFERENCE_TYPE.MODIFIED, pak2Parameter) {
                 valueBefore = ParameterValueFormatter.format(parameter, this.pak1.Utils, entity, composite),
                 valueAfter = ParameterValueFormatter.format(pak2Parameter, this.pak2.Utils, pak2Entity, pak2Composite)
             };
+        }
+
+        private static bool isEmptyResource(Parameter parameter) {
+            return parameter?.content is cResource resource && (resource.value == null || resource.value.Count == 0);
         }
 
         /*
@@ -258,7 +264,7 @@ namespace AIPAKDifferentiation {
             }
 
             if (null == entityDifference && 0 < linkDifferences.Count) {
-                entityDifference = new EntityDifference(entity, DIFFERENCE_TYPE.MODIFIED, pak2Entity, compositeDifference.composite, compositeDifference.compositePak2, pak1.Utils, pak2.Utils);
+                entityDifference = new EntityDifference(entity, DIFFERENCE_TYPE.MODIFIED, pak2Entity, compositeDifference.composite, compositeDifference.compositePak2, pak1.Utils, pak2.Utils, this.pak1, this.pak2);
                 compositeDifference.entityDifferences.Add(entityDifference);
             }
 
