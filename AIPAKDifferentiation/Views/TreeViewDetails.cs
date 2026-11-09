@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Windows.Forms;
 using System.Drawing;
 
@@ -50,7 +50,7 @@ namespace AIPAKDifferentiation.Views {
 
             switch (entry.differenceType) {
                 case DIFFERENCE_TYPE.CREATED:
-                    content += "entities: " + compositeDifference.composite.functions.Count() + "\n";
+                    content += "entities: " + compositeDifference.compositePak2.functions.Count() + "\n";
                     content += "entity differences: " + compositeDifference.entityDifferences.Count();
                     break;
                 case DIFFERENCE_TYPE.MODIFIED:
@@ -120,15 +120,15 @@ namespace AIPAKDifferentiation.Views {
                     // todo
                     break;
                 case DIFFERENCE_TYPE.MODIFIED:
-                    string entityName = EntityUtils.GetName(linkDifference.composite.shortGUID, linkDifference.entity.shortGUID);
-                    string childEntityName = EntityUtils.GetName(linkDifference.composite.shortGUID, linkDifference.link.childID);
+                    string entityName = linkDifference.utils.GetEntityName(linkDifference.composite, linkDifference.entity);
+                    string childEntityName = linkDifference.utils.GetEntityName(linkDifference.composite.shortGUID, linkDifference.link.linkedEntityID);
                     content += "Initial value:\n";
-                    content += entityName + " [" + linkDifference.link.parentParamID.ToString() + "] => " +
-                        linkDifference.link.childID.ToString() + " [" + linkDifference.link.childParamID.ToString() + "]" + "\n\n";
+                    content += entityName + " [" + linkDifference.link.thisParamID.ToString() + "] => " +
+                        linkDifference.link.linkedEntityID.ToString() + " [" + linkDifference.link.linkedParamID.ToString() + "]" + "\n\n";
 
                     //todo
                     content += "New value:\n";
-                    content += "todo" + " [" + linkDifference.link.parentParamID.ToString() + "]";//todo
+                    content += "todo" + " [" + linkDifference.link.thisParamID.ToString() + "]";//todo
                     break;
                 case DIFFERENCE_TYPE.DELETED:
                     break;

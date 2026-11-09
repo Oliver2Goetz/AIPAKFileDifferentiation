@@ -71,8 +71,15 @@ namespace AIPAKDifferentiation {
         private bool loadPakFileDifferences() {
             PAKFileDifferentiation pakFileDifferentiation = new PAKFileDifferentiation(this.pakPath1, this.pakPath2);
 
+            if (!pakFileDifferentiation.pak1.Loaded || !pakFileDifferentiation.pak2.Loaded ||
+                pakFileDifferentiation.pak1.EntryPoints?.FirstOrDefault() == null ||
+                pakFileDifferentiation.pak2.EntryPoints?.FirstOrDefault() == null) {
+                MessageBox.Show("One or both PAK files could not be loaded or have no level entry point.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
             string splittedPak1Name = pakFileDifferentiation.pak1.EntryPoints[0].name.Split('\\').Last();
-            string splittedPak2Name = pakFileDifferentiation.pak1.EntryPoints[0].name.Split('\\').Last();
+            string splittedPak2Name = pakFileDifferentiation.pak2.EntryPoints[0].name.Split('\\').Last();
 
             if (splittedPak1Name != splittedPak2Name) {
                 string namePak1 = pakFileDifferentiation.pak1.EntryPoints[0].name.Split('\\').Last();
@@ -313,7 +320,15 @@ namespace AIPAKDifferentiation {
 
                     if (dialogResult == DialogResult.Yes) {
                         if (File.Exists(result[2])) {
-                            Process.Start(result[2]);
+                            try {
+                                Process.Start(new ProcessStartInfo {
+                                    FileName = result[2],
+                                    UseShellExecute = true
+                                });
+                            } catch (Exception ex) when (ex is System.ComponentModel.Win32Exception || ex is InvalidOperationException) {
+                                MessageBox.Show("The export was saved, but could not be opened.\n\n" + result[2] + "\n\n" + ex.Message,
+                                    "Open Export Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
                         } else {
                             MessageBox.Show("The file does not exist: " + result[2]);
                         }

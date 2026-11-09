@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using CATHODE;
 using CATHODE.Scripting;
@@ -27,15 +27,19 @@ namespace AIPAKDifferentiation {
 
         public Entity entity;
         public Entity entityPak2;
+        public CommandsUtils utils;
+        public CommandsUtils utilsPak2;
         public Composite composite;
         public Composite compositePak2;
         public List<ParameterDifference> parameterDiffereces = new List<ParameterDifference>();
         public List<LinkDifference> linkDifferences = new List<LinkDifference>();
 
-        public EntityDifference(Entity entity, DIFFERENCE_TYPE differenceType, Entity entityPak2, Composite composite, Composite compositePak2) {
+        public EntityDifference(Entity entity, DIFFERENCE_TYPE differenceType, Entity entityPak2, Composite composite, Composite compositePak2, CommandsUtils utils, CommandsUtils utilsPak2) {
             this.entity = entity;
             this.differenceType = differenceType;
             this.entityPak2 = entityPak2;
+            this.utils = utils;
+            this.utilsPak2 = utilsPak2;
             this.composite = composite;
             this.compositePak2 = compositePak2;
         }
@@ -57,17 +61,19 @@ namespace AIPAKDifferentiation {
 
     class LinkDifference : AbstractDifference {
 
-        public EntityLink link;
-        public EntityLink linkPak2;
+        public EntityConnector link;
+        public EntityConnector linkPak2;
         public Composite composite;
         public Composite compositePak2;
         public Entity entity;
         public Entity entityPak2;
+        public CommandsUtils utils;
+        public CommandsUtils utilsPak2;
 
         /*
          * If a link has been CREATED - link and linkPak2 are the same -> both are from PAK2 (this is also the case for DELETED -> both are from PAK1)
          */
-        public LinkDifference(EntityLink link, DIFFERENCE_TYPE differenceType, EntityLink linkPak2, Composite composite, Composite compositePak2, Entity entity, Entity entityPak2) {
+        public LinkDifference(EntityConnector link, DIFFERENCE_TYPE differenceType, EntityConnector linkPak2, Composite composite, Composite compositePak2, Entity entity, Entity entityPak2, CommandsUtils utils, CommandsUtils utilsPak2) {
             this.link = link;
             this.differenceType = differenceType;
             this.linkPak2 = linkPak2;
@@ -75,6 +81,8 @@ namespace AIPAKDifferentiation {
             this.compositePak2 = compositePak2;
             this.entity = entity;
             this.entityPak2 = entityPak2;
+            this.utils = utils;
+            this.utilsPak2 = utilsPak2;
         }
     }
 

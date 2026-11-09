@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
@@ -124,9 +124,9 @@ namespace AIPAKDifferentiation {
             string entityName = "";
 
             if (entityDifference.differenceType == DIFFERENCE_TYPE.CREATED) {
-                entityName = EntityUtils.GetName(entityDifference.compositePak2.shortGUID, entityDifference.entityPak2.shortGUID);
+                entityName = entityDifference.utilsPak2.GetEntityName(entityDifference.compositePak2, entityDifference.entityPak2);
             } else {
-                entityName = EntityUtils.GetName(entityDifference.composite.shortGUID, entityDifference.entity.shortGUID);
+                entityName = entityDifference.utils.GetEntityName(entityDifference.composite, entityDifference.entity);
             }
 
             if (entityName.StartsWith("CATHODE.Scripting.")) {
@@ -151,7 +151,7 @@ namespace AIPAKDifferentiation {
                     parameter = parameterDifference.parameter;
                 }
 
-                string stringParam = this.translateParameter(parameter, parameterDifference.differenceType);
+                string stringParam = this.translateParameter(parameter, parameterDifference.differenceType, parameterDifference.differenceType == DIFFERENCE_TYPE.CREATED ? entityDifference.utilsPak2 : entityDifference.utils);
                 parameters.Add(stringParam);
             }
 
@@ -170,14 +170,14 @@ namespace AIPAKDifferentiation {
             List<string> links = new List<string>();
 
             foreach (LinkDifference linkDifference in entityDifference.linkDifferences) {
-                EntityLink link = linkDifference.link;
+                EntityConnector link = linkDifference.link;
                 if (linkDifference.differenceType == DIFFERENCE_TYPE.CREATED) {
                     link = linkDifference.linkPak2;
                 } else {
                     link = linkDifference.link;
                 }
 
-                string stringLink = "{" + link.parentParamID + " => [" + link.childID + ": " + link.childParamID + "] " + linkDifference.differenceType + "}";
+                string stringLink = "{" + link.thisParamID + " => [" + link.linkedEntityID + ": " + link.linkedParamID + "] " + linkDifference.differenceType + "}";
                 links.Add(stringLink);
             }
 
@@ -196,7 +196,7 @@ namespace AIPAKDifferentiation {
         }
 
 
-        private string translateParameter(Parameter parameter, DIFFERENCE_TYPE differenceType) {
+        private string translateParameter(Parameter parameter, DIFFERENCE_TYPE differenceType, CommandsUtils utils) {
             string newValue = "";
 
             ParameterData data = parameter.content;
@@ -234,10 +234,10 @@ namespace AIPAKDifferentiation {
 
                 case DataType.ENUM:
                     cEnum cEnum = (cEnum)parameter.content;
-                    EnumUtils.EnumDescriptor descriptor = EnumUtils.GetEnum(cEnum.enumID);
-                    string element = descriptor.Entries.ElementAtOrDefault(cEnum.enumIndex);
+                    var descriptor = utils.GetEnum(cEnum.enumID);
+                    string element = descriptor?.Entries.Find(e => e.Index == cEnum.enumIndex)?.Name;
                     if (element != null) {
-                        newValue = data.dataType.ToString() + COMPOSITE_SEPARATOR + "[" + cEnum.enumID.ToString() + ": " + descriptor.Entries.ElementAtOrDefault(cEnum.enumIndex) + " (enumIndex: " + cEnum.enumIndex + ")]";
+                        newValue = data.dataType.ToString() + COMPOSITE_SEPARATOR + "[" + cEnum.enumID.ToString() + ": " + descriptor?.Entries.Find(e => e.Index == cEnum.enumIndex)?.Name + " (enumIndex: " + cEnum.enumIndex + ")]";
                     } else {
                         newValue = data.dataType.ToString() + COMPOSITE_SEPARATOR + "[" + cEnum.enumID.ToString() + ": " + cEnum.enumIndex + "]";
                     }
@@ -261,19 +261,10 @@ namespace AIPAKDifferentiation {
                 case DataType.OBJECT:
                     // TODO
                     break;
-                case DataType.ZONE_LINK_PTR:
+                case DataType.ZONE_LINK:
                     // TODO
                     break;
-                case DataType.ZONE_PTR:
-                    // TODO
-                    break;
-                case DataType.MARKER:
-                    // TODO
-                    break;
-                case DataType.CHARACTER:
-                    // TODO
-                    break;
-                case DataType.CAMERA:
+                case DataType.ZONE:
                     // TODO
                     break;
 

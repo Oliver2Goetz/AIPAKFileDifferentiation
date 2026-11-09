@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -64,13 +64,13 @@ namespace AIPAKDifferentiation.Views {
                     switch (entityDifference.differenceType) {
                         case DIFFERENCE_TYPE.CREATED:
                             entityIdentifier = entityDifference.entityPak2.shortGUID.ToString();
-                            entityName = EntityUtils.GetName(entityDifference.compositePak2.shortGUID, entityDifference.entityPak2.shortGUID);
+                            entityName = entityDifference.utilsPak2.GetEntityName(entityDifference.compositePak2, entityDifference.entityPak2);
                             entityVariant = entityDifference.entityPak2.variant.ToString();
                             break;
                         case DIFFERENCE_TYPE.MODIFIED:
                         case DIFFERENCE_TYPE.DELETED:
                             entityIdentifier = entityDifference.entity.shortGUID.ToString();
-                            entityName = EntityUtils.GetName(entityDifference.composite.shortGUID, entityDifference.entity.shortGUID);
+                            entityName = entityDifference.utils.GetEntityName(entityDifference.composite, entityDifference.entity);
                             entityVariant = entityDifference.entity.variant.ToString();
                             break;
                         default:
@@ -92,9 +92,9 @@ namespace AIPAKDifferentiation.Views {
                     treeNodeComposite.Nodes.Add(treeNodeEntity);
 
                     TreeNode treeNodeEntityParameters = new TreeNode("parameters");
-                    TreeNode treeNodeEntityLinks = new TreeNode("links");
+                    TreeNode treeNodeEntityConnectors = new TreeNode("links");
                     treeNodeEntity.Nodes.Add(treeNodeEntityParameters);
-                    treeNodeEntity.Nodes.Add(treeNodeEntityLinks);
+                    treeNodeEntity.Nodes.Add(treeNodeEntityConnectors);
 
                     foreach (ParameterDifference parameterDifference in entityDifference.parameterDiffereces) {
 
@@ -139,21 +139,21 @@ namespace AIPAKDifferentiation.Views {
 
                         switch (linkDifference.differenceType) {
                             case DIFFERENCE_TYPE.CREATED:
-                                connectionIDstr = linkDifference.linkPak2.connectionID.ToString();
-                                name = "entityID: " + entityDifference.entityPak2.shortGUID.ToString() + " childID: " + linkDifference.linkPak2.childID;
+                                connectionIDstr = linkDifference.linkPak2.ID.ToString();
+                                name = "entityID: " + entityDifference.entityPak2.shortGUID.ToString() + " childID: " + linkDifference.linkPak2.linkedEntityID;
                                 valueBefore = "-";
-                                valueAfter = "[" + linkDifference.linkPak2.parentParamID.ToString() + "] => [" + linkDifference.linkPak2.childParamID + "]";
+                                valueAfter = "[" + linkDifference.linkPak2.thisParamID.ToString() + "] => [" + linkDifference.linkPak2.linkedParamID + "]";
                                 break;
                             case DIFFERENCE_TYPE.MODIFIED:
-                                connectionIDstr = linkDifference.link.connectionID.ToString();
-                                name = "entityID: " + linkDifference.entity.shortGUID.ToString() + " childID: " + linkDifference.link.childID;
-                                valueBefore = "[" + linkDifference.link.parentParamID.ToString() + "] => [" + linkDifference.link.childParamID + "]";
-                                valueAfter = "[" + linkDifference.linkPak2.parentParamID.ToString() + "] => [" + linkDifference.linkPak2.childParamID + "]";
+                                connectionIDstr = linkDifference.link.ID.ToString();
+                                name = "entityID: " + linkDifference.entity.shortGUID.ToString() + " childID: " + linkDifference.link.linkedEntityID;
+                                valueBefore = "[" + linkDifference.link.thisParamID.ToString() + "] => [" + linkDifference.link.linkedParamID + "]";
+                                valueAfter = "[" + linkDifference.linkPak2.thisParamID.ToString() + "] => [" + linkDifference.linkPak2.linkedParamID + "]";
                                 break;
                             case DIFFERENCE_TYPE.DELETED:
-                                connectionIDstr = linkDifference.link.connectionID.ToString();
-                                name = "entityID: " + linkDifference.entity.shortGUID.ToString() + " childID: " + linkDifference.link.childID;
-                                valueBefore = "[" + linkDifference.link.parentParamID.ToString() + "] => [" + linkDifference.link.childParamID + "]";
+                                connectionIDstr = linkDifference.link.ID.ToString();
+                                name = "entityID: " + linkDifference.entity.shortGUID.ToString() + " childID: " + linkDifference.link.linkedEntityID;
+                                valueBefore = "[" + linkDifference.link.thisParamID.ToString() + "] => [" + linkDifference.link.linkedParamID + "]";
                                 valueAfter = "-";
                                 break;
                             default:
@@ -172,7 +172,7 @@ namespace AIPAKDifferentiation.Views {
 
                         TreeNode treeNodeLink = new TreeNode(linkEntry.name);
                         treeNodeLink.Tag = linkEntry;
-                        treeNodeEntityLinks.Nodes.Add(treeNodeLink);
+                        treeNodeEntityConnectors.Nodes.Add(treeNodeLink);
                     }
                 }
             }

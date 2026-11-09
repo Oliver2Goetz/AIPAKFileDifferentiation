@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -23,8 +23,6 @@ namespace AIPAKDifferentiation.Views {
 
         /*
          * @param form            : used for getting controls for filter logic
-         * @param entityUtilsPak1 : EntityUtils for PAK1
-         * @param entityUtilsPak2 : EntityUtils for PAK2
          */
         public DifferenceListViewItemList(AIPAKDifferentiation form) {
             this.form1 = form;
@@ -82,13 +80,13 @@ namespace AIPAKDifferentiation.Views {
                                 switch (entityDifference.differenceType) {
                                     case DIFFERENCE_TYPE.CREATED:
                                         identifier = entityDifference.entityPak2.shortGUID.ToString();
-                                        name = EntityUtils.GetName(entityDifference.compositePak2.shortGUID, entityDifference.entityPak2.shortGUID);
+                                        name = entityDifference.utilsPak2.GetEntityName(entityDifference.compositePak2, entityDifference.entityPak2);
                                         variant = entityDifference.entityPak2.variant.ToString();
                                         break;
                                     case DIFFERENCE_TYPE.MODIFIED:
                                     case DIFFERENCE_TYPE.DELETED:
                                         identifier = entityDifference.entity.shortGUID.ToString();
-                                        name = EntityUtils.GetName(entityDifference.composite.shortGUID, entityDifference.entity.shortGUID);
+                                        name = entityDifference.utils.GetEntityName(entityDifference.composite, entityDifference.entity);
                                         variant = entityDifference.entity.variant.ToString();
                                         break;
                                     default:
@@ -150,16 +148,16 @@ namespace AIPAKDifferentiation.Views {
 
                                     switch (linkDifference.differenceType) {
                                         case DIFFERENCE_TYPE.CREATED:
-                                            identifier = linkDifference.linkPak2.connectionID.ToString();
-                                            name = "entityID: " + entityDifference.entityPak2.shortGUID.ToString() + " childID: " + linkDifference.linkPak2.childID;
+                                            identifier = linkDifference.linkPak2.ID.ToString();
+                                            name = "entityID: " + entityDifference.entityPak2.shortGUID.ToString() + " childID: " + linkDifference.linkPak2.linkedEntityID;
                                             valueBefore = "-";
-                                            valueAfter = "[" + linkDifference.linkPak2.parentParamID.ToString() + "] => [" + linkDifference.linkPak2.childParamID + "]";
+                                            valueAfter = "[" + linkDifference.linkPak2.thisParamID.ToString() + "] => [" + linkDifference.linkPak2.linkedParamID + "]";
                                             break;
                                         case DIFFERENCE_TYPE.MODIFIED:
                                         case DIFFERENCE_TYPE.DELETED:
-                                            identifier = linkDifference.link.connectionID.ToString();
-                                            name = "entityID: " + entityDifference.entity.shortGUID.ToString() + " childID: " + linkDifference.link.childID;
-                                            valueBefore = "[" + linkDifference.link.parentParamID.ToString() + "] => [" + linkDifference.link.childParamID + "]";
+                                            identifier = linkDifference.link.ID.ToString();
+                                            name = "entityID: " + entityDifference.entity.shortGUID.ToString() + " childID: " + linkDifference.link.linkedEntityID;
+                                            valueBefore = "[" + linkDifference.link.thisParamID.ToString() + "] => [" + linkDifference.link.linkedParamID + "]";
                                             valueAfter = "-";
                                             break;
                                         default:
@@ -208,7 +206,7 @@ namespace AIPAKDifferentiation.Views {
                 entity = entityDifference.entityPak2;
             }
 
-            if (entity.variant == EntityVariant.OVERRIDE && checkboxEntityHideOverrides.Checked) {
+            if (entity.variant == EntityVariant.ALIAS && checkboxEntityHideOverrides.Checked) {
                 isValid = false;
             }
 

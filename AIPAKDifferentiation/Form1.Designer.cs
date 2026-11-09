@@ -186,7 +186,7 @@
             this.checkboxEntityHideOverrides.Name = "checkboxEntityHideOverrides";
             this.checkboxEntityHideOverrides.Size = new System.Drawing.Size(143, 17);
             this.checkboxEntityHideOverrides.TabIndex = 7;
-            this.checkboxEntityHideOverrides.Text = "Hide OVERRIDE entities";
+            this.checkboxEntityHideOverrides.Text = "Hide ALIAS entities";
             this.checkboxEntityHideOverrides.UseVisualStyleBackColor = true;
             this.checkboxEntityHideOverrides.CheckedChanged += new System.EventHandler(this.checkboxEntityHideOverrides_CheckedChanged);
             // 

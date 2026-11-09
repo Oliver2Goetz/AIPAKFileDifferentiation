@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using CATHODE;
@@ -26,8 +26,17 @@ namespace AIPAKDifferentiation {
             this.pakPath2 = pakPath2;
 
             // Load PAKs
-            this.pak1 = new Commands(pakPath1);
-            this.pak2 = new Commands(pakPath2);
+            this.pak1 = LoadCommands(pakPath1);
+            this.pak2 = LoadCommands(pakPath2);
+        }
+
+        private static Commands LoadCommands(string path) {
+            // Resource differences are excluded. Empty companion tables let CathodeLib read
+            // references without requiring other level files next to a standalone COMMANDS.PAK.
+            return new Commands(path,
+                new EnvironmentAnimations("", null),
+                new CollisionMaps("", null, null),
+                new RenderableElements("", null, null));
         }
 
         /*
@@ -35,6 +44,7 @@ namespace AIPAKDifferentiation {
          */
         public List<CompositeDifference> loadDifferences() {
             if (pak1.Loaded && pak2.Loaded) {
+                this.compositeDifferences.Clear();
                 this.loadDifferencesComposites();
 
                 return this.compositeDifferences;
@@ -47,28 +57,22 @@ namespace AIPAKDifferentiation {
          * Loads differences for composites
          */
         private void loadDifferencesComposites() {
-            foreach (Composite composite in pak1.Composites) {
+            foreach (Composite composite in pak1.Entries) {
                 // first we check for composite deletion (check 1: check if shortGuid is in both paks. check 2: In not, check if name/path of the composite exists in both paks)
-                bool pak2ContainsComposite = pak2.GetComposite(composite.shortGUID) != null;
-                if (!pak2ContainsComposite) {
-                    pak2ContainsComposite = pak2.GetCompositeNames().ToList().Contains(composite.name);
-                }
+                Composite pak2Composite = pak2.GetComposite(composite.shortGUID) ?? pak2.GetComposite(composite.name);
 
-                if (!pak2ContainsComposite) {
+                if (pak2Composite == null) {
                     CompositeDifference compositeDifference = new CompositeDifference(composite, DIFFERENCE_TYPE.DELETED, null);
                     this.compositeDifferences.Add(compositeDifference);
                 } else {
                     // this part handles modifications (responsible for checking entities) - we do not want to check for modified entities if a composite got deleted
-                    this.loadDifferencesEntities(composite, pak2.GetComposite(composite.shortGUID));
+                    this.loadDifferencesEntities(composite, pak2Composite);
                 }
             }
             // afterwards we check if any composite has been created - this does not mean we want all the entities and parameter inside the newly created composite. We only want the composite in this case
-            foreach (Composite pak2composite in pak2.Composites) {
+            foreach (Composite pak2composite in pak2.Entries) {
                 // same as for checking for DELETED, here again we check if the composite exists in both paks
-                bool pak1ContainsComposite = pak1.GetComposite(pak2composite.shortGUID) != null;
-                if (!pak1ContainsComposite) {
-                    pak1ContainsComposite = pak1.GetCompositeNames().ToList().Contains(pak2composite.name);
-                }
+                bool pak1ContainsComposite = (pak1.GetComposite(pak2composite.shortGUID) ?? pak1.GetComposite(pak2composite.name)) != null;
 
                 if (!pak1ContainsComposite) {
                     CompositeDifference compositeDifference = new CompositeDifference(null, DIFFERENCE_TYPE.CREATED, pak2composite);
@@ -84,12 +88,10 @@ namespace AIPAKDifferentiation {
             CompositeDifference compositeDifference = new CompositeDifference(composite, DIFFERENCE_TYPE.MODIFIED, pak2Composite);
             
             foreach (Entity entity in composite.GetEntities()) {
-                string name = EntityUtils.GetName(composite.shortGUID, entity.shortGUID);
-
                 // first we check for entity deletion
                 Entity pak2Entity = pak2Composite.GetEntityByID(entity.shortGUID);
                 if (pak2Entity == null) {
-                    EntityDifference entityDifference = new EntityDifference(entity, DIFFERENCE_TYPE.DELETED, null, composite, pak2Composite);
+                    EntityDifference entityDifference = new EntityDifference(entity, DIFFERENCE_TYPE.DELETED, null, composite, pak2Composite, pak1.Utils, pak2.Utils);
                     compositeDifference.entityDifferences.Add(entityDifference);
                 } else {
                     // now we handle modifications with parameters and links of this entity
@@ -104,7 +106,7 @@ namespace AIPAKDifferentiation {
             // afterwards we check if any entity has been created - we dont want any parameters here, just the newly created entities
             foreach (Entity pak2Entity in pak2Composite.GetEntities()) {
                 if (null == composite.GetEntityByID(pak2Entity.shortGUID)) { // null means the entity with guid from composite2 wasn't found in composite1
-                    EntityDifference entityDifference = new EntityDifference(null, DIFFERENCE_TYPE.CREATED, pak2Entity, composite, pak2Composite);
+                    EntityDifference entityDifference = new EntityDifference(null, DIFFERENCE_TYPE.CREATED, pak2Entity, composite, pak2Composite, pak1.Utils, pak2.Utils);
                     this.loadParameterDifferenceByNewEntity(pak2Entity, entityDifference);
                     compositeDifference.entityDifferences.Add(entityDifference);
                 }
@@ -120,7 +122,7 @@ namespace AIPAKDifferentiation {
          * Loads differences for parameters
          */
         private EntityDifference loadDifferencesParameters(Entity entity, Entity pak2Entity, CompositeDifference compositeDifference) {
-            EntityDifference entityDifference = new EntityDifference(entity, DIFFERENCE_TYPE.MODIFIED, pak2Entity, compositeDifference.composite, compositeDifference.compositePak2);
+            EntityDifference entityDifference = new EntityDifference(entity, DIFFERENCE_TYPE.MODIFIED, pak2Entity, compositeDifference.composite, compositeDifference.compositePak2, pak1.Utils, pak2.Utils);
 
             foreach (Parameter parameter in entity.parameters) {
                 // do not handle resources currently - we don't want to see the differences as of now
@@ -150,7 +152,7 @@ namespace AIPAKDifferentiation {
                 Parameter foundPak1Parameter = entity.parameters.Find(x => x.name == pak2Parameter.name);
                 if (null == foundPak1Parameter) {
                     ParameterDifference parameterDifference = new ParameterDifference(null, DIFFERENCE_TYPE.CREATED, pak2Parameter);
-                    parameterDifference.valueAfter = this.getParameterValue(pak2Parameter);
+                    parameterDifference.valueAfter = this.getParameterValue(pak2Parameter, pak2.Utils);
                     entityDifference.parameterDiffereces.Add(parameterDifference);
                 }
             }
@@ -174,7 +176,7 @@ namespace AIPAKDifferentiation {
                 }
 
                 ParameterDifference parameterDifference = new ParameterDifference(null, DIFFERENCE_TYPE.CREATED, pak2Parameter);
-                parameterDifference.valueAfter = this.getParameterValue(pak2Parameter);
+                parameterDifference.valueAfter = this.getParameterValue(pak2Parameter, pak2.Utils);
                 entityDifference.parameterDiffereces.Add(parameterDifference);
             }
         }
@@ -224,23 +226,23 @@ namespace AIPAKDifferentiation {
                         cTransform cTransform = (cTransform)parameter.content;
                         cTransform cTransform2 = (cTransform)pak2Parameter.content;
                         parameterDifference.valueBefore = data.dataType.ToString() + ": " + cTransform.position.ToString() + ", " + cTransform.rotation.ToString();
-                        parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + cTransform2.position.ToString() + ", " + cTransform.rotation.ToString();
+                        parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + cTransform2.position.ToString() + ", " + cTransform2.rotation.ToString();
                         break;
                     case DataType.ENUM:
                         cEnum cEnum = (cEnum)parameter.content;
-                        EnumUtils.EnumDescriptor descriptor = EnumUtils.GetEnum(cEnum.enumID);
-                        string element = descriptor.Entries.ElementAtOrDefault(cEnum.enumIndex);
+                        var descriptor = pak1.Utils.GetEnum(cEnum.enumID);
+                        string element = descriptor?.Entries.Find(e => e.Index == cEnum.enumIndex)?.Name;
                         if (element != null) {
-                            parameterDifference.valueBefore = data.dataType.ToString() + ": [" + cEnum.enumID.ToString() + ": " + descriptor.Entries.ElementAtOrDefault(cEnum.enumIndex) + " (enumIndex: " + cEnum.enumIndex + ")]";
+                            parameterDifference.valueBefore = data.dataType.ToString() + ": [" + cEnum.enumID.ToString() + ": " + descriptor?.Entries.Find(e => e.Index == cEnum.enumIndex)?.Name + " (enumIndex: " + cEnum.enumIndex + ")]";
                         } else {
                             parameterDifference.valueBefore = data.dataType.ToString() + ": [" + cEnum.enumID.ToString() + ": " + cEnum.enumIndex + "]";
                         }
 
                         cEnum cEnum2 = (cEnum)pak2Parameter.content;
-                        EnumUtils.EnumDescriptor descriptor2 = EnumUtils.GetEnum(cEnum2.enumID);
-                        string element2 = descriptor2.Entries.ElementAtOrDefault(cEnum2.enumIndex);
+                        var descriptor2 = pak2.Utils.GetEnum(cEnum2.enumID);
+                        string element2 = descriptor2?.Entries.Find(e => e.Index == cEnum2.enumIndex)?.Name;
                         if (element2 != null) {
-                            parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": [" + cEnum2.enumID.ToString() + ": " + descriptor2.Entries.ElementAtOrDefault(cEnum2.enumIndex) + " (enumIndex: " + cEnum2.enumIndex + ")]";
+                            parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": [" + cEnum2.enumID.ToString() + ": " + descriptor2?.Entries.Find(e => e.Index == cEnum2.enumIndex)?.Name + " (enumIndex: " + cEnum2.enumIndex + ")]";
                         } else {
                             parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": [" + cEnum2.enumID.ToString() + ": " + cEnum2.enumIndex + "]";
                         }
@@ -270,19 +272,10 @@ namespace AIPAKDifferentiation {
                     case DataType.OBJECT:
                         // TODO
                         break;
-                    case DataType.ZONE_LINK_PTR:
+                    case DataType.ZONE_LINK:
                         // TODO
                         break;
-                    case DataType.ZONE_PTR:
-                        // TODO
-                        break;
-                    case DataType.MARKER:
-                        // TODO
-                        break;
-                    case DataType.CHARACTER:
-                        // TODO
-                        break;
-                    case DataType.CAMERA:
+                    case DataType.ZONE:
                         // TODO
                         break;
 
@@ -308,7 +301,7 @@ namespace AIPAKDifferentiation {
          * Gets the readable value for the given parameter, e.g: STRING: example
          * Maybe merge this function and loadParameterValues() together later
          */
-        private string getParameterValue(Parameter parameter) {
+        private string getParameterValue(Parameter parameter, CommandsUtils utils) {
             string value = "";
 
             ParameterData data = parameter.content;
@@ -342,10 +335,10 @@ namespace AIPAKDifferentiation {
                 case DataType.ENUM:
                     // TODO make enums better
                     cEnum cEnum = (cEnum)parameter.content;
-                    EnumUtils.EnumDescriptor descriptor = EnumUtils.GetEnum(cEnum.enumID);
-                    string element = descriptor.Entries.ElementAtOrDefault(cEnum.enumIndex);
+                    var descriptor = utils.GetEnum(cEnum.enumID);
+                    string element = descriptor?.Entries.Find(e => e.Index == cEnum.enumIndex)?.Name;
                     if (element != null) {
-                        value = data.dataType.ToString() + ": [" + cEnum.enumID.ToString() + ": " + descriptor.Entries.ElementAtOrDefault(cEnum.enumIndex) + " (enumIndex: " + cEnum.enumIndex + ")]";
+                        value = data.dataType.ToString() + ": [" + cEnum.enumID.ToString() + ": " + descriptor?.Entries.Find(e => e.Index == cEnum.enumIndex)?.Name + " (enumIndex: " + cEnum.enumIndex + ")]";
                     } else {
                         value = data.dataType.ToString() + ": [" + cEnum.enumID.ToString() + ": " + cEnum.enumIndex + "]";
                     }
@@ -368,19 +361,10 @@ namespace AIPAKDifferentiation {
                 case DataType.OBJECT:
                     // TODO
                     break;
-                case DataType.ZONE_LINK_PTR:
+                case DataType.ZONE_LINK:
                     // TODO
                     break;
-                case DataType.ZONE_PTR:
-                    // TODO
-                    break;
-                case DataType.MARKER:
-                    // TODO
-                    break;
-                case DataType.CHARACTER:
-                    // TODO
-                    break;
-                case DataType.CAMERA:
+                case DataType.ZONE:
                     // TODO
                     break;
 
@@ -398,28 +382,23 @@ namespace AIPAKDifferentiation {
          */
         private EntityDifference loadDifferencesLinks(Entity entity, Entity pak2Entity, CompositeDifference compositeDifference, EntityDifference entityDifference) {
             List<LinkDifference> linkDifferences = new List<LinkDifference>();
+            List<EntityConnector> unmatchedPak2Links = new List<EntityConnector>(pak2Entity.childLinks);
 
             // first we check for deletion (modification of a link is not possible - in this case it would be a new link
-            foreach (EntityLink link  in entity.childLinks) {
-                EntityLink pak2Link = pak2Entity.childLinks.Find(x => x.connectionID == link.connectionID);
-                if (null == pak2Link.connectionID.val) {
-                    LinkDifference linkDifference = new LinkDifference(link, DIFFERENCE_TYPE.DELETED, link, compositeDifference.composite, compositeDifference.compositePak2, entity, pak2Entity);
+            foreach (EntityConnector link  in entity.childLinks) {
+                if (!unmatchedPak2Links.Remove(link)) {
+                    LinkDifference linkDifference = new LinkDifference(link, DIFFERENCE_TYPE.DELETED, link, compositeDifference.composite, compositeDifference.compositePak2, entity, pak2Entity, pak1.Utils, pak2.Utils);
                     linkDifferences.Add(linkDifference);
-                } else {
-                    // TODO implement link moficiations -> modification of links seems to be possible in the current staging branch of OpenCAGE
                 }
             }
             // afterwards we check if any link has been created
-            foreach (EntityLink pak2Link in pak2Entity.childLinks) {
-                EntityLink foundPak1Link = entity.childLinks.Find(x => x.connectionID == pak2Link.connectionID);
-                if (null == foundPak1Link.connectionID.val) {
-                    LinkDifference linkDifference = new LinkDifference(pak2Link, DIFFERENCE_TYPE.CREATED, pak2Link, compositeDifference.composite, compositeDifference.composite, entity, pak2Entity);
-                    linkDifferences.Add(linkDifference);
-                }
+            foreach (EntityConnector pak2Link in unmatchedPak2Links) {
+                LinkDifference linkDifference = new LinkDifference(pak2Link, DIFFERENCE_TYPE.CREATED, pak2Link, compositeDifference.composite, compositeDifference.compositePak2, entity, pak2Entity, pak1.Utils, pak2.Utils);
+                linkDifferences.Add(linkDifference);
             }
 
             if (null == entityDifference && 0 < linkDifferences.Count) {
-                entityDifference = new EntityDifference(entity, DIFFERENCE_TYPE.MODIFIED, pak2Entity, compositeDifference.composite, compositeDifference.compositePak2);
+                entityDifference = new EntityDifference(entity, DIFFERENCE_TYPE.MODIFIED, pak2Entity, compositeDifference.composite, compositeDifference.compositePak2, pak1.Utils, pak2.Utils);
                 compositeDifference.entityDifferences.Add(entityDifference);
             }
             if (0 < linkDifferences.Count) {
