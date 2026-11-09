@@ -243,8 +243,8 @@ namespace AIPAKDifferentiation {
                     case DataType.FLOAT:
                         cFloat cFloat = (cFloat)parameter.content;
                         cFloat cFloat2 = (cFloat)pak2Parameter.content;
-                        parameterDifference.valueBefore = data.dataType.ToString() + ": " + cFloat.value.ToString();
-                        parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + cFloat2.value.ToString();
+                        parameterDifference.valueBefore = data.dataType.ToString() + ": " + ParameterValueFormatter.formatFloat(cFloat.value);
+                        parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + ParameterValueFormatter.formatFloat(cFloat2.value);
                         break;
                     case DataType.INTEGER:
                         cInteger cInteger = (cInteger)parameter.content;
@@ -261,14 +261,14 @@ namespace AIPAKDifferentiation {
                     case DataType.VECTOR:
                         cVector3 cVector3 = (cVector3)parameter.content;
                         cVector3 cVector32 = (cVector3)pak2Parameter.content;
-                        parameterDifference.valueBefore = data.dataType.ToString() + ": " + cVector3.value.ToString();
-                        parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + cVector32.value.ToString();
+                        parameterDifference.valueBefore = data.dataType.ToString() + ": " + ParameterValueFormatter.formatVector(cVector3.value);
+                        parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + ParameterValueFormatter.formatVector(cVector32.value);
                         break;
                     case DataType.TRANSFORM:
                         cTransform cTransform = (cTransform)parameter.content;
                         cTransform cTransform2 = (cTransform)pak2Parameter.content;
-                        parameterDifference.valueBefore = data.dataType.ToString() + ": " + cTransform.position.ToString() + ", " + cTransform.rotation.ToString();
-                        parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + cTransform2.position.ToString() + ", " + cTransform2.rotation.ToString();
+                        parameterDifference.valueBefore = data.dataType.ToString() + ": " + ParameterValueFormatter.formatVector(cTransform.position) + ", " + ParameterValueFormatter.formatVector(cTransform.rotation);
+                        parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + ParameterValueFormatter.formatVector(cTransform2.position) + ", " + ParameterValueFormatter.formatVector(cTransform2.rotation);
                         break;
                     case DataType.ENUM:
                         cEnum cEnum = (cEnum)parameter.content;
@@ -296,11 +296,11 @@ namespace AIPAKDifferentiation {
                         cSpline cSpline2 = (cSpline)pak2Parameter.content;
                         string str1 = cSpline.dataType.ToString() + ":";
                         foreach (cTransform c in cSpline.splinePoints) {
-                            str1 += " [position: " + c.position.ToString() + ", rotation: " + c.rotation.ToString() + "]";
+                            str1 += " [position: " + ParameterValueFormatter.formatVector(c.position) + ", rotation: " + ParameterValueFormatter.formatVector(c.rotation) + "]";
                         }
                         string str2 = cSpline2.dataType.ToString() + ":";
                         foreach (cTransform c2 in cSpline2.splinePoints) {
-                            str2 += " [position: " + c2.position.ToString() + ", rotation: " + c2.rotation.ToString() + "]";
+                            str2 += " [position: " + ParameterValueFormatter.formatVector(c2.position) + ", rotation: " + ParameterValueFormatter.formatVector(c2.rotation) + "]";
                         }
                         parameterDifference.valueBefore = str1;
                         parameterDifference.valueAfter = str2;
@@ -356,7 +356,7 @@ namespace AIPAKDifferentiation {
                     break;
                 case DataType.FLOAT:
                     cFloat cFloat = (cFloat)parameter.content;
-                    value = data.dataType.ToString() + ": " + cFloat.value.ToString();
+                    value = data.dataType.ToString() + ": " + ParameterValueFormatter.formatFloat(cFloat.value);
                     break;
                 case DataType.INTEGER:
                     cInteger cInteger = (cInteger)parameter.content;
@@ -368,11 +368,11 @@ namespace AIPAKDifferentiation {
                     break;
                 case DataType.VECTOR:
                     cVector3 cVector3 = (cVector3)parameter.content;
-                    value = data.dataType.ToString() + ": " + cVector3.value.ToString();
+                    value = data.dataType.ToString() + ": " + ParameterValueFormatter.formatVector(cVector3.value);
                     break;
                 case DataType.TRANSFORM:
                     cTransform cTransform = (cTransform)parameter.content;
-                    value = data.dataType.ToString() + ": " + cTransform.position.ToString() + ", " + cTransform.rotation.ToString();
+                    value = data.dataType.ToString() + ": " + ParameterValueFormatter.formatVector(cTransform.position) + ", " + ParameterValueFormatter.formatVector(cTransform.rotation);
                     break;
                 case DataType.ENUM:
                     // TODO make enums better
@@ -390,7 +390,7 @@ namespace AIPAKDifferentiation {
                     cSpline cSpline = (cSpline)parameter.content;
                     string str1 = cSpline.dataType.ToString() + ":";
                     foreach (cTransform c in cSpline.splinePoints) {
-                        str1 += " [position: " + c.position.ToString() + ", rotation: " + c.rotation.ToString() + "]";
+                        str1 += " [position: " + ParameterValueFormatter.formatVector(c.position) + ", rotation: " + ParameterValueFormatter.formatVector(c.rotation) + "]";
                     }
                     value = str1;
                     break;
@@ -433,6 +433,7 @@ namespace AIPAKDifferentiation {
                     linkDifferences.Add(linkDifference);
                 }
             }
+
             // afterwards we check if any link has been created
             foreach (EntityConnector pak2Link in unmatchedPak2Links) {
                 LinkDifference linkDifference = new LinkDifference(pak2Link, DIFFERENCE_TYPE.CREATED, pak2Link, compositeDifference.composite, compositeDifference.compositePak2, entity, pak2Entity, pak1.Utils, pak2.Utils);
@@ -443,6 +444,7 @@ namespace AIPAKDifferentiation {
                 entityDifference = new EntityDifference(entity, DIFFERENCE_TYPE.MODIFIED, pak2Entity, compositeDifference.composite, compositeDifference.compositePak2, pak1.Utils, pak2.Utils);
                 compositeDifference.entityDifferences.Add(entityDifference);
             }
+
             if (0 < linkDifferences.Count) {
                 entityDifference.linkDifferences.AddRange(linkDifferences);
 

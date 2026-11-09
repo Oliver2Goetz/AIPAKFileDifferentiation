@@ -209,7 +209,7 @@ namespace AIPAKDifferentiation {
 
                 case DataType.FLOAT:
                     cFloat cFloat = (cFloat)parameter.content;
-                    newValue = parameter.content.dataType.ToString() + COMPOSITE_SEPARATOR + cFloat.value.ToString();
+                    newValue = parameter.content.dataType.ToString() + COMPOSITE_SEPARATOR + ParameterValueFormatter.formatFloat(cFloat.value);
                     break;
 
                 case DataType.INTEGER:
@@ -224,12 +224,12 @@ namespace AIPAKDifferentiation {
 
                 case DataType.VECTOR:
                     cVector3 cVector3 = (cVector3)parameter.content;
-                    newValue = parameter.content.dataType.ToString() + COMPOSITE_SEPARATOR + cVector3.value.ToString();
+                    newValue = parameter.content.dataType.ToString() + COMPOSITE_SEPARATOR + ParameterValueFormatter.formatVector(cVector3.value);
                     break;
 
                 case DataType.TRANSFORM:
                     cTransform cTransform = (cTransform)parameter.content;
-                    newValue = parameter.content.dataType.ToString() + COMPOSITE_SEPARATOR + cTransform.position.ToString() + ", " + cTransform.rotation.ToString();
+                    newValue = parameter.content.dataType.ToString() + COMPOSITE_SEPARATOR + ParameterValueFormatter.formatVector(cTransform.position) + ", " + ParameterValueFormatter.formatVector(cTransform.rotation);
                     break;
 
                 case DataType.ENUM:
@@ -248,8 +248,9 @@ namespace AIPAKDifferentiation {
                     cSpline cSpline = (cSpline)parameter.content;
                     string str = cSpline.dataType.ToString() + COMPOSITE_SEPARATOR;
                     foreach (cTransform c in cSpline.splinePoints) {
-                        str += " [position: " + c.position.ToString() + ", rotation: " + c.rotation.ToString() + "]";
+                        str += " [position: " + ParameterValueFormatter.formatVector(c.position) + ", rotation: " + ParameterValueFormatter.formatVector(c.rotation) + "]";
                     }
+                    newValue = str;
                     break;
 
                 case DataType.RESOURCE:
