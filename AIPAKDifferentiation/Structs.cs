@@ -51,6 +51,7 @@ namespace AIPAKDifferentiation {
         public string valueBefore = "-";
         public string valueAfter = "-";
         public Parameter parameterPak2;
+        public EntityDifference parent;
 
         public ParameterDifference(Parameter parameter, DIFFERENCE_TYPE differenceType, Parameter parameterPak2) {
             this.parameter = parameter;

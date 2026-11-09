@@ -1,142 +1,30 @@
-using System.Linq;
-using System.Windows.Forms;
 using System.Drawing;
-
-using CATHODE.Scripting;
+using System.Windows.Forms;
 
 namespace AIPAKDifferentiation.Views {
 
     class TreeViewDetails {
 
-        public TreeViewDetails() {
+        public Control buildTreeViewDetails(TreeNodeEntry entry) {
+            string content = entry.cathodeType switch {
+                CATHODE_TYPE.COMPOSITE => DifferenceDetails.composite((CompositeDifference)entry.difference),
+                CATHODE_TYPE.ENTITY => DifferenceDetails.entity((EntityDifference)entry.difference),
+                CATHODE_TYPE.PARAMETER => DifferenceDetails.parameter((ParameterDifference)entry.difference),
+                CATHODE_TYPE.LINK => DifferenceDetails.link((LinkDifference)entry.difference),
+                _ => ""
+            };
+
+            return new TextBox {
+                Dock = DockStyle.Fill,
+                Multiline = true,
+                ReadOnly = true,
+                ScrollBars = ScrollBars.Both,
+                WordWrap = true,
+                BorderStyle = BorderStyle.None,
+                BackColor = SystemColors.Control,
+                Font = new Font(FontFamily.GenericSansSerif, 10),
+                Text = content
+            };
         }
-
-        /*
-         * Builds the details of the selected/given TreeNodeEntry
-         */
-        public Label buildTreeViewDetails(TreeNodeEntry entry) {
-            Label label = new Label();
-            label.Location = new Point(5, 5);
-            label.Size = new Size(500, 486);
-            label.Font = new Font(FontFamily.GenericSansSerif, 10);
-
-            string content = "";
-            switch (entry.cathodeType) {
-                case CATHODE_TYPE.COMPOSITE:
-                    content = getCompositeDetails(entry);
-                    break;
-                case CATHODE_TYPE.ENTITY:
-                    content = getEntityDetails(entry);
-                    break;
-                case CATHODE_TYPE.PARAMETER:
-                    content = getParameterDetails(entry);
-                    break;
-                case CATHODE_TYPE.LINK:
-                    content = getLinkDetails(entry);
-                    break;
-                default:
-                    break;
-            }
-
-            label.Text = content;
-
-            return label;
-        }
-
-        private string getCompositeDetails(TreeNodeEntry entry) {
-            CompositeDifference compositeDifference = (CompositeDifference)entry.difference;
-
-            string content = "Composite differences - " + entry.differenceType.ToString() + "\n\n";
-
-            switch (entry.differenceType) {
-                case DIFFERENCE_TYPE.CREATED:
-                    content += "entities: " + compositeDifference.compositePak2.functions.Count() + "\n";
-                    content += "entity differences: " + compositeDifference.entityDifferences.Count();
-                    break;
-                case DIFFERENCE_TYPE.MODIFIED:
-                    content += "entities: " + compositeDifference.composite.functions.Count() + "\n";
-                    content += "entitiy differences: " + compositeDifference.entityDifferences.Count();
-                    break;
-                case DIFFERENCE_TYPE.DELETED:
-                    content += "entities: " + compositeDifference.composite.functions.Count() + "\n";
-                    content += "entitiy differences: " + compositeDifference.entityDifferences.Count();
-                    break;
-                default:
-                    break;
-            }
-
-            return content;
-        }
-
-        private string getEntityDetails(TreeNodeEntry entry) {
-            EntityDifference entityDifference = (EntityDifference)entry.difference;
-
-            string content = "Entity difference - " + entry.differenceType.ToString() + "\n\n";
-            content += "entity type: [coming soon] \n\n";
-
-            // parameters
-            int parameterCount = 0;
-            if (entityDifference.differenceType == DIFFERENCE_TYPE.CREATED) {
-                parameterCount = entityDifference.entityPak2.parameters.Count();
-            } else {
-                parameterCount = entityDifference.entity.parameters.Count();
-            }
-            content += "parameters: " + parameterCount + "\n";
-            content += "parameter differences: " + entityDifference.parameterDiffereces.Count() + "\n\n";
-
-            // links
-            int childLinkCount = 0;
-            if (entityDifference.differenceType == DIFFERENCE_TYPE.CREATED) {
-                childLinkCount = entityDifference.entityPak2.childLinks.Count();
-            } else {
-                childLinkCount = entityDifference.entity.childLinks.Count();
-            }
-            content += "child links: " + childLinkCount + "\n";
-            content += "child link differences: " + entityDifference.linkDifferences.Count();
-
-            return content;
-        }
-
-        private string getParameterDetails(TreeNodeEntry entry) {
-            ParameterDifference parameterDifference = (ParameterDifference)entry.difference;
-
-            string content = "Parameter difference - " + entry.differenceType.ToString() + "\n\n";
-
-            content += "Initial value:\n";
-            content += parameterDifference.valueBefore + "\n\n";
-            content += "New value:\n";
-            content += parameterDifference.valueAfter + "\n\n";
-
-            return content;
-        }
-
-        private string getLinkDetails(TreeNodeEntry entry) {
-            LinkDifference linkDifference = (LinkDifference)entry.difference;
-            
-            string content = "Link difference - " + entry.differenceType.ToString() + "\n\n";
-
-            switch (entry.differenceType) {
-                case DIFFERENCE_TYPE.CREATED:
-                    // todo
-                    break;
-                case DIFFERENCE_TYPE.MODIFIED:
-                    string entityName = linkDifference.utils.GetEntityName(linkDifference.composite, linkDifference.entity);
-                    string childEntityName = linkDifference.utils.GetEntityName(linkDifference.composite.shortGUID, linkDifference.link.linkedEntityID);
-                    content += "Initial value:\n";
-                    content += entityName + " [" + linkDifference.link.thisParamID.ToString() + "] => " +
-                        linkDifference.link.linkedEntityID.ToString() + " [" + linkDifference.link.linkedParamID.ToString() + "]" + "\n\n";
-
-                    //todo
-                    content += "New value:\n";
-                    content += "todo" + " [" + linkDifference.link.thisParamID.ToString() + "]";//todo
-                    break;
-                case DIFFERENCE_TYPE.DELETED:
-                    break;
-                default:
-                    break;
-            }
-
-            return content;
-        } 
     }
 }

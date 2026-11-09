@@ -176,11 +176,14 @@ namespace AIPAKDifferentiation {
                 Parameter pak2Parameter = pak2Entity.parameters.Find(x => x.name == parameter.name);
                 if (null == pak2Parameter) {
                     ParameterDifference parameterDifference = new ParameterDifference(parameter, DIFFERENCE_TYPE.DELETED, null);
+                    parameterDifference.valueBefore = ParameterValueFormatter.format(parameter, this.pak1.Utils, entity, compositeDifference.composite);
+                    parameterDifference.parent = entityDifference;
                     entityDifference.parameterDiffereces.Add(parameterDifference);
                 } else {
-                    ParameterDifference parameterDifference = loadParameterValues(parameter, pak2Parameter);
+                    ParameterDifference parameterDifference = this.loadParameterValues(parameter, pak2Parameter, entity, pak2Entity, compositeDifference.composite, compositeDifference.compositePak2);
 
                     if (null != parameterDifference) {
+                        parameterDifference.parent = entityDifference;
                         entityDifference.parameterDiffereces.Add(parameterDifference);
                     }
                 }
@@ -194,7 +197,8 @@ namespace AIPAKDifferentiation {
                 Parameter foundPak1Parameter = entity.parameters.Find(x => x.name == pak2Parameter.name);
                 if (null == foundPak1Parameter) {
                     ParameterDifference parameterDifference = new ParameterDifference(null, DIFFERENCE_TYPE.CREATED, pak2Parameter);
-                    parameterDifference.valueAfter = this.getParameterValue(pak2Parameter, pak2.Utils);
+                    parameterDifference.valueAfter = ParameterValueFormatter.format(pak2Parameter, this.pak2.Utils, pak2Entity, compositeDifference.compositePak2);
+                    parameterDifference.parent = entityDifference;
                     entityDifference.parameterDiffereces.Add(parameterDifference);
                 }
             }
@@ -218,205 +222,18 @@ namespace AIPAKDifferentiation {
                 }
 
                 ParameterDifference parameterDifference = new ParameterDifference(null, DIFFERENCE_TYPE.CREATED, pak2Parameter);
-                parameterDifference.valueAfter = this.getParameterValue(pak2Parameter, pak2.Utils);
+                parameterDifference.valueAfter = ParameterValueFormatter.format(pak2Parameter, this.pak2.Utils, pak2Entity, entityDifference.compositePak2);
+                parameterDifference.parent = entityDifference;
                 entityDifference.parameterDiffereces.Add(parameterDifference);
             }
         }
 
-        /*
-         * Checks if the parameter in both entities from each PAK are the same
-         * The performance of this part is really bad currently
-         */
-        private ParameterDifference loadParameterValues(Parameter parameter, Parameter pak2Parameter) {
-            ParameterDifference parameterDifference = new ParameterDifference(parameter, DIFFERENCE_TYPE.MODIFIED, pak2Parameter);
-
-            ParameterData data = parameter.content;
-            if (data.dataType == pak2Parameter.content.dataType) {
-                // this part is trash - maybe change that if everything is clear in the end
-                switch (data.dataType) {
-                    case DataType.STRING:
-                        cString cString = (cString)parameter.content;
-                        cString cString2 = (cString)pak2Parameter.content;
-                        parameterDifference.valueBefore = data.dataType.ToString() + ": " + cString.value;
-                        parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + cString2.value;
-                        break;
-                    case DataType.FLOAT:
-                        cFloat cFloat = (cFloat)parameter.content;
-                        cFloat cFloat2 = (cFloat)pak2Parameter.content;
-                        parameterDifference.valueBefore = data.dataType.ToString() + ": " + ParameterValueFormatter.formatFloat(cFloat.value);
-                        parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + ParameterValueFormatter.formatFloat(cFloat2.value);
-                        break;
-                    case DataType.INTEGER:
-                        cInteger cInteger = (cInteger)parameter.content;
-                        cInteger cInteger2 = (cInteger)pak2Parameter.content;
-                        parameterDifference.valueBefore = data.dataType.ToString() + ": " + cInteger.value.ToString();
-                        parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + cInteger2.value.ToString();
-                        break;
-                    case DataType.BOOL:
-                        cBool cBool = (cBool)parameter.content;
-                        cBool cBool2 = (cBool)pak2Parameter.content;
-                        parameterDifference.valueBefore = data.dataType.ToString() + ": " + cBool.value.ToString();
-                        parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + cBool2.value.ToString();
-                        break;
-                    case DataType.VECTOR:
-                        cVector3 cVector3 = (cVector3)parameter.content;
-                        cVector3 cVector32 = (cVector3)pak2Parameter.content;
-                        parameterDifference.valueBefore = data.dataType.ToString() + ": " + ParameterValueFormatter.formatVector(cVector3.value);
-                        parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + ParameterValueFormatter.formatVector(cVector32.value);
-                        break;
-                    case DataType.TRANSFORM:
-                        cTransform cTransform = (cTransform)parameter.content;
-                        cTransform cTransform2 = (cTransform)pak2Parameter.content;
-                        parameterDifference.valueBefore = data.dataType.ToString() + ": " + ParameterValueFormatter.formatVector(cTransform.position) + ", " + ParameterValueFormatter.formatVector(cTransform.rotation);
-                        parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": " + ParameterValueFormatter.formatVector(cTransform2.position) + ", " + ParameterValueFormatter.formatVector(cTransform2.rotation);
-                        break;
-                    case DataType.ENUM:
-                        cEnum cEnum = (cEnum)parameter.content;
-                        var descriptor = pak1.Utils.GetEnum(cEnum.enumID);
-                        string element = descriptor?.Entries.Find(e => e.Index == cEnum.enumIndex)?.Name;
-                        if (element != null) {
-                            parameterDifference.valueBefore = data.dataType.ToString() + ": [" + cEnum.enumID.ToString() + ": " + descriptor?.Entries.Find(e => e.Index == cEnum.enumIndex)?.Name + " (enumIndex: " + cEnum.enumIndex + ")]";
-                        } else {
-                            parameterDifference.valueBefore = data.dataType.ToString() + ": [" + cEnum.enumID.ToString() + ": " + cEnum.enumIndex + "]";
-                        }
-
-                        cEnum cEnum2 = (cEnum)pak2Parameter.content;
-                        var descriptor2 = pak2.Utils.GetEnum(cEnum2.enumID);
-                        string element2 = descriptor2?.Entries.Find(e => e.Index == cEnum2.enumIndex)?.Name;
-                        if (element2 != null) {
-                            parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": [" + cEnum2.enumID.ToString() + ": " + descriptor2?.Entries.Find(e => e.Index == cEnum2.enumIndex)?.Name + " (enumIndex: " + cEnum2.enumIndex + ")]";
-                        } else {
-                            parameterDifference.valueAfter = pak2Parameter.content.dataType.ToString() + ": [" + cEnum2.enumID.ToString() + ": " + cEnum2.enumIndex + "]";
-                        }
-
-                        break;
-                    case DataType.SPLINE:
-                        // TODO make splines better
-                        cSpline cSpline = (cSpline)parameter.content;
-                        cSpline cSpline2 = (cSpline)pak2Parameter.content;
-                        string str1 = cSpline.dataType.ToString() + ":";
-                        foreach (cTransform c in cSpline.splinePoints) {
-                            str1 += " [position: " + ParameterValueFormatter.formatVector(c.position) + ", rotation: " + ParameterValueFormatter.formatVector(c.rotation) + "]";
-                        }
-                        string str2 = cSpline2.dataType.ToString() + ":";
-                        foreach (cTransform c2 in cSpline2.splinePoints) {
-                            str2 += " [position: " + ParameterValueFormatter.formatVector(c2.position) + ", rotation: " + ParameterValueFormatter.formatVector(c2.rotation) + "]";
-                        }
-                        parameterDifference.valueBefore = str1;
-                        parameterDifference.valueAfter = str2;
-                        break;
-                    case DataType.RESOURCE:
-                        // TODO
-                        break;
-                    case DataType.FILEPATH:
-                        // TODO
-                        break;
-                    case DataType.OBJECT:
-                        // TODO
-                        break;
-                    case DataType.ZONE_LINK:
-                        // TODO
-                        break;
-                    case DataType.ZONE:
-                        // TODO
-                        break;
-
-                    case DataType.NONE:
-                    default:
-                        // Do nothing - default values are already set
-                        break;
-                }
-            } else { // dataType was changed of this parameter (this case probably shouldn't exist since it's not possible to date to edit the datatype itself)
-                parameterDifference.valueBefore = "Initial type: " + data.dataType.ToString();
-                parameterDifference.valueAfter = "New type" + pak2Parameter.content.dataType.ToString();
-            }
-
-            // check if they are the same - if yes there is no difference
-            if (parameterDifference.valueBefore == parameterDifference.valueAfter) {
-                return null;
-            }
-
-            return parameterDifference;
-        }
-
-        /*
-         * Gets the readable value for the given parameter, e.g: STRING: example
-         * Maybe merge this function and loadParameterValues() together later
-         */
-        private string getParameterValue(Parameter parameter, CommandsUtils utils) {
-            string value = "";
-
-            ParameterData data = parameter.content;
-
-            // this part is trash - maybe change that if everything is clear in the end
-            switch (data.dataType) {
-                case DataType.STRING:
-                    cString cString = (cString)parameter.content;
-                    value = data.dataType.ToString() + ": " + cString.value;
-                    break;
-                case DataType.FLOAT:
-                    cFloat cFloat = (cFloat)parameter.content;
-                    value = data.dataType.ToString() + ": " + ParameterValueFormatter.formatFloat(cFloat.value);
-                    break;
-                case DataType.INTEGER:
-                    cInteger cInteger = (cInteger)parameter.content;
-                    value = data.dataType.ToString() + ": " + cInteger.value.ToString();
-                    break;
-                case DataType.BOOL:
-                    cBool cBool = (cBool)parameter.content;
-                    value = data.dataType.ToString() + ": " + cBool.value.ToString();
-                    break;
-                case DataType.VECTOR:
-                    cVector3 cVector3 = (cVector3)parameter.content;
-                    value = data.dataType.ToString() + ": " + ParameterValueFormatter.formatVector(cVector3.value);
-                    break;
-                case DataType.TRANSFORM:
-                    cTransform cTransform = (cTransform)parameter.content;
-                    value = data.dataType.ToString() + ": " + ParameterValueFormatter.formatVector(cTransform.position) + ", " + ParameterValueFormatter.formatVector(cTransform.rotation);
-                    break;
-                case DataType.ENUM:
-                    // TODO make enums better
-                    cEnum cEnum = (cEnum)parameter.content;
-                    var descriptor = utils.GetEnum(cEnum.enumID);
-                    string element = descriptor?.Entries.Find(e => e.Index == cEnum.enumIndex)?.Name;
-                    if (element != null) {
-                        value = data.dataType.ToString() + ": [" + cEnum.enumID.ToString() + ": " + descriptor?.Entries.Find(e => e.Index == cEnum.enumIndex)?.Name + " (enumIndex: " + cEnum.enumIndex + ")]";
-                    } else {
-                        value = data.dataType.ToString() + ": [" + cEnum.enumID.ToString() + ": " + cEnum.enumIndex + "]";
-                    }
-                    break;
-                case DataType.SPLINE:
-                    // TODO make splines better
-                    cSpline cSpline = (cSpline)parameter.content;
-                    string str1 = cSpline.dataType.ToString() + ":";
-                    foreach (cTransform c in cSpline.splinePoints) {
-                        str1 += " [position: " + ParameterValueFormatter.formatVector(c.position) + ", rotation: " + ParameterValueFormatter.formatVector(c.rotation) + "]";
-                    }
-                    value = str1;
-                    break;
-                case DataType.RESOURCE:
-                    // TODO
-                    break;
-                case DataType.FILEPATH:
-                    // TODO
-                    break;
-                case DataType.OBJECT:
-                    // TODO
-                    break;
-                case DataType.ZONE_LINK:
-                    // TODO
-                    break;
-                case DataType.ZONE:
-                    // TODO
-                    break;
-
-                case DataType.NONE:
-                default:
-                    value = "<<Unkown type: Please create an bug report if this occurs>>";
-                    break;
-            }
-
-            return value;
+        private ParameterDifference loadParameterValues(Parameter parameter, Parameter pak2Parameter, Entity entity, Entity pak2Entity, Composite composite, Composite pak2Composite) {
+            if (ParameterValueFormatter.sameStoredValue(parameter, pak2Parameter)) return null;
+            return new ParameterDifference(parameter, DIFFERENCE_TYPE.MODIFIED, pak2Parameter) {
+                valueBefore = ParameterValueFormatter.format(parameter, this.pak1.Utils, entity, composite),
+                valueAfter = ParameterValueFormatter.format(pak2Parameter, this.pak2.Utils, pak2Entity, pak2Composite)
+            };
         }
 
         /*

@@ -226,10 +226,10 @@ namespace AIPAKDifferentiation {
          * Build the treeview details of hte current selected TreeNode
          */
         private void buildTreeViewDetails(TreeNodeEntry entry) {
+            this.panelTreeViewDetails.Controls.Clear();
             if (null != entry) {
-                panelTreeViewDetails.Controls.Clear();
-                Label label = this.treeViewDetails.buildTreeViewDetails(entry);
-                panelTreeViewDetails.Controls.Add(label);
+                Control details = this.treeViewDetails.buildTreeViewDetails(entry);
+                this.panelTreeViewDetails.Controls.Add(details);
             }
         }
 
