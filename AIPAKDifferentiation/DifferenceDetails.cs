@@ -56,6 +56,22 @@ namespace AIPAKDifferentiation {
             text.AppendLine("Composite: " + (composite?.name ?? "unresolved"));
             appendEntitySide(text, "Initial", difference.entity, difference.commands);
             appendEntitySide(text, "New", difference.entityPak2, difference.commandsPak2);
+
+            if (difference.storedDataChanges.Count > 0) {
+                text.AppendLine("Changed stored entity data:");
+                foreach (string change in difference.storedDataChanges) {
+                    text.AppendLine("  " + change);
+                }
+            } else if (
+                difference.differenceType != DIFFERENCE_TYPE.MODIFIED &&
+                (current is ProxyEntity || current is AliasEntity || current is CAGEAnimation || current is TriggerSequence)
+            ) {
+                text.AppendLine("Stored entity data:");
+                foreach (string field in EntityStoredData.details(current)) {
+                    text.AppendLine("  " + field);
+                }
+            }
+
             text.AppendLine("Changed parameters shown: " + (filteredParameterCount ?? difference.parameterDiffereces.Count));
             text.AppendLine("Changed links shown: " + (filteredLinkCount ?? difference.linkDifferences.Count));
 
@@ -85,7 +101,7 @@ namespace AIPAKDifferentiation {
                 text.AppendLine(title + " proxy function ID: " + proxy.function.ToByteString());
                 text.AppendLine(title + " proxy path: " + path(proxy.proxy));
                 if (proxy.sequence.Count > 0 || proxy.methods.Count > 0) {
-                    text.AppendLine(title + " trigger sequence data: " + proxy.sequence.Count + " sequence entries, " + proxy.methods.Count + " methods (not compared)");
+                    text.AppendLine(title + " trigger sequence data: " + proxy.sequence.Count + " sequence entries, " + proxy.methods.Count + " methods");
                 }
 
             } else if (value is AliasEntity alias) {
@@ -103,11 +119,11 @@ namespace AIPAKDifferentiation {
                 }
 
                 if (function is CAGEAnimation animation) {
-                    text.AppendLine(title + " animation: " + animation.connections.Count + " connections, " + animation.floatTracks.Count + " float tracks, " + animation.eventTracks.Count + " event tracks (not compared)");
+                    text.AppendLine(title + " animation: " + animation.connections.Count + " connections, " + animation.floatTracks.Count + " float tracks, " + animation.eventTracks.Count + " event tracks");
                 }
 
                 if (function is TriggerSequence sequence) {
-                    text.AppendLine(title + " trigger sequence: " + sequence.sequence.Count + " entries, " + sequence.methods.Count + " methods (not compared)");
+                    text.AppendLine(title + " trigger sequence: " + sequence.sequence.Count + " entries, " + sequence.methods.Count + " methods");
                 }
             }
         }

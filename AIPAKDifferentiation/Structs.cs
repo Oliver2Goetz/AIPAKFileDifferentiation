@@ -35,6 +35,7 @@ namespace AIPAKDifferentiation {
         public Composite compositePak2;
         public List<ParameterDifference> parameterDiffereces = new List<ParameterDifference>();
         public List<LinkDifference> linkDifferences = new List<LinkDifference>();
+        public List<string> storedDataChanges = new List<string>();
 
         public EntityDifference(Entity entity, DIFFERENCE_TYPE differenceType, Entity entityPak2, Composite composite, Composite compositePak2, CommandsUtils utils, CommandsUtils utilsPak2, Commands commands = null, Commands commandsPak2 = null) {
             this.entity = entity;

@@ -139,10 +139,15 @@ namespace AIPAKDifferentiation {
                     // now we handle modifications with parameters and links of this entity
                     EntityDifference entityDifference = this.loadDifferencesParameters(entity, pak2Entity, compositeDifference);
                     entityDifference = this.loadDifferencesLinks(entity, pak2Entity, compositeDifference, entityDifference);
+                    List<string> storedDataChanges = EntityStoredData.changes(entity, pak2Entity);
+                    if (storedDataChanges.Count > 0) {
+                        if (entityDifference == null) {
+                            entityDifference = new EntityDifference(entity, DIFFERENCE_TYPE.MODIFIED, pak2Entity, composite, pak2Composite, pak1.Utils, pak2.Utils, this.pak1, this.pak2);
+                            compositeDifference.entityDifferences.Add(entityDifference);
+                        }
 
-                    //if (null != entityDifference) {
-                    //    compositeDifference.entityDifferences.Add(entityDifference);
-                    //}
+                        entityDifference.storedDataChanges.AddRange(storedDataChanges);
+                    }
                 }
             }
             // afterwards we check if any entity has been created - we dont want any parameters here, just the newly created entities
