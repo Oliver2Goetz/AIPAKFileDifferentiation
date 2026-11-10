@@ -20,8 +20,11 @@ namespace AIPAKDifferentiation {
             text.AppendLine("Composite - " + difference.differenceType);
             text.AppendLine("Name: " + current.name);
             text.AppendLine("ID: " + current.shortGUID.ToByteString());
+            text.AppendLine();
             appendCompositeSide(text, "Initial", difference.composite);
+            text.AppendLine();
             appendCompositeSide(text, "New", difference.compositePak2);
+            text.AppendLine();
             text.AppendLine("Changed entities shown: " + shownEntities.Count);
 
             foreach (DIFFERENCE_TYPE type in new[] { DIFFERENCE_TYPE.CREATED, DIFFERENCE_TYPE.MODIFIED, DIFFERENCE_TYPE.DELETED }) {
@@ -54,10 +57,13 @@ namespace AIPAKDifferentiation {
             text.AppendLine("Name: " + (utils?.GetEntityName(composite, current) ?? "unresolved"));
             text.AppendLine("ID: " + current.shortGUID.ToByteString());
             text.AppendLine("Composite: " + (composite?.name ?? "unresolved"));
+            text.AppendLine();
             appendEntitySide(text, "Initial", difference.entity, difference.commands);
+            text.AppendLine();
             appendEntitySide(text, "New", difference.entityPak2, difference.commandsPak2);
 
             if (difference.storedDataChanges.Count > 0) {
+                text.AppendLine();
                 text.AppendLine("Changed stored entity data:");
                 foreach (string change in difference.storedDataChanges) {
                     text.AppendLine("  " + change);
@@ -66,12 +72,14 @@ namespace AIPAKDifferentiation {
                 difference.differenceType != DIFFERENCE_TYPE.MODIFIED &&
                 (current is ProxyEntity || current is AliasEntity || current is CAGEAnimation || current is TriggerSequence)
             ) {
+                text.AppendLine();
                 text.AppendLine("Stored entity data:");
                 foreach (string field in EntityStoredData.details(current)) {
                     text.AppendLine("  " + field);
                 }
             }
 
+            text.AppendLine();
             text.AppendLine("Changed parameters shown: " + (filteredParameterCount ?? difference.parameterDiffereces.Count));
             text.AppendLine("Changed links shown: " + (filteredLinkCount ?? difference.linkDifferences.Count));
 
@@ -144,7 +152,9 @@ namespace AIPAKDifferentiation {
             text.AppendLine("Parameter - " + difference.differenceType);
             text.AppendLine("Name: " + current.name);
             text.AppendLine("ID: " + current.name.ToByteString());
+            text.AppendLine();
             appendParameterSide(text, "Initial", difference.parameter, parent?.utils, parent?.entity, parent?.composite);
+            text.AppendLine();
             appendParameterSide(text, "New", difference.parameterPak2, parent?.utilsPak2, parent?.entityPak2, parent?.compositePak2);
 
             return text.ToString().TrimEnd();
@@ -168,8 +178,10 @@ namespace AIPAKDifferentiation {
             StringBuilder text = new StringBuilder();
             text.AppendLine("Link - " + difference.differenceType);
             text.AppendLine("Connection ID: " + current.ID.ToByteString());
+            text.AppendLine();
             appendLinkSide(text, "Initial", difference.differenceType == DIFFERENCE_TYPE.CREATED ? null : difference.link,
                 difference.entity, difference.composite, difference.utils);
+            text.AppendLine();
             appendLinkSide(text, "New", difference.differenceType == DIFFERENCE_TYPE.DELETED ? null : difference.linkPak2,
                 difference.entityPak2, difference.compositePak2, difference.utilsPak2);
 
