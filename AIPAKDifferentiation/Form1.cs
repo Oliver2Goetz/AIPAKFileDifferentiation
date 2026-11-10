@@ -34,12 +34,49 @@ namespace AIPAKDifferentiation {
         }
 
         private void AIPAKDifferentiation_Load(object sender, EventArgs e) {
-            // for testing
-            this.pakPath1 = @"C:\Users\Oliver\Desktop\Programming\Alien Isolation\AIPAKDifferentiation\examplePAKs\COMMANDS_TECH_HUB_vanilla.PAK";
-            this.pakPath2 = @"C:\Users\Oliver\Desktop\Programming\Alien Isolation\AIPAKDifferentiation\examplePAKs\COMMANDS_TECH_HUB_modified.PAK";
+            this.settingsFileLocationMenuItem.Text = "Settings file: " + PakPathSettings.FilePath;
+            try {
+                PakPathSettings settings = PakPathSettings.load();
+                this.rememberPakPathsMenuItem.Checked = settings.RememberPaths;
+                if (settings.RememberPaths) {
+                    this.pakPath1 = settings.Pak1Path ?? "";
+                    this.pakPath2 = settings.Pak2Path ?? "";
+                }
+            } catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException || ex is System.Text.Json.JsonException) {
+                MessageBox.Show("The saved PAK paths could not be read from:\n" + PakPathSettings.FilePath + "\n\n" + ex.Message,
+                    "Settings Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+            this.updatePakPathLabels();
 
             this.differencesAsListViewItemList = new DifferenceListViewItemList(this);
             this.differencesAsTreeNodeList = new DifferenceTreeNodeList();
+        }
+
+        private void rememberPakPathsMenuItem_Click(object sender, EventArgs e) {
+            try {
+                this.savePakPathSettings();
+            } catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException) {
+                this.rememberPakPathsMenuItem.Checked = !this.rememberPakPathsMenuItem.Checked;
+                MessageBox.Show("The PAK paths could not be saved to:\n" + PakPathSettings.FilePath + "\n\n" + ex.Message,
+                    "Settings Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void savePakPathSettings() {
+            PakPathSettings settings = new PakPathSettings {
+                RememberPaths = this.rememberPakPathsMenuItem.Checked,
+                Pak1Path = this.rememberPakPathsMenuItem.Checked ? this.pakPath1 : "",
+                Pak2Path = this.rememberPakPathsMenuItem.Checked ? this.pakPath2 : ""
+            };
+            settings.save();
+        }
+
+        private void updatePakPathLabels() {
+            this.labelPak1.Text = "PAK 1: " + (this.pakPath1.Length == 0 ? "-" : this.pakPath1);
+            this.labelPak2.Text = "PAK 2: " + (this.pakPath2.Length == 0 ? "-" : this.pakPath2);
+            this.setToolTip(this.labelPak1, this.pakPath1);
+            this.setToolTip(this.labelPak2, this.pakPath2);
         }
 
         /*
@@ -104,34 +141,56 @@ namespace AIPAKDifferentiation {
          * button click - opens file dialog for PAK1
          */
         private void buttonBrowsePak1_Click(object sender, EventArgs e) {
-            string initialDirectory = "";
-            if (0 < this.pakPath1.Length) {
-                string directoryName = Path.GetDirectoryName(this.pakPath1);
-                if (Directory.Exists(directoryName)) {
-                    initialDirectory = directoryName;
-                }
+            string selectedPath = this.getFileDialogResult("Select PAK 1", this.getInitialPakDirectory(this.pakPath1));
+            if (selectedPath.Length == 0) {
+                return;
             }
 
-            this.pakPath1 = this.getFileDialogResult("Select PAK 1", initialDirectory);
-            labelPak1.Text = "PAK 1: " + this.pakPath1;
-            this.setToolTip(labelPak1, this.pakPath1);
+            this.pakPath1 = selectedPath;
+            this.updatePakPathLabels();
+            if (this.rememberPakPathsMenuItem.Checked) {
+                this.trySavePakPathSettings();
+            }
         }
 
         /*
          * button click - opens file dialog for PAK2
          */
         private void buttonBrowsePak2_Click(object sender, EventArgs e) {
-            string initialDirectory = "";
-            if (0 < this.pakPath2.Length) {
-                string directoryName = Path.GetDirectoryName(this.pakPath2);
-                if (Directory.Exists(directoryName)) {
-                    initialDirectory = directoryName;
+            string selectedPath = this.getFileDialogResult("Select PAK 2", this.getInitialPakDirectory(this.pakPath2));
+            if (selectedPath.Length == 0) {
+                return;
+            }
+
+            this.pakPath2 = selectedPath;
+            this.updatePakPathLabels();
+            if (this.rememberPakPathsMenuItem.Checked) {
+                this.trySavePakPathSettings();
+            }
+        }
+
+        private void trySavePakPathSettings() {
+            try {
+                this.savePakPathSettings();
+            } catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException) {
+                MessageBox.Show("The PAK path was selected but could not be saved to:\n" + PakPathSettings.FilePath + "\n\n" + ex.Message,
+                    "Settings Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private string getInitialPakDirectory(string pakPath) {
+            if (!string.IsNullOrEmpty(pakPath)) {
+                try {
+                    string directory = Path.GetDirectoryName(pakPath);
+                    if (Directory.Exists(directory)) {
+                        return directory;
+                    }
+                } catch (ArgumentException) {
+                    // A stale path should not prevent the user from choosing a new PAK.
                 }
             }
 
-            this.pakPath2 = this.getFileDialogResult("Select PAK 2", initialDirectory);
-            labelPak2.Text = "PAK 2: " + this.pakPath2;
-            this.setToolTip(labelPak2, this.pakPath2);
+            return Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
         }
 
         /*
@@ -142,6 +201,7 @@ namespace AIPAKDifferentiation {
 
             fileDialog.Title = title;
             fileDialog.InitialDirectory = initialDirectory;
+            fileDialog.FileName = "";
 
             if (fileDialog.ShowDialog() == DialogResult.OK) {
                 result = fileDialog.FileName;

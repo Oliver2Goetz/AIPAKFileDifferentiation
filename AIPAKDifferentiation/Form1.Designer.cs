@@ -1,4 +1,4 @@
-﻿namespace AIPAKDifferentiation {
+namespace AIPAKDifferentiation {
     partial class AIPAKDifferentiation {
         /// <summary>
         /// Required designer variable.
@@ -55,13 +55,18 @@
             buttonExportAsTxt = new System.Windows.Forms.Button();
             checkboxShowWindowOnTop = new System.Windows.Forms.CheckBox();
             checkboxApplyFiltersForExport = new System.Windows.Forms.CheckBox();
+            menuStripSettings = new System.Windows.Forms.MenuStrip();
+            settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            rememberPakPathsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            settingsFileLocationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             panelTreeView.SuspendLayout();
+            menuStripSettings.SuspendLayout();
             SuspendLayout();
             // 
             // buttonPakShowDifferences
             // 
             buttonPakShowDifferences.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            buttonPakShowDifferences.Location = new System.Drawing.Point(14, 93);
+            buttonPakShowDifferences.Location = new System.Drawing.Point(14, 117);
             buttonPakShowDifferences.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             buttonPakShowDifferences.Name = "buttonPakShowDifferences";
             buttonPakShowDifferences.Size = new System.Drawing.Size(152, 44);
@@ -77,7 +82,7 @@
             listviewDifferences.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] { columnCathodeType, columnGuid, columnName, columnValueBefore, columnValueAfter, columnDifferenceType });
             listviewDifferences.FullRowSelect = true;
             listviewDifferences.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            listviewDifferences.Location = new System.Drawing.Point(14, 172);
+            listviewDifferences.Location = new System.Drawing.Point(14, 196);
             listviewDifferences.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             listviewDifferences.Name = "listviewDifferences";
             listviewDifferences.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -122,7 +127,7 @@
             // 
             labelDifferences.AutoSize = true;
             labelDifferences.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            labelDifferences.Location = new System.Drawing.Point(14, 149);
+            labelDifferences.Location = new System.Drawing.Point(14, 173);
             labelDifferences.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             labelDifferences.Name = "labelDifferences";
             labelDifferences.Size = new System.Drawing.Size(80, 17);
@@ -131,7 +136,7 @@
             // 
             // buttonBrowsePak1
             // 
-            buttonBrowsePak1.Location = new System.Drawing.Point(14, 14);
+            buttonBrowsePak1.Location = new System.Drawing.Point(14, 38);
             buttonBrowsePak1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             buttonBrowsePak1.Name = "buttonBrowsePak1";
             buttonBrowsePak1.Size = new System.Drawing.Size(152, 29);
@@ -143,7 +148,7 @@
             // 
             // buttonBrowsePak2
             // 
-            buttonBrowsePak2.Location = new System.Drawing.Point(14, 46);
+            buttonBrowsePak2.Location = new System.Drawing.Point(14, 70);
             buttonBrowsePak2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             buttonBrowsePak2.Name = "buttonBrowsePak2";
             buttonBrowsePak2.Size = new System.Drawing.Size(152, 29);
@@ -157,7 +162,7 @@
             // 
             labelPak1.AutoSize = true;
             labelPak1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.75F);
-            labelPak1.Location = new System.Drawing.Point(173, 18);
+            labelPak1.Location = new System.Drawing.Point(173, 42);
             labelPak1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             labelPak1.Name = "labelPak1";
             labelPak1.Size = new System.Drawing.Size(50, 15);
@@ -168,7 +173,7 @@
             // 
             labelPak2.AutoSize = true;
             labelPak2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.75F);
-            labelPak2.Location = new System.Drawing.Point(173, 51);
+            labelPak2.Location = new System.Drawing.Point(173, 75);
             labelPak2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             labelPak2.Name = "labelPak2";
             labelPak2.Size = new System.Drawing.Size(50, 15);
@@ -184,7 +189,7 @@
             // checkboxEntityHideOverrides
             // 
             checkboxEntityHideOverrides.AutoSize = true;
-            checkboxEntityHideOverrides.Location = new System.Drawing.Point(676, 93);
+            checkboxEntityHideOverrides.Location = new System.Drawing.Point(676, 117);
             checkboxEntityHideOverrides.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             checkboxEntityHideOverrides.Name = "checkboxEntityHideOverrides";
             checkboxEntityHideOverrides.Size = new System.Drawing.Size(126, 19);
@@ -197,7 +202,7 @@
             // 
             labelFilters.AutoSize = true;
             labelFilters.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.75F);
-            labelFilters.Location = new System.Drawing.Point(173, 92);
+            labelFilters.Location = new System.Drawing.Point(173, 116);
             labelFilters.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             labelFilters.Name = "labelFilters";
             labelFilters.Size = new System.Drawing.Size(43, 15);
@@ -207,7 +212,7 @@
             // checkboxHideComposites
             // 
             checkboxHideComposites.AutoSize = true;
-            checkboxHideComposites.Location = new System.Drawing.Point(230, 93);
+            checkboxHideComposites.Location = new System.Drawing.Point(230, 117);
             checkboxHideComposites.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             checkboxHideComposites.Name = "checkboxHideComposites";
             checkboxHideComposites.Size = new System.Drawing.Size(115, 19);
@@ -219,7 +224,7 @@
             // checkboxHideEntities
             // 
             checkboxHideEntities.AutoSize = true;
-            checkboxHideEntities.Location = new System.Drawing.Point(358, 93);
+            checkboxHideEntities.Location = new System.Drawing.Point(358, 117);
             checkboxHideEntities.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             checkboxHideEntities.Name = "checkboxHideEntities";
             checkboxHideEntities.Size = new System.Drawing.Size(92, 19);
@@ -231,7 +236,7 @@
             // checkboxHideParameters
             // 
             checkboxHideParameters.AutoSize = true;
-            checkboxHideParameters.Location = new System.Drawing.Point(463, 93);
+            checkboxHideParameters.Location = new System.Drawing.Point(463, 117);
             checkboxHideParameters.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             checkboxHideParameters.Name = "checkboxHideParameters";
             checkboxHideParameters.Size = new System.Drawing.Size(113, 19);
@@ -243,7 +248,7 @@
             // checkboxHideLinks
             // 
             checkboxHideLinks.AutoSize = true;
-            checkboxHideLinks.Location = new System.Drawing.Point(590, 93);
+            checkboxHideLinks.Location = new System.Drawing.Point(590, 117);
             checkboxHideLinks.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             checkboxHideLinks.Name = "checkboxHideLinks";
             checkboxHideLinks.Size = new System.Drawing.Size(78, 19);
@@ -255,7 +260,7 @@
             // checkboxHideCreated
             // 
             checkboxHideCreated.AutoSize = true;
-            checkboxHideCreated.Location = new System.Drawing.Point(230, 118);
+            checkboxHideCreated.Location = new System.Drawing.Point(230, 142);
             checkboxHideCreated.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             checkboxHideCreated.Name = "checkboxHideCreated";
             checkboxHideCreated.Size = new System.Drawing.Size(93, 19);
@@ -267,7 +272,7 @@
             // checkboxHideModified
             // 
             checkboxHideModified.AutoSize = true;
-            checkboxHideModified.Location = new System.Drawing.Point(358, 118);
+            checkboxHideModified.Location = new System.Drawing.Point(358, 142);
             checkboxHideModified.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             checkboxHideModified.Name = "checkboxHideModified";
             checkboxHideModified.Size = new System.Drawing.Size(102, 19);
@@ -279,7 +284,7 @@
             // checkboxHideDeleted
             // 
             checkboxHideDeleted.AutoSize = true;
-            checkboxHideDeleted.Location = new System.Drawing.Point(463, 118);
+            checkboxHideDeleted.Location = new System.Drawing.Point(463, 142);
             checkboxHideDeleted.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             checkboxHideDeleted.Name = "checkboxHideDeleted";
             checkboxHideDeleted.Size = new System.Drawing.Size(93, 19);
@@ -291,7 +296,7 @@
             // buttonSwitchView
             // 
             buttonSwitchView.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            buttonSwitchView.Location = new System.Drawing.Point(1385, 128);
+            buttonSwitchView.Location = new System.Drawing.Point(1385, 152);
             buttonSwitchView.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             buttonSwitchView.Name = "buttonSwitchView";
             buttonSwitchView.Size = new System.Drawing.Size(99, 30);
@@ -306,7 +311,7 @@
             panelTreeView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             panelTreeView.Controls.Add(treeviewDifferences);
             panelTreeView.Controls.Add(panelTreeViewDetails);
-            panelTreeView.Location = new System.Drawing.Point(14, 172);
+            panelTreeView.Location = new System.Drawing.Point(14, 196);
             panelTreeView.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             panelTreeView.Name = "panelTreeView";
             panelTreeView.Size = new System.Drawing.Size(1470, 577);
@@ -335,7 +340,7 @@
             // buttonExportAsTxt
             // 
             buttonExportAsTxt.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            buttonExportAsTxt.Location = new System.Drawing.Point(1291, 86);
+            buttonExportAsTxt.Location = new System.Drawing.Point(1291, 110);
             buttonExportAsTxt.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             buttonExportAsTxt.Name = "buttonExportAsTxt";
             buttonExportAsTxt.Size = new System.Drawing.Size(194, 30);
@@ -348,7 +353,7 @@
             // checkboxShowWindowOnTop
             // 
             checkboxShowWindowOnTop.AutoSize = true;
-            checkboxShowWindowOnTop.Location = new System.Drawing.Point(1347, 20);
+            checkboxShowWindowOnTop.Location = new System.Drawing.Point(1347, 44);
             checkboxShowWindowOnTop.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             checkboxShowWindowOnTop.Name = "checkboxShowWindowOnTop";
             checkboxShowWindowOnTop.Size = new System.Drawing.Size(138, 19);
@@ -360,19 +365,52 @@
             // checkboxApplyFiltersForExport
             // 
             checkboxApplyFiltersForExport.AutoSize = true;
-            checkboxApplyFiltersForExport.Location = new System.Drawing.Point(1139, 92);
+            checkboxApplyFiltersForExport.Location = new System.Drawing.Point(1139, 116);
             checkboxApplyFiltersForExport.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             checkboxApplyFiltersForExport.Name = "checkboxApplyFiltersForExport";
             checkboxApplyFiltersForExport.Size = new System.Drawing.Size(144, 19);
             checkboxApplyFiltersForExport.TabIndex = 19;
             checkboxApplyFiltersForExport.Text = "Apply filters for export";
             checkboxApplyFiltersForExport.UseVisualStyleBackColor = true;
+            //
+            // menuStripSettings
+            //
+            menuStripSettings.BackColor = System.Drawing.Color.White;
+            menuStripSettings.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { settingsToolStripMenuItem });
+            menuStripSettings.Location = new System.Drawing.Point(0, 0);
+            menuStripSettings.Name = "menuStripSettings";
+            menuStripSettings.Size = new System.Drawing.Size(1498, 24);
+            menuStripSettings.TabIndex = 20;
+            menuStripSettings.Text = "Settings menu";
+            //
+            // settingsToolStripMenuItem
+            //
+            settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { rememberPakPathsMenuItem, settingsFileLocationMenuItem });
+            settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            settingsToolStripMenuItem.Text = "Settings";
+            //
+            // rememberPakPathsMenuItem
+            //
+            rememberPakPathsMenuItem.CheckOnClick = true;
+            rememberPakPathsMenuItem.Name = "rememberPakPathsMenuItem";
+            rememberPakPathsMenuItem.Size = new System.Drawing.Size(416, 22);
+            rememberPakPathsMenuItem.Text = "Remember selected COMMANDS.PAK paths";
+            rememberPakPathsMenuItem.Click += rememberPakPathsMenuItem_Click;
+            //
+            // settingsFileLocationMenuItem
+            //
+            settingsFileLocationMenuItem.Enabled = false;
+            settingsFileLocationMenuItem.Name = "settingsFileLocationMenuItem";
+            settingsFileLocationMenuItem.Size = new System.Drawing.Size(416, 22);
+            this.settingsFileLocationMenuItem.Text = "Settings file: %APPDATA%\\AIPAKDifferentiation\\settings.json";
             // 
             // AIPAKDifferentiation
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(1498, 763);
+            ClientSize = new System.Drawing.Size(1498, 787);
+            Controls.Add(menuStripSettings);
             Controls.Add(checkboxApplyFiltersForExport);
             Controls.Add(checkboxShowWindowOnTop);
             Controls.Add(buttonExportAsTxt);
@@ -395,15 +433,18 @@
             Controls.Add(listviewDifferences);
             Controls.Add(buttonPakShowDifferences);
             Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
+            MainMenuStrip = menuStripSettings;
             Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             MaximizeBox = false;
-            MaximumSize = new System.Drawing.Size(1514, 802);
-            MinimumSize = new System.Drawing.Size(1514, 802);
+            MaximumSize = new System.Drawing.Size(1514, 826);
+            MinimumSize = new System.Drawing.Size(1514, 826);
             Name = "AIPAKDifferentiation";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             Text = "AIPAKDifferentiation";
             Load += AIPAKDifferentiation_Load;
             panelTreeView.ResumeLayout(false);
+            menuStripSettings.ResumeLayout(false);
+            menuStripSettings.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
 
@@ -441,6 +482,10 @@
         private System.Windows.Forms.Button buttonExportAsTxt;
         private System.Windows.Forms.CheckBox checkboxShowWindowOnTop;
         private System.Windows.Forms.CheckBox checkboxApplyFiltersForExport;
+        private System.Windows.Forms.MenuStrip menuStripSettings;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rememberPakPathsMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem settingsFileLocationMenuItem;
     }
 }
 

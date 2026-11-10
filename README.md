@@ -15,6 +15,8 @@ The goal of this project is to see the differences in a modded PAK file and the 
 Select two PAK files via the first two buttons. Click "Show differences". Loading all the differences might take a while depending on the each level and the amount differences both PAKs have.
 Filters can be used to hide certain types.
 
+To restore your selected PAK paths on the next launch, enable **Settings > Remember selected COMMANDS.PAK paths**. The two paths are saved separately in `%APPDATA%\AIPAKDifferentiation\settings.json`. The Settings menu also displays the full settings-file location in case you want to delete this file.
+
 ### Download
 The program can be downloaded on the [release page](https://github.com/Oliver2Goetz/AIPAKFileDifferentiation/releases). Be sure to download the newest release version
 
