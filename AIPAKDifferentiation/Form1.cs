@@ -28,6 +28,7 @@ namespace AIPAKDifferentiation {
 
         private DISPLAY_MODE displayMode = DISPLAY_MODE.LISTVIEW;
         private TreeViewDetails treeViewDetails;
+        private string activeSearch = "";
 
         public AIPAKDifferentiation() {
             InitializeComponent();
@@ -94,10 +95,14 @@ namespace AIPAKDifferentiation {
 
             if (success) {
                 this.treeViewDetails = new TreeViewDetails();
+                this.updateSummary();
                 this.buildActiveView();
             } else {
-                listviewDifferences.Items.Clear();
-                treeviewDifferences.Nodes.Clear();
+                this.compositeDifferences.Clear();
+                this.listviewDifferences.Items.Clear();
+                this.treeviewDifferences.Nodes.Clear();
+                this.panelTreeViewDetails.Controls.Clear();
+                this.updateSummary();
             }
         }
 
@@ -239,18 +244,49 @@ namespace AIPAKDifferentiation {
          * Display the listview with the differences
          */
         private void buildListView() {
-            listviewDifferences.Items.Clear();
-            this.preparedDifferenceItemList = this.differencesAsListViewItemList.getDifferencesAsListViewItemList(this.compositeDifferences);
-            listviewDifferences.Items.AddRange(this.preparedDifferenceItemList.ToArray());
+            this.listviewDifferences.Items.Clear();
+            this.preparedDifferenceItemList = this.differencesAsListViewItemList.getDifferencesAsListViewItemList(
+                DifferenceSearch.filter(this.compositeDifferences, this.activeSearch));
+            this.listviewDifferences.Items.AddRange(this.preparedDifferenceItemList.ToArray());
         }
 
         /*
          * Display the treeview with the differences
          */
         private void buildTreeView() {
-            treeviewDifferences.Nodes.Clear();
-            this.preparedDifferenceNodeList = this.differencesAsTreeNodeList.getDifferencesAsTreeNodeList(this.compositeDifferences);
-            treeviewDifferences.Nodes.AddRange(this.preparedDifferenceNodeList.ToArray());
+            this.treeviewDifferences.Nodes.Clear();
+            this.panelTreeViewDetails.Controls.Clear();
+            this.preparedDifferenceNodeList = this.differencesAsTreeNodeList.getDifferencesAsTreeNodeList(
+                DifferenceSearch.filter(this.compositeDifferences, this.activeSearch));
+            this.treeviewDifferences.Nodes.AddRange(this.preparedDifferenceNodeList.ToArray());
+        }
+
+        private void textBoxSearch_KeyDown(object sender, KeyEventArgs e) {
+            if (e.KeyCode == Keys.Enter) {
+                e.SuppressKeyPress = true;
+                this.activeSearch = this.textBoxSearch.Text.Trim();
+                this.buildActiveView();
+            }
+        }
+
+        private void updateSummary() {
+            List<AbstractDifference> composites = this.compositeDifferences.Cast<AbstractDifference>().ToList();
+            List<AbstractDifference> entities = this.compositeDifferences.SelectMany(composite => composite.entityDifferences).Cast<AbstractDifference>().ToList();
+            List<AbstractDifference> parameters = this.compositeDifferences.SelectMany(composite => composite.entityDifferences)
+                .SelectMany(entity => entity.parameterDiffereces).Cast<AbstractDifference>().ToList();
+            List<AbstractDifference> links = this.compositeDifferences.SelectMany(composite => composite.entityDifferences)
+                .SelectMany(entity => entity.linkDifferences).Cast<AbstractDifference>().ToList();
+
+            this.labelSummary.Text = "Composites: " + this.summaryCounts(composites) +
+                "   Entities: " + this.summaryCounts(entities) +
+                "   Parameters: " + this.summaryCounts(parameters) +
+                "   Links: " + this.summaryCounts(links);
+        }
+
+        private string summaryCounts(List<AbstractDifference> differences) {
+            return differences.Count(difference => difference.differenceType == DIFFERENCE_TYPE.CREATED) + ", " +
+                differences.Count(difference => difference.differenceType == DIFFERENCE_TYPE.MODIFIED) + ", " +
+                differences.Count(difference => difference.differenceType == DIFFERENCE_TYPE.DELETED);
         }
 
         /*
@@ -270,6 +306,7 @@ namespace AIPAKDifferentiation {
             }
 
             buttonSwitchView.Text = displayMode.ToString().ToLower();
+            this.buildActiveView();
         }
 
         /*
@@ -383,7 +420,10 @@ namespace AIPAKDifferentiation {
                         HideDeleted = this.checkboxHideDeleted.Checked
                     };
                 }
-                List<string> result = export.export(this.compositeDifferences, this.pak1Name, exportFilters);
+                List<CompositeDifference> exportDifferences = this.checkboxApplyFiltersForExport.Checked
+                    ? DifferenceSearch.filter(this.compositeDifferences, this.activeSearch)
+                    : this.compositeDifferences;
+                List<string> result = export.export(exportDifferences, this.pak1Name, exportFilters);
 
                 if ("exception" == result[0]) {
                     MessageBox.Show(result[1], "Export Error");

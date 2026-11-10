@@ -150,11 +150,15 @@ namespace AIPAKDifferentiation {
                     }
                 }
             }
-            // afterwards we check if any entity has been created - we dont want any parameters here, just the newly created entities
+            // afterwards we check if any entities have been created and include their stores parameters and links
             foreach (Entity pak2Entity in pak2Composite.GetEntities()) {
                 if (null == composite.GetEntityByID(pak2Entity.shortGUID)) { // null means the entity with guid from composite2 wasn't found in composite1
                     EntityDifference entityDifference = new EntityDifference(null, DIFFERENCE_TYPE.CREATED, pak2Entity, composite, pak2Composite, pak1.Utils, pak2.Utils, this.pak1, this.pak2);
                     this.loadParameterDifferenceByNewEntity(pak2Entity, entityDifference);
+                    foreach (EntityConnector link in pak2Entity.childLinks) {
+                        entityDifference.linkDifferences.Add(new LinkDifference(link, DIFFERENCE_TYPE.CREATED, link,
+                            composite, pak2Composite, null, pak2Entity, pak1.Utils, pak2.Utils));
+                    }
                     compositeDifference.entityDifferences.Add(entityDifference);
                 }
             }

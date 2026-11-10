@@ -22,8 +22,8 @@ namespace AIPAKDifferentiation {
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
-        {
+        private void InitializeComponent() {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AIPAKDifferentiation));
             buttonPakShowDifferences = new System.Windows.Forms.Button();
             listviewDifferences = new System.Windows.Forms.ListView();
@@ -59,12 +59,16 @@ namespace AIPAKDifferentiation {
             settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             rememberPakPathsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             settingsFileLocationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            labelSearch = new System.Windows.Forms.Label();
+            textBoxSearch = new System.Windows.Forms.TextBox();
+            labelSummary = new System.Windows.Forms.Label();
+            toolTipSummary = new System.Windows.Forms.ToolTip(components);
             panelTreeView.SuspendLayout();
             menuStripSettings.SuspendLayout();
             SuspendLayout();
-            // 
+            //
             // buttonPakShowDifferences
-            // 
+            //
             buttonPakShowDifferences.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             buttonPakShowDifferences.Location = new System.Drawing.Point(14, 117);
             buttonPakShowDifferences.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -75,9 +79,9 @@ namespace AIPAKDifferentiation {
             buttonPakShowDifferences.Text = "Show differences";
             buttonPakShowDifferences.UseVisualStyleBackColor = true;
             buttonPakShowDifferences.Click += buttonPakShowDifferences_Click;
-            // 
+            //
             // listviewDifferences
-            // 
+            //
             listviewDifferences.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             listviewDifferences.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] { columnCathodeType, columnGuid, columnName, columnValueBefore, columnValueAfter, columnDifferenceType });
             listviewDifferences.FullRowSelect = true;
@@ -87,44 +91,44 @@ namespace AIPAKDifferentiation {
             listviewDifferences.Name = "listviewDifferences";
             listviewDifferences.RightToLeft = System.Windows.Forms.RightToLeft.No;
             listviewDifferences.ShowItemToolTips = true;
-            listviewDifferences.Size = new System.Drawing.Size(1470, 577);
+            listviewDifferences.Size = new System.Drawing.Size(1470, 552);
             listviewDifferences.TabIndex = 0;
             listviewDifferences.TabStop = false;
             listviewDifferences.UseCompatibleStateImageBehavior = false;
             listviewDifferences.View = System.Windows.Forms.View.Details;
-            // 
+            //
             // columnCathodeType
-            // 
+            //
             columnCathodeType.Text = "Cathode Type";
             columnCathodeType.Width = 85;
-            // 
+            //
             // columnGuid
-            // 
+            //
             columnGuid.Text = "Guid";
             columnGuid.Width = 85;
-            // 
+            //
             // columnName
-            // 
+            //
             columnName.Text = "Name";
             columnName.Width = 540;
-            // 
+            //
             // columnValueBefore
-            // 
+            //
             columnValueBefore.Text = "Initial Value";
             columnValueBefore.Width = 320;
-            // 
+            //
             // columnValueAfter
-            // 
+            //
             columnValueAfter.Text = "New value";
             columnValueAfter.Width = 320;
-            // 
+            //
             // columnDifferenceType
-            // 
+            //
             columnDifferenceType.Text = "Difference Type";
             columnDifferenceType.Width = 100;
-            // 
+            //
             // labelDifferences
-            // 
+            //
             labelDifferences.AutoSize = true;
             labelDifferences.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             labelDifferences.Location = new System.Drawing.Point(14, 173);
@@ -133,9 +137,9 @@ namespace AIPAKDifferentiation {
             labelDifferences.Size = new System.Drawing.Size(80, 17);
             labelDifferences.TabIndex = 2;
             labelDifferences.Text = "Differences";
-            // 
+            //
             // buttonBrowsePak1
-            // 
+            //
             buttonBrowsePak1.Location = new System.Drawing.Point(14, 38);
             buttonBrowsePak1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             buttonBrowsePak1.Name = "buttonBrowsePak1";
@@ -145,9 +149,9 @@ namespace AIPAKDifferentiation {
             buttonBrowsePak1.Text = "Select PAK 1";
             buttonBrowsePak1.UseVisualStyleBackColor = true;
             buttonBrowsePak1.Click += buttonBrowsePak1_Click;
-            // 
+            //
             // buttonBrowsePak2
-            // 
+            //
             buttonBrowsePak2.Location = new System.Drawing.Point(14, 70);
             buttonBrowsePak2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             buttonBrowsePak2.Name = "buttonBrowsePak2";
@@ -157,9 +161,9 @@ namespace AIPAKDifferentiation {
             buttonBrowsePak2.Text = "Select PAK 2";
             buttonBrowsePak2.UseVisualStyleBackColor = true;
             buttonBrowsePak2.Click += buttonBrowsePak2_Click;
-            // 
+            //
             // labelPak1
-            // 
+            //
             labelPak1.AutoSize = true;
             labelPak1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.75F);
             labelPak1.Location = new System.Drawing.Point(173, 42);
@@ -168,9 +172,9 @@ namespace AIPAKDifferentiation {
             labelPak1.Size = new System.Drawing.Size(50, 15);
             labelPak1.TabIndex = 5;
             labelPak1.Text = "PAK 1: -";
-            // 
+            //
             // labelPak2
-            // 
+            //
             labelPak2.AutoSize = true;
             labelPak2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.75F);
             labelPak2.Location = new System.Drawing.Point(173, 75);
@@ -179,15 +183,15 @@ namespace AIPAKDifferentiation {
             labelPak2.Size = new System.Drawing.Size(50, 15);
             labelPak2.TabIndex = 6;
             labelPak2.Text = "PAK 2: -";
-            // 
+            //
             // fileDialog
-            // 
+            //
             fileDialog.DefaultExt = "pak";
             fileDialog.Filter = "PAK files (*.pak)|*pak";
             fileDialog.InitialDirectory = "C:\\";
-            // 
+            //
             // checkboxEntityHideOverrides
-            // 
+            //
             checkboxEntityHideOverrides.AutoSize = true;
             checkboxEntityHideOverrides.Location = new System.Drawing.Point(676, 117);
             checkboxEntityHideOverrides.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -197,9 +201,9 @@ namespace AIPAKDifferentiation {
             checkboxEntityHideOverrides.Text = "Hide ALIAS entities";
             checkboxEntityHideOverrides.UseVisualStyleBackColor = true;
             checkboxEntityHideOverrides.CheckedChanged += checkboxEntityHideOverrides_CheckedChanged;
-            // 
+            //
             // labelFilters
-            // 
+            //
             labelFilters.AutoSize = true;
             labelFilters.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.75F);
             labelFilters.Location = new System.Drawing.Point(173, 116);
@@ -208,9 +212,9 @@ namespace AIPAKDifferentiation {
             labelFilters.Size = new System.Drawing.Size(43, 15);
             labelFilters.TabIndex = 8;
             labelFilters.Text = "Filters:";
-            // 
+            //
             // checkboxHideComposites
-            // 
+            //
             checkboxHideComposites.AutoSize = true;
             checkboxHideComposites.Location = new System.Drawing.Point(230, 117);
             checkboxHideComposites.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -220,9 +224,9 @@ namespace AIPAKDifferentiation {
             checkboxHideComposites.Text = "Hide composites";
             checkboxHideComposites.UseVisualStyleBackColor = true;
             checkboxHideComposites.CheckedChanged += checkboxHideComposites_CheckedChanged;
-            // 
+            //
             // checkboxHideEntities
-            // 
+            //
             checkboxHideEntities.AutoSize = true;
             checkboxHideEntities.Location = new System.Drawing.Point(358, 117);
             checkboxHideEntities.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -232,9 +236,9 @@ namespace AIPAKDifferentiation {
             checkboxHideEntities.Text = "Hide entities";
             checkboxHideEntities.UseVisualStyleBackColor = true;
             checkboxHideEntities.CheckedChanged += checkboxHideEntities_CheckedChanged;
-            // 
+            //
             // checkboxHideParameters
-            // 
+            //
             checkboxHideParameters.AutoSize = true;
             checkboxHideParameters.Location = new System.Drawing.Point(463, 117);
             checkboxHideParameters.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -244,9 +248,9 @@ namespace AIPAKDifferentiation {
             checkboxHideParameters.Text = "Hide parameters";
             checkboxHideParameters.UseVisualStyleBackColor = true;
             checkboxHideParameters.CheckedChanged += checkboxHideParameters_CheckedChanged;
-            // 
+            //
             // checkboxHideLinks
-            // 
+            //
             checkboxHideLinks.AutoSize = true;
             checkboxHideLinks.Location = new System.Drawing.Point(590, 117);
             checkboxHideLinks.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -256,9 +260,9 @@ namespace AIPAKDifferentiation {
             checkboxHideLinks.Text = "Hide links";
             checkboxHideLinks.UseVisualStyleBackColor = true;
             checkboxHideLinks.CheckedChanged += checkboxHideLinks_CheckedChanged;
-            // 
+            //
             // checkboxHideCreated
-            // 
+            //
             checkboxHideCreated.AutoSize = true;
             checkboxHideCreated.Location = new System.Drawing.Point(230, 142);
             checkboxHideCreated.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -268,9 +272,9 @@ namespace AIPAKDifferentiation {
             checkboxHideCreated.Text = "Hide created";
             checkboxHideCreated.UseVisualStyleBackColor = true;
             checkboxHideCreated.CheckedChanged += checkHideCreated_CheckedChanged;
-            // 
+            //
             // checkboxHideModified
-            // 
+            //
             checkboxHideModified.AutoSize = true;
             checkboxHideModified.Location = new System.Drawing.Point(358, 142);
             checkboxHideModified.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -280,9 +284,9 @@ namespace AIPAKDifferentiation {
             checkboxHideModified.Text = "Hide modified";
             checkboxHideModified.UseVisualStyleBackColor = true;
             checkboxHideModified.CheckedChanged += checkboxHideModified_CheckedChanged;
-            // 
+            //
             // checkboxHideDeleted
-            // 
+            //
             checkboxHideDeleted.AutoSize = true;
             checkboxHideDeleted.Location = new System.Drawing.Point(463, 142);
             checkboxHideDeleted.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -292,9 +296,9 @@ namespace AIPAKDifferentiation {
             checkboxHideDeleted.Text = "Hide deleted";
             checkboxHideDeleted.UseVisualStyleBackColor = true;
             checkboxHideDeleted.CheckedChanged += checkboxHideDeleted_CheckedChanged;
-            // 
+            //
             // buttonSwitchView
-            // 
+            //
             buttonSwitchView.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             buttonSwitchView.Location = new System.Drawing.Point(1385, 152);
             buttonSwitchView.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -305,40 +309,40 @@ namespace AIPAKDifferentiation {
             buttonSwitchView.Text = "listview";
             buttonSwitchView.UseVisualStyleBackColor = true;
             buttonSwitchView.Click += buttonSwitchView_Click;
-            // 
+            //
             // panelTreeView
-            // 
+            //
             panelTreeView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             panelTreeView.Controls.Add(treeviewDifferences);
             panelTreeView.Controls.Add(panelTreeViewDetails);
             panelTreeView.Location = new System.Drawing.Point(14, 196);
             panelTreeView.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             panelTreeView.Name = "panelTreeView";
-            panelTreeView.Size = new System.Drawing.Size(1470, 577);
+            panelTreeView.Size = new System.Drawing.Size(1470, 552);
             panelTreeView.TabIndex = 16;
             panelTreeView.Visible = false;
-            // 
+            //
             // treeviewDifferences
-            // 
+            //
             treeviewDifferences.Location = new System.Drawing.Point(5, 4);
             treeviewDifferences.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             treeviewDifferences.Name = "treeviewDifferences";
-            treeviewDifferences.Size = new System.Drawing.Size(864, 566);
+            treeviewDifferences.Size = new System.Drawing.Size(864, 541);
             treeviewDifferences.TabIndex = 0;
             treeviewDifferences.AfterSelect += treeviewDifferences_AfterSelect;
-            // 
+            //
             // panelTreeViewDetails
-            // 
+            //
             panelTreeViewDetails.BackColor = System.Drawing.Color.White;
             panelTreeViewDetails.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             panelTreeViewDetails.Location = new System.Drawing.Point(875, 5);
             panelTreeViewDetails.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             panelTreeViewDetails.Name = "panelTreeViewDetails";
-            panelTreeViewDetails.Size = new System.Drawing.Size(589, 566);
+            panelTreeViewDetails.Size = new System.Drawing.Size(589, 541);
             panelTreeViewDetails.TabIndex = 1;
-            // 
+            //
             // buttonExportAsTxt
-            // 
+            //
             buttonExportAsTxt.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             buttonExportAsTxt.Location = new System.Drawing.Point(1291, 110);
             buttonExportAsTxt.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -349,9 +353,9 @@ namespace AIPAKDifferentiation {
             buttonExportAsTxt.Text = "Export diffrences as txt";
             buttonExportAsTxt.UseVisualStyleBackColor = true;
             buttonExportAsTxt.Click += buttonExportAsTxt_Click;
-            // 
+            //
             // checkboxShowWindowOnTop
-            // 
+            //
             checkboxShowWindowOnTop.AutoSize = true;
             checkboxShowWindowOnTop.Location = new System.Drawing.Point(1347, 44);
             checkboxShowWindowOnTop.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -361,9 +365,9 @@ namespace AIPAKDifferentiation {
             checkboxShowWindowOnTop.Text = "Show window on top";
             checkboxShowWindowOnTop.UseVisualStyleBackColor = true;
             checkboxShowWindowOnTop.CheckedChanged += checkboxShowWindowOnTop_CheckedChanged;
-            // 
+            //
             // checkboxApplyFiltersForExport
-            // 
+            //
             checkboxApplyFiltersForExport.AutoSize = true;
             checkboxApplyFiltersForExport.Location = new System.Drawing.Point(1139, 116);
             checkboxApplyFiltersForExport.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -394,7 +398,7 @@ namespace AIPAKDifferentiation {
             //
             rememberPakPathsMenuItem.CheckOnClick = true;
             rememberPakPathsMenuItem.Name = "rememberPakPathsMenuItem";
-            rememberPakPathsMenuItem.Size = new System.Drawing.Size(416, 22);
+            rememberPakPathsMenuItem.Size = new System.Drawing.Size(395, 22);
             rememberPakPathsMenuItem.Text = "Remember selected COMMANDS.PAK paths";
             rememberPakPathsMenuItem.Click += rememberPakPathsMenuItem_Click;
             //
@@ -402,15 +406,45 @@ namespace AIPAKDifferentiation {
             //
             settingsFileLocationMenuItem.Enabled = false;
             settingsFileLocationMenuItem.Name = "settingsFileLocationMenuItem";
-            settingsFileLocationMenuItem.Size = new System.Drawing.Size(416, 22);
-            this.settingsFileLocationMenuItem.Text = "Settings file: %APPDATA%\\AIPAKDifferentiation\\settings.json";
-            // 
+            settingsFileLocationMenuItem.Size = new System.Drawing.Size(395, 22);
+            settingsFileLocationMenuItem.Text = "Settings file: %APPDATA%\\AIPAKDifferentiation\\settings.json";
+            //
+            // labelSearch
+            //
+            labelSearch.AutoSize = true;
+            labelSearch.Location = new System.Drawing.Point(628, 147);
+            labelSearch.Name = "labelSearch";
+            labelSearch.Size = new System.Drawing.Size(42, 15);
+            labelSearch.TabIndex = 21;
+            labelSearch.Text = "Search";
+            //
+            // textBoxSearch
+            //
+            textBoxSearch.Location = new System.Drawing.Point(676, 142);
+            textBoxSearch.Name = "textBoxSearch";
+            textBoxSearch.PlaceholderText = "Type a term and press Enter";
+            textBoxSearch.Size = new System.Drawing.Size(300, 23);
+            textBoxSearch.TabIndex = 22;
+            textBoxSearch.KeyDown += textBoxSearch_KeyDown;
+            //
+            // labelSummary
+            //
+            labelSummary.AutoSize = true;
+            labelSummary.Location = new System.Drawing.Point(14, 757);
+            labelSummary.Name = "labelSummary";
+            labelSummary.Size = new System.Drawing.Size(0, 15);
+            labelSummary.TabIndex = 23;
+            toolTipSummary.SetToolTip(labelSummary, "Summary (created, edited, deleted). Counts cover the full comparison.");
+            //
             // AIPAKDifferentiation
-            // 
+            //
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(1498, 787);
             Controls.Add(menuStripSettings);
+            Controls.Add(labelSummary);
+            Controls.Add(textBoxSearch);
+            Controls.Add(labelSearch);
             Controls.Add(checkboxApplyFiltersForExport);
             Controls.Add(checkboxShowWindowOnTop);
             Controls.Add(buttonExportAsTxt);
@@ -486,6 +520,10 @@ namespace AIPAKDifferentiation {
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rememberPakPathsMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsFileLocationMenuItem;
+        private System.Windows.Forms.Label labelSearch;
+        private System.Windows.Forms.TextBox textBoxSearch;
+        private System.Windows.Forms.Label labelSummary;
+        private System.Windows.Forms.ToolTip toolTipSummary;
     }
 }
 
